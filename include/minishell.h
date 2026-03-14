@@ -13,4 +13,15 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "gc_libft.h"
+
+typedef struct s_lexer t_lexer;
+
+struct s_lexer
+{
+	
+};
+
+t_lexer	*init_lexer(t_gc *gc);
+
 #endif

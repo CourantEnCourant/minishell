@@ -14,19 +14,21 @@
 # define MINISHELL_H
 
 # include "gc_libft.h"
+# include "datastructures.h"
 
 typedef struct s_token t_token;
-typedef struct s_lexer t_lexer;
+typedef struct s_parser t_parser;
 
 struct s_token
 {
 	char	*expr;
 };
 
-struct s_lexer
+struct s_parser
 {
+	t_darray	*(*tokenize)(char *cmd, t_gc *gc);
 };
 
-t_lexer	*init_lexer(t_gc *gc);
+t_parser	*init_parser(t_gc *gc);
 
 #endif

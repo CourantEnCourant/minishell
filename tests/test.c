@@ -11,9 +11,25 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include "datastructures.h"
+#include "gc_libft.h"
+#include "minishell.h"
+
+void	test_parser(t_gc *gc)
+{
+	t_parser	*parser;
+	t_darray	*cmds;
+
+	parser = init_parser(gc);
+	cmds = parser->tokenize("ls -l|grep -la", gc);
+	cmds->repr(cmds);
+}
 
 int main(void)
 {
-    printf("Test file\n");
-	return (0);
+	t_gc	*gc;
+
+	gc = init_gc();
+	test_parser(gc);
+	gc->clean(gc);
 }

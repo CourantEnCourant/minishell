@@ -19,8 +19,11 @@ void	test_darray(t_gc *gc)
 	t_darray	*list;
 
 	list = init_darray(gc);
+	list->repr(list);
 	list->push(list, gc_strdup("Hello", gc), gc);
 	list->push(list, gc_strdup("World", gc), gc);
+	list->repr(list);
+	list->pop(list);
 	list->repr(list);
 }
 

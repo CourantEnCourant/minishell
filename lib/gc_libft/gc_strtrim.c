@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gc_strdup.c                                        :+:      :+:    :+:   */
+/*   gc_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/15 19:24:25 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/15 22:22:41 by weizhang         ###   ########.fr       */
+/*   Created: 2026/03/15 22:20:58 by weizhang          #+#    #+#             */
+/*   Updated: 2026/03/15 22:24:03 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 #include "libft.h"
 #include "gc_libft.h"
 
-char	*gc_strdup(char *s, t_gc *gc)
+char	*gc_strtrim(char const *s1, char const *set, t_gc *gc)
 {
-	char	*s_dup;
+	char	*trimmed;
 
-	s_dup = ft_strdup(s);
-	if (!s_dup)
+	trimmed = ft_strtrim(s1, set);
+	if (!trimmed)
 	{
 		gc->clean(gc);
 		exit(EXIT_FAILURE);
 	}
-	gc->add(gc, s_dup);
-	return (s_dup);
+	gc->add(gc, trimmed);
+	return (trimmed);
 }

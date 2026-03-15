@@ -16,14 +16,14 @@ t_darray	*tokenize(char *cmd, t_gc *gc)
 	{
 		if (cmd[i + j] == '|')	
 		{
-			tokens->push(tokens, gc_substr(cmd, i, j, gc), gc);
+			tokens->push(tokens, gc_strtrim(gc_substr(cmd, i, j, gc), " ", gc), gc);
 			tokens->push(tokens, "|", gc);
 			i += j + 1;
 			j = -1;
 		}
 		j++;
 	}
-	tokens->push(tokens, gc_substr(cmd, i, j, gc), gc);
+	tokens->push(tokens, gc_strtrim(gc_substr(cmd, i, j, gc), " ", gc), gc);
 	return (tokens);
 }
 

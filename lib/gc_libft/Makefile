@@ -7,12 +7,13 @@ RM = rm -f
 
 INCLUDE = -I ../../include
 SRC = gc_basic.c \
-	  gc_malloc.c \
 	  gc_calloc.c \
-	  gc_strjoin.c \
-	  gc_substr.c \
+	  gc_get_next_line.c \
+	  gc_malloc.c \
 	  gc_split.c \
-	  gc_get_next_line.c
+	  gc_strdup.c \
+	  gc_strjoin.c \
+	  gc_substr.c
 
 OBJ = $(SRC:.c=.o)
 

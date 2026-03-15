@@ -15,11 +15,16 @@
 
 # include "gc_libft.h"
 
+typedef struct s_token t_token;
 typedef struct s_lexer t_lexer;
+
+struct s_token
+{
+	char	*expr;
+};
 
 struct s_lexer
 {
-	
 };
 
 t_lexer	*init_lexer(t_gc *gc);

@@ -14,26 +14,21 @@
 #include "gc_libft.h"
 #include "datastructures.h"
 
-/*
-int	main(int argc, char *argv[])
+void	test_darray(t_gc *gc)
 {
-	t_gc		*gc = init_gc();
-	t_darray	*list = init_darray(gc);
+	t_darray	*list;
 
-	printf("Push 0 into list\n");
-	list->push(list, 0, gc);
+	list = init_darray(gc);
+	list->push(list, gc_strdup("Hello", gc), gc);
+	list->push(list, gc_strdup("World", gc), gc);
 	list->repr(list);
-	printf("Push 1-4 into list\n");
-	for (int i = 1; i < 5; i++)
-		list->push(list, i, gc);
-	list->repr(list);
-	printf("Insert 0 into list[0]\n");
-	list->insert(list, 0, 0, gc);
-	list->repr(list);
-	printf("Pop\n");
-	list->pop(list);
-	list->repr(list);
+}
+
+int	main(void)
+{
+	t_gc	*gc;
+	gc = init_gc();
+	test_darray(gc);
 	gc->clean(gc);
 	return (0);
 }
-*/

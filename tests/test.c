@@ -21,6 +21,8 @@ void	test_parser(t_gc *gc)
 	t_darray	*cmds;
 
 	parser = init_parser(gc);
+	cmds = parser->tokenize("ls -l | grep -la", gc);
+	cmds->repr(cmds);
 	cmds = parser->tokenize("ls -l|grep -la", gc);
 	cmds->repr(cmds);
 }

@@ -16,9 +16,9 @@
 #include "datastructures.h"
 
 void	*peep(t_darray *self);
-void	insert(t_darray *s, size_t i, void *item, t_gc *gc);
+void	insert(t_darray *self, size_t i, void *item, t_gc *gc);
 void	push(t_darray *self, void *item, t_gc *gc);
-void	*pop_i(t_darray *s, size_t i);
+void	*pop_i(t_darray *self, size_t i);
 void	*pop(t_darray *self);
 
 static void	repr(t_darray *self)

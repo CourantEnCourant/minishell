@@ -11,6 +11,7 @@ SRC = gc_basic.c \
 	  gc_get_next_line.c \
 	  gc_malloc.c \
 	  gc_split.c \
+	  gc_strdup.c \
 	  gc_strjoin.c \
 	  gc_substr.c
 

@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   darray_bool.c                                      :+:      :+:    :+:   */
+/*   gc_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weiqi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/30 15:39:56 by weiqi             #+#    #+#             */
-/*   Updated: 2026/02/03 13:21:23 by weiqi            ###   ########.fr       */
+/*   Created: 2026/03/15 19:24:25 by weizhang          #+#    #+#             */
+/*   Updated: 2026/03/15 22:22:41 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include <stddef.h>
-#include "datastructures.h"
+#include <stdlib.h>
+#include "libft.h"
+#include "gc_libft.h"
 
-bool	is_sorted(t_darray *self)
+char	*gc_strdup(char *s, t_gc *gc)
 {
-	size_t	i;
+	char	*s_dup;
 
-	i = 0;
-	while (i < self->len - 1)
+	s_dup = ft_strdup(s);
+	if (!s_dup)
 	{
-		if (self->arr[i + 1] > self->arr[i])
-			return (false);
-		i++;
+		gc->clean(gc);
+		exit(EXIT_FAILURE);
 	}
-	return (true);
+	gc->add(gc, s_dup);
+	return (s_dup);
 }

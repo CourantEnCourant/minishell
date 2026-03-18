@@ -15,10 +15,13 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
+bool			is_valid_cmd(char *cmd);
+
 t_parser	*init_parser(t_gc *gc)
 {
 	t_parser	*parser;
 
 	parser = gc_malloc(sizeof(t_gc), gc);
+	parser->is_valid_cmd = is_valid_cmd;
 	return (parser);
 }

@@ -13,7 +13,7 @@ make        # Build the minishell executable
 make clean  # Remove object files
 make fclean # Remove object files and the executable
 make re     # Rebuild from scratch
-make test   # Build tests (Need to uncommon tests)
+make test   # Build tests (uncomment the relevant tests in the Makefile or test sources first)
 ```
 
 ### Run

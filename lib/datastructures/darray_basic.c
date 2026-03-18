@@ -16,9 +16,9 @@
 #include "datastructures.h"
 
 int		peep(t_darray *self);
-void	insert(t_darray *self, size_t i, int num, t_gc *gc);
-void	push(t_darray *self, int num, t_gc *gc);
-int		pop_i(t_darray *self, size_t i);
+void	insert(t_darray *s, size_t i, int item, t_gc *gc);
+void	push(t_darray *self, int item, t_gc *gc);
+int		pop_i(t_darray *s, size_t i);
 int		pop(t_darray *self);
 bool	is_sorted(t_darray *self);
 

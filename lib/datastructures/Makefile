@@ -1,4 +1,5 @@
 NAME = datastructures.a
+TEST = test
 
 CC = cc
 CFLAGS = -Wextra -Werror -Wall -g3
@@ -26,9 +27,15 @@ clean:
 	@echo "Removed all .o files in datastructures"
 
 fclean: clean
-	@$(RM) $(NAME)
-	@echo "Removed $(NAME)"
+	@$(RM) $(NAME) $(TEST)
+	@echo "Removed $(NAME) and $(TEST)"
+
+test: $(NAME)
+	@$(MAKE) -C ../libft
+	@$(MAKE) -C ../gc_libft
+	@$(CC) $(CFLAGS) $(INCLUDE) test.c $(NAME) ../gc_libft/gc_libft.a ../libft/libft.a -o $(TEST)
+	@echo "Compiled ./${TEST}"
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test

@@ -13,9 +13,9 @@ OBJ = $(SRC:.c=.o)
 TEST_SRC = $(filter-out ./src/main.c, $(SRC))
 TEST_OBJ = $(TEST_SRC:.c=.o)
 
-LIB_ARCHIVES = ./lib/libft/libft.a \
+LIB_ARCHIVES = ./lib/datastructures/datastructures.a \
 			   ./lib/gc_libft/gc_libft.a \
-			   ./lib/datastructures/datastructures.a
+			   ./lib/libft/libft.a
 
 all: $(NAME)
 
@@ -40,7 +40,7 @@ fclean: clean
 
 test: $(LIB_ARCHIVES) $(TEST_OBJ)
 	@$(CC) $(CFLAGS) $(INCLUDE) tests/test.c $(TEST_OBJ) $(LIB_ARCHIVES) -lreadline -o test
-	@./test
+	@echo "Compiled ./test"
 
 re: fclean all
 

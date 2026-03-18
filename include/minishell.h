@@ -28,6 +28,7 @@ typedef enum e_lexer_state
 struct s_parser
 {
 	bool			(*is_valid_cmd)(char *cmd);
+	t_darray		*(*tokenize)(char *cmd, t_gc *gc);
 };
 
 t_parser	*init_parser(t_gc *gc);

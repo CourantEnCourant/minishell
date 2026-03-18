@@ -17,6 +17,60 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
+static void	test_parser_tokenize(t_gc *gc)
+{
+	t_parser	*parser;
+	t_darray	*cmds;
+	char		*s;
+
+	printf("==========TEST_PARSER_TOKENIZE==========\n");
+	parser = init_parser(gc);
+
+	// empty string
+	s = "";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// single pipe
+	s = "ls -l | grep -la";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// pipe without spaces
+	s = "ls -l|grep -la";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// simple command, no operators
+	s = "echo hello world";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// multiple pipes
+	s = "cat file | grep foo | wc -l";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// operators inside single quotes (should not tokenize)
+	s = "echo '|| && |' | cat";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	printf("==========ALL TESTS PASSED==========\n\n");
+}
+
 static void test_parser_is_valid_cmd(t_gc *gc)
 {
 	t_parser	*parser;
@@ -190,6 +244,7 @@ int main(void)
 
 	gc = init_gc();
 	test_parser_is_valid_cmd(gc);
+	test_parser_tokenize(gc);
 	gc->clean(gc);
 }
 */

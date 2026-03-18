@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   gc_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/16 20:40:48 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/17 17:46:45 by weizhang         ###   ########.fr       */
+/*   Created: 2026/03/15 22:20:58 by weizhang          #+#    #+#             */
+/*   Updated: 2026/03/15 22:24:03 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include <stddef.h>
+#include <stdlib.h>
+#include "libft.h"
 #include "gc_libft.h"
-#include "minishell.h"
 
-bool			is_valid_cmd(char *cmd);
-t_darray		*tokenize(char *cmd, t_gc *gc);
-
-t_parser	*init_parser(t_gc *gc)
+char	*gc_strtrim(char const *s1, char const *set, t_gc *gc)
 {
-	t_parser	*parser;
+	char	*trimmed;
 
-	parser = gc_malloc(sizeof(t_gc), gc);
-	parser->is_valid_cmd = is_valid_cmd;
-	parser->tokenize = tokenize;
-	return (parser);
+	trimmed = ft_strtrim(s1, set);
+	if (!trimmed)
+	{
+		gc->clean(gc);
+		exit(EXIT_FAILURE);
+	}
+	gc->add(gc, trimmed);
+	return (trimmed);
 }

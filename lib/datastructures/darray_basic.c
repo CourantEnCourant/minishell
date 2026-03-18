@@ -46,8 +46,9 @@ t_darray	*init_darray(t_gc *gc)
 	t_darray	*darray;
 
 	darray = gc_malloc(sizeof(t_darray), gc);
-	darray->arr = gc_calloc((LIST_LEN + 1), sizeof(void *), gc);
+	darray->arr = gc_calloc((DARRAY_LEN + 1), sizeof(void *), gc);
 	darray->len = 0;
+	darray->capacity = DARRAY_LEN;
 	darray->gc = gc;
 	darray->repr = repr;
 	darray->peep = peep;

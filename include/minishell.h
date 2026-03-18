@@ -18,6 +18,13 @@
 
 typedef struct s_parser	t_parser;
 
+typedef enum e_lexer_state
+{
+	TEXT,
+	SINGLE,
+	DOUBLE,
+}	t_lexer_state;
+
 struct s_parser
 {
 	bool			(*is_valid_cmd)(char *cmd);

@@ -7,6 +7,7 @@ RM = rm -rf
 
 INCLUDE = -I ./include
 SRC = ./src/main.c \
+	  ./src/lexer.c \
 	  ./src/parser.c
 
 OBJ = $(SRC:.c=.o)

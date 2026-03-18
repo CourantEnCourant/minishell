@@ -42,20 +42,20 @@ void	test_darray(t_gc *gc)
 	printf("\n");
 
 	printf("Test insert(OUT_OF_RANGE_INDEX)\n");
-	list->insert(list, 50000, gc_strdup("OUT_OF_RANGE_INDEX test", gc), gc);
+	list->insert(list, 50000, gc_strdup("OUT_OF_RANGE_INDEX test", gc));
 	list->repr(list);
 	printf("\n");
 
 	printf("Test insert(NEGATIVE_INDEX)\n");
-	list->insert(list, -5, gc_strdup("NEGATIVE_INDEX test", gc), gc);
+	list->insert(list, -5, gc_strdup("NEGATIVE_INDEX test", gc));
 	list->repr(list);
 	printf("\n");
 
 	printf("Push 4 strs to list\n");
-	list->push(list, gc_strdup("Hello", gc), gc);
-	list->push(list, gc_strdup("World", gc), gc);
-	list->push(list, gc_strdup("Mine", gc), gc);
-	list->push(list, gc_strdup("Craft", gc), gc);
+	list->push(list, gc_strdup("Hello", gc));
+	list->push(list, gc_strdup("World", gc));
+	list->push(list, gc_strdup("Mine", gc));
+	list->push(list, gc_strdup("Craft", gc));
 	list->repr(list);
 	printf("\n");
 

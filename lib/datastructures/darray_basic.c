@@ -16,8 +16,8 @@
 #include "datastructures.h"
 
 void	*peep(t_darray *self);
-void	insert(t_darray *self, size_t i, void *item, t_gc *gc);
-void	push(t_darray *self, void *item, t_gc *gc);
+void	insert(t_darray *self, size_t i, void *item);
+void	push(t_darray *self, void *item);
 void	*pop_i(t_darray *self, size_t i);
 void	*pop(t_darray *self);
 
@@ -48,6 +48,7 @@ t_darray	*init_darray(t_gc *gc)
 	darray = gc_malloc(sizeof(t_darray), gc);
 	darray->arr = gc_calloc((LIST_LEN + 1), sizeof(void *), gc);
 	darray->len = 0;
+	darray->gc = gc;
 	darray->repr = repr;
 	darray->peep = peep;
 	darray->insert = insert;

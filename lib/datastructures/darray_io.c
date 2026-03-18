@@ -25,7 +25,7 @@ void	*peep(t_darray *self)
 	return (self->arr[self->len - 1]);
 }
 
-void	insert(t_darray *s, size_t i, void *item, t_gc *gc)
+void	insert(t_darray *s, size_t i, void *item)
 {
 	void	**arr_ext;
 
@@ -36,7 +36,7 @@ void	insert(t_darray *s, size_t i, void *item, t_gc *gc)
 	}
 	if (s->len && s->len % LIST_LEN == 0)
 	{
-		arr_ext = gc_calloc(s->len * 2 + 1, sizeof(void *), gc);
+		arr_ext = gc_calloc(s->len * 2 + 1, sizeof(void *), s->gc);
 		ft_memmove(arr_ext, s->arr, s->len * sizeof(void *));
 		s->arr = arr_ext;
 	}
@@ -45,9 +45,9 @@ void	insert(t_darray *s, size_t i, void *item, t_gc *gc)
 	s->len++;
 }
 
-void	push(t_darray *self, void *item, t_gc *gc)
+void	push(t_darray *self, void *item)
 {
-	self->insert(self, self->len, item, gc);
+	self->insert(self, self->len, item);
 }
 
 void	*pop_i(t_darray *s, size_t i)

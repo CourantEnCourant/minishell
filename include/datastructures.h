@@ -27,10 +27,11 @@ struct s_darray
 {
 	void	**arr;
 	size_t	len;
+	t_gc	*gc;
 	void	(*repr)(t_darray *self);
 	void	*(*peep)(t_darray *self);
-	void	(*insert)(t_darray *self, size_t i, void *item, t_gc *gc);
-	void	(*push)(t_darray *self, void *item, t_gc *gc);
+	void	(*insert)(t_darray *self, size_t i, void *item);
+	void	(*push)(t_darray *self, void *item);
 	void	*(*pop_i)(t_darray *self, size_t i);
 	void	*(*pop)(t_darray *self);
 };

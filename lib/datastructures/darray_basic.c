@@ -34,10 +34,10 @@ static void	repr(t_darray *self)
 	}
 	while (i < self->len - 1)
 	{
-		ft_printf("\"%s\", ", self->arr[i]);
+		ft_printf("\"%s\", ", (char *)self->arr[i]);
 		i++;
 	}
-	ft_printf("\"%s\"", self->arr[i]);
+	ft_printf("\"%s\"", (char *)self->arr[i]);
 	write(1, "]\n", 2);
 }
 

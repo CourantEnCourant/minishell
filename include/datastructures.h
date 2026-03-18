@@ -13,8 +13,8 @@
 #ifndef DATASTRUCTURES_H
 # define DATASTRUCTURES_H
 
-# ifndef LIST_LEN
-#  define LIST_LEN 42
+# ifndef DARRAY_LEN
+#  define DARRAY_LEN 42
 # endif
 
 # include <stddef.h>
@@ -27,6 +27,7 @@ struct s_darray
 {
 	void	**arr;
 	size_t	len;
+	size_t	capacity;
 	t_gc	*gc;
 	void	(*repr)(t_darray *self);
 	void	*(*peep)(t_darray *self);

@@ -34,9 +34,10 @@ void	insert(t_darray *s, size_t i, void *item)
 		ft_printf("IndexError: max len is %d, insert at %d\n", s->len, i);
 		return ;
 	}
-	if (s->len && s->len % LIST_LEN == 0)
+	if (s->len >= s->capacity)
 	{
-		arr_ext = gc_calloc(s->len * 2 + 1, sizeof(void *), s->gc);
+		s->capacity *= 2;
+		arr_ext = gc_calloc(s->capacity + 1, sizeof(void *), s->gc);
 		ft_memmove(arr_ext, s->arr, s->len * sizeof(void *));
 		s->arr = arr_ext;
 	}

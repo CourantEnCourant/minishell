@@ -82,6 +82,41 @@ static void	test_parser_tokenize(t_gc *gc)
 	cmds->repr(cmds);
 	printf("\n");
 
+	// operators inside single quotes (should not tokenize)
+	s = "echo '|| && |' | cat";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// parentheses
+	s = "(echo hello && echo world)";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// nested parentheses
+	s = "(echo hello && (echo world || echo foo))";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// parentheses without spaces
+	s = "(ls -l)&&(echo hello)";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// parentheses inside quotes (should not tokenize)
+	s = "echo \"(hello)\" | cat";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
 	// simple command, no operators
 	s = "echo hello world";
 	printf("Tokenizing %s\n", s);
@@ -96,8 +131,8 @@ static void	test_parser_tokenize(t_gc *gc)
 	cmds->repr(cmds);
 	printf("\n");
 
-	// operators inside single quotes (should not tokenize)
-	s = "echo '|| && |' | cat";
+	// all operators combined
+	s = "(ls | grep foo) && echo yes || echo no";
 	printf("Tokenizing %s\n", s);
 	cmds = parser->tokenize(s, gc);
 	cmds->repr(cmds);

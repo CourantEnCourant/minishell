@@ -57,3 +57,51 @@ bool	is_valid_cmd(char *cmd)
 	}
 	return (state == TEXT && open_paren_count == 0);
 }
+
+static size_t	process(t_darray *tokens, char *cmd, int len, char *operator)
+{
+	char	*token;
+
+	token = gc_substr(cmd, 0, len, tokens->gc);
+	token = gc_strtrim(token, " ", tokens->gc);
+	if (token[0])
+		tokens->push(tokens, token);
+	if (operator[0])
+		tokens->push(tokens, operator);
+	return (len + ft_strlen(operator));
+}
+
+static size_t	lookup(t_darray *tokens, char *cmd, size_t start, size_t i)
+{
+	if (cmd[i] == '|')
+		start += process(tokens, &cmd[start], i - start, "|");
+	return (start);
+}
+
+t_darray	*tokenize(char *cmd, t_gc *gc)
+{
+	t_darray		*tokens;
+	t_lexer_state	state;
+	size_t			i;
+	size_t			start;
+
+	tokens = init_darray(gc);
+	state = TEXT;
+	i = 0;
+	start = 0;
+	while (cmd[i])
+	{
+		if (i < start)
+			i = start;
+		state = update_state(cmd[i], state);
+		if (state == SINGLE || state == DOUBLE)
+		{
+			i++;
+			continue ;
+		}
+		start = lookup(tokens, cmd, start, i);
+		i++;
+	}
+	process(tokens, &cmd[start], i - start, "");
+	return (tokens);
+}

@@ -13,6 +13,7 @@ SRC = gc_basic.c \
 	  gc_split.c \
 	  gc_strdup.c \
 	  gc_strjoin.c \
+	  gc_strtrim.c \
 	  gc_substr.c
 
 OBJ = $(SRC:.c=.o)

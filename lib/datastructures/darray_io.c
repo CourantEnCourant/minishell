@@ -17,6 +17,11 @@
 
 void	*peep(t_darray *self)
 {
+	if (self->len == 0)
+	{
+		ft_printf("IndexError: peeped from empty darray\n");
+		return (NULL);
+	}
 	return (self->arr[self->len - 1]);
 }
 
@@ -24,6 +29,11 @@ void	insert(t_darray *s, size_t i, void *item, t_gc *gc)
 {
 	void	**arr_ext;
 
+	if (i > s->len)
+	{
+		ft_printf("IndexError: max len is %d, insert at %d\n", s->len, i);
+		return ;
+	}
 	if (s->len && s->len % LIST_LEN == 0)
 	{
 		arr_ext = gc_calloc(s->len * 2 + 1, sizeof(void *), gc);
@@ -46,7 +56,12 @@ void	*pop_i(t_darray *s, size_t i)
 
 	if (s->len == 0)
 	{
-		ft_printf("Popped from empty darray\n");
+		ft_printf("IndexError: popped from empty darray\n");
+		return (NULL);
+	}
+	if (i > s->len - 1)
+	{
+		ft_printf("IndexError: max index %d, popped at %d\n", s->len - 1, i);
 		return (NULL);
 	}
 	item = s->arr[i];
@@ -57,5 +72,10 @@ void	*pop_i(t_darray *s, size_t i)
 
 void	*pop(t_darray *self)
 {
+	if (self->len == 0)
+	{
+		ft_printf("IndexError: popped from empty darray\n");
+		return (NULL);
+	}
 	return (self->pop_i(self, self->len - 1));
 }

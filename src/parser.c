@@ -22,7 +22,7 @@ t_parser	*init_parser(t_gc *gc)
 {
 	t_parser	*parser;
 
-	parser = gc_malloc(sizeof(t_gc), gc);
+	parser = gc_malloc(sizeof(t_parser), gc);
 	parser->is_valid_cmd = is_valid_cmd;
 	parser->tokenize = tokenize;
 	return (parser);

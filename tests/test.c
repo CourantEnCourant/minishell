@@ -10,10 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include <stdio.h>
+#include <assert.h>
+#include "datastructures.h"
+#include "gc_libft.h"
+#include "minishell.h"
 
 int main(void)
 {
-    printf("Test file\n");
-	return (0);
+	t_gc	*gc;
+
+	gc = init_gc();
+	init_parser(gc);
+	gc->clean(gc);
 }
+*/

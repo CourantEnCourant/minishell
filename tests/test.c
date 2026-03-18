@@ -47,6 +47,20 @@ static void	test_parser_tokenize(t_gc *gc)
 	cmds->repr(cmds);
 	printf("\n");
 
+	// pipe + and
+	s = "ls -l | grep -la && cat -e";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
+	// and without spaces
+	s = "ls -l | grep -la&&cat -e";
+	printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds);
+	printf("\n");
+
 	// simple command, no operators
 	s = "echo hello world";
 	printf("Tokenizing %s\n", s);

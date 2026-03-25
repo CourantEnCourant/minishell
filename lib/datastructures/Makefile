@@ -8,7 +8,8 @@ RM = rm -f
 
 INCLUDE = -I ../../include
 
-SRC = darray_basic.c \
+SRC = btree.c \
+	  darray_basic.c \
 	  darray_io.c \
 	  darray_io_2.c
 

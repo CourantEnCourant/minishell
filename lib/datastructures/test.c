@@ -167,11 +167,86 @@ void	test_darray(t_gc *gc)
 	ft_printf("\n");
 }
 
+void	test_btree(t_gc *gc)
+{
+	t_btree	*root;
+	t_btree	*tmp1;
+	t_btree	*tmp2;
+
+	ft_printf("==========btree test==========\n");
+	ft_printf("Test 1: 1 + 2 * 3 / 5\n");
+	root = init_btree(gc_strdup("+", gc), gc);
+	tmp1 = init_btree(gc_strdup("*", gc), gc);
+	tmp2 = init_btree(gc_strdup("/", gc), gc);
+	root->left = init_btree(gc_strdup("1", gc), gc);
+	root->right = tmp1;
+	tmp1->left = init_btree(gc_strdup("2", gc), gc);
+	tmp1->right = tmp2;
+	tmp2->left = init_btree(gc_strdup("3", gc), gc);
+	tmp2->right = init_btree(gc_strdup("5", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 2: single node\n");
+	root = init_btree(gc_strdup("42", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 3: 1 + 2\n");
+	root = init_btree(gc_strdup("+", gc), gc);
+	root->left = init_btree(gc_strdup("1", gc), gc);
+	root->right = init_btree(gc_strdup("2", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 4: ((1 + 2) - 3) * 4\n");
+	root = init_btree(gc_strdup("*", gc), gc);
+	tmp1 = init_btree(gc_strdup("-", gc), gc);
+	tmp2 = init_btree(gc_strdup("+", gc), gc);
+	root->left = tmp1;
+	root->right = init_btree(gc_strdup("4", gc), gc);
+	tmp1->left = tmp2;
+	tmp1->right = init_btree(gc_strdup("3", gc), gc);
+	tmp2->left = init_btree(gc_strdup("1", gc), gc);
+	tmp2->right = init_btree(gc_strdup("2", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 5: 1 || (2 && (3 | 4))\n");
+	root = init_btree(gc_strdup("||", gc), gc);
+	tmp1 = init_btree(gc_strdup("&&", gc), gc);
+	tmp2 = init_btree(gc_strdup("|", gc), gc);
+	root->left = init_btree(gc_strdup("1", gc), gc);
+	root->right = tmp1;
+	tmp1->left = init_btree(gc_strdup("2", gc), gc);
+	tmp1->right = tmp2;
+	tmp2->left = init_btree(gc_strdup("3", gc), gc);
+	tmp2->right = init_btree(gc_strdup("4", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 6: full balanced tree\n");
+	root = init_btree(gc_strdup("&&", gc), gc);
+	tmp1 = init_btree(gc_strdup("||", gc), gc);
+	tmp2 = init_btree(gc_strdup("|", gc), gc);
+	root->left = tmp1;
+	root->right = tmp2;
+	tmp1->left = init_btree(gc_strdup("a", gc), gc);
+	tmp1->right = init_btree(gc_strdup("b", gc), gc);
+	tmp2->left = init_btree(gc_strdup("c", gc), gc);
+	tmp2->right = init_btree(gc_strdup("d", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 7: left-only chain\n");
+	root = init_btree(gc_strdup("+", gc), gc);
+	tmp1 = init_btree(gc_strdup("-", gc), gc);
+	root->left = tmp1;
+	tmp1->left = init_btree(gc_strdup("7", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+}
+
 int	main(void)
 {
 	t_gc	*gc;
 	gc = init_gc();
 	test_darray(gc);
+	test_btree(gc);
 	gc->clean(gc);
 	return (0);
 }

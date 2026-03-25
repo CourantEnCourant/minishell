@@ -22,6 +22,7 @@
 # include "gc_libft.h"
 
 typedef struct s_darray	t_darray;
+typedef struct s_btree	t_btree;
 
 struct s_darray
 {
@@ -38,5 +39,15 @@ struct s_darray
 	void	*(*pop)(t_darray *self);
 };
 t_darray	*init_darray(t_gc *gc);
+
+struct s_btree
+{
+	void	*value;
+	t_btree	*left;
+	t_btree	*right;
+	t_gc	*gc;
+	void	(*repr)(t_btree *s, void (*repr_v)(void *v));
+};
+t_btree		*init_btree(void *value, t_gc *gc);
 
 #endif

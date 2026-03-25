@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gc_strdup.c                                        :+:      :+:    :+:   */
+/*   gc_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hch <hch@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/15 19:24:25 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/26 15:14:30 by anying           ###   ########.fr       */
+/*   Created: 2025/12/03 19:18:22 by weizhang          #+#    #+#             */
+/*   Updated: 2026/03/25 18:29:39 by hch              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "libft.h"
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "gc_libft.h"
 
-char	*gc_strdup(char *s, t_gc *gc)
+char	*gc_readline(const char *prompt, t_gc *gc)
 {
-	char	*s_dup;
-
-	s_dup = ft_strdup(s);
-	if (!s_dup)
+	char	*line;
+	line = readline(prompt);
+	if (line)
 	{
-		gc->clean(gc);
-		exit(EXIT_FAILURE);
+		gc->add(gc, line);
 	}
-	gc->add(gc, s_dup);
-	return (s_dup);
+
+	return (line);
 }

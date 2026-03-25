@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   gc_getcwd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/14 21:07:26 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/25 17:39:13 by anying           ###   ########.fr       */
+/*   Created: 2026/03/25 17:35:54 by anying            #+#    #+#             */
+/*   Updated: 2026/03/25 18:14:58 by anying           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include <stdlib.h>
+#include "gc_libft.h"
 
-# include "gc_libft.h"
-# include "datastructures.h"
-
-typedef struct s_parser	t_parser;
-
-typedef enum e_lexer_state
+char	*gc_getcwd(t_gc *gc)
 {
-	TEXT,
-	SINGLE,
-	DOUBLE,
-}	t_lexer_state;
-
-struct s_parser
-{
-	bool			(*is_valid_cmd)(char *cmd);
-	t_darray		*(*tokenize)(char *cmd, t_gc *gc);
-};
-
-t_parser	*init_parser(t_gc *gc);
-
-#endif
+	char	*cwd;
+	cwd = get(NULL, 0);
+	if (!cwd)
+	{
+		gc->clean(gc);
+		exit(EXIT_FAILURE);
+	}
+	gc->add(gc, cwd);
+	return (cwd);
+}

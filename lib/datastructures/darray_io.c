@@ -6,7 +6,7 @@
 /*   By: weiqizhang <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:31:04 by weiqizhang        #+#    #+#             */
-/*   Updated: 2026/02/03 13:23:30 by weiqi            ###   ########.fr       */
+/*   Updated: 2026/03/24 19:44:56 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,6 @@
 #include "libft.h"
 #include "gc_libft.h"
 #include "datastructures.h"
-
-void	*peep(t_darray *self)
-{
-	if (self->len == 0)
-	{
-		ft_printf("IndexError: peeped from empty darray\n");
-		return (NULL);
-	}
-	return (self->arr[self->len - 1]);
-}
 
 void	insert(t_darray *s, size_t i, void *item)
 {

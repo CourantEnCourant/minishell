@@ -9,6 +9,7 @@ INCLUDE = -I ../../include
 SRC = gc_basic.c \
 	  gc_calloc.c \
 	  gc_get_next_line.c \
+	  gc_itoa.c \
 	  gc_malloc.c \
 	  gc_split.c \
 	  gc_strdup.c \

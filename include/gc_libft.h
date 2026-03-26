@@ -6,7 +6,7 @@
 /*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 20:31:24 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/26 15:13:43 by anying           ###   ########.fr       */
+/*   Updated: 2026/03/26 15:16:58 by anying           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ char	*gc_strjoin(char const *s1, char const *s2, t_gc *gc);
 char	*gc_get_next_line(int fd, t_gc *gc);
 char	**gc_split(char const *s, char c, t_gc *gc);
 char	*gc_strtrim(char const *s1, char const *set, t_gc *gc);
-char	*gc_readline(const char *prompt, t_gc *gc);
-char	*gc_getcwd(t_gc *gc);
 char	*gc_itoa(int n, t_gc *gc);
 
 #endif

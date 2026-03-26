@@ -6,7 +6,7 @@
 /*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 21:07:26 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/25 17:39:13 by anying           ###   ########.fr       */
+/*   Updated: 2026/03/26 15:21:30 by anying           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,8 @@ struct s_parser
 };
 
 t_parser	*init_parser(t_gc *gc);
+
+char		*gc_readline(const char *prompt, t_gc *gc);
+char		*gc_getcwd(t_gc *gc);
 
 #endif

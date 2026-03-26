@@ -6,9 +6,12 @@ AR = ar rcs
 RM = rm -rf
 
 INCLUDE = -I ./include
-SRC = ./src/main.c \
-	  ./src/lexer.c \
-	  ./src/parser.c
+SRC = ./src/lexer.c \
+	  ./src/main.c \
+	  ./src/parser.c \
+	  ./src/token.c \
+	  ./src/utils.c
+
 
 OBJ = $(SRC:.c=.o)
 

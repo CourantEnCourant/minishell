@@ -6,12 +6,11 @@
 /*   By: weiqizhang <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 00:08:35 by weiqizhang        #+#    #+#             */
-/*   Updated: 2026/03/17 17:47:55 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/03/24 19:46:09 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "libft.h"
 #include "gc_libft.h"
 #include "datastructures.h"
 
@@ -21,7 +20,7 @@ void	push(t_darray *self, void *item);
 void	*pop_i(t_darray *self, size_t i);
 void	*pop(t_darray *self);
 
-static void	repr(t_darray *self)
+static void	repr(t_darray *self, void (*repr_item)(void *value))
 {
 	size_t	i;
 
@@ -34,10 +33,11 @@ static void	repr(t_darray *self)
 	}
 	while (i < self->len - 1)
 	{
-		ft_printf("\"%s\", ", (char *)self->arr[i]);
+		repr_item(self->arr[i]);
+		write(1, ", ", 2);
 		i++;
 	}
-	ft_printf("\"%s\"", (char *)self->arr[i]);
+	repr_item(self->arr[i]);
 	write(1, "]\n", 2);
 }
 

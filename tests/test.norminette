@@ -20,293 +20,150 @@ static void	repr_str(void *value)
 	ft_printf("\"%s\"", (char *)value);
 }
 
+static void	test_parser_tokenize_case(t_parser *parser, t_gc *gc, char *s)
+{
+	t_darray	*cmds;
+
+	ft_printf("Tokenizing %s\n", s);
+	cmds = parser->tokenize(s, gc);
+	cmds->repr(cmds, repr_str);
+	ft_printf("\n");
+}
+
 static void	test_parser_tokenize(t_gc *gc)
 {
 	t_parser	*parser;
-	t_darray	*cmds;
-	char		*s;
 
 	ft_printf("==========TEST_PARSER_TOKENIZE==========\n");
 	parser = init_parser(gc);
 
 	// empty string
-	s = "";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "");
 
 	// single pipe
-	s = "ls -l | grep -la";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "ls -l | grep -la");
 
 	// pipe without spaces
-	s = "ls -l|grep -la";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "ls -l|grep -la");
 
 	// pipe + and
-	s = "ls -l | grep -la && cat -e";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "ls -l | grep -la && cat -e");
 
 	// and without spaces
-	s = "ls -l | grep -la&&cat -e";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "ls -l | grep -la&&cat -e");
 
 	// pipe + and + or
-	s = "ls -l | grep -la && cat -e || ls -la";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "ls -l | grep -la && cat -e || ls -la");
 
 	// or without spaces
-	s = "ls -l | grep -la&&cat -e|| ls -la";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "ls -l | grep -la&&cat -e|| ls -la");
 
 	// operators inside double quotes (should not tokenize)
-	s = "ls -l | \"grep -la&&cat -e\"|| ls -la";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "ls -l | \"grep -la&&cat -e\"|| ls -la");
 
 	// operators inside single quotes (should not tokenize)
-	s = "echo '|| && |' | cat";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "echo '|| && |' | cat");
 
 	// parentheses
-	s = "(echo hello && echo world)";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "(echo hello && echo world)");
 
 	// nested parentheses
-	s = "(echo hello && (echo world || echo foo))";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "(echo hello && (echo world || echo foo))");
 
 	// parentheses without spaces
-	s = "(ls -l)&&(echo hello)";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "(ls -l)&&(echo hello)");
 
 	// parentheses inside quotes (should not tokenize)
-	s = "echo \"(hello)\" | cat";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "echo \"(hello)\" | cat");
 
 	// simple command, no operators
-	s = "echo hello world";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "echo hello world");
 
 	// multiple pipes
-	s = "cat file | grep foo | wc -l";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "cat file | grep foo | wc -l");
 
 	// all operators combined
-	s = "(ls | grep foo) && echo yes || echo no";
-	ft_printf("Tokenizing %s\n", s);
-	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
-	ft_printf("\n");
+	test_parser_tokenize_case(parser, gc, "(ls | grep foo) && echo yes || echo no");
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
-static void test_parser_is_valid_cmd(t_gc *gc)
+static void	test_parser_is_valid_case(t_parser *parser, char *s, bool expected)
+{
+	ft_printf("Testing %s\n", s);
+	assert(parser->is_valid_cmd(s) == expected);
+}
+
+static void	test_parser_is_valid_cmd(t_gc *gc)
 {
 	t_parser	*parser;
-	char		*s;
 
 	ft_printf("==========TEST_PARSER_IS_VALID_CMD==========\n");
 	parser = init_parser(gc);
 
 	// basic
-	s = "";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "echo hello";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
+	test_parser_is_valid_case(parser, "", true);
+	test_parser_is_valid_case(parser, "echo hello", true);
 
 	// single quotes
-	s = "'hello'";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "''";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "'";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "'hello";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
+	test_parser_is_valid_case(parser, "'hello'", true);
+	test_parser_is_valid_case(parser, "''", true);
+	test_parser_is_valid_case(parser, "'", false);
+	test_parser_is_valid_case(parser, "'hello", false);
 
 	// double quotes
-	s = "\"hello\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "\"\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "\"hello";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
+	test_parser_is_valid_case(parser, "\"hello\"", true);
+	test_parser_is_valid_case(parser, "\"\"", true);
+	test_parser_is_valid_case(parser, "\"", false);
+	test_parser_is_valid_case(parser, "\"hello", false);
 
 	// mixed quotes
-	s = "\"'\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "'\"'";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "\"''\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "'\"\"'";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "\"'";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "'\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "\"'\"''";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "'\"'\"'\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
+	test_parser_is_valid_case(parser, "\"'\"", true);
+	test_parser_is_valid_case(parser, "'\"'", true);
+	test_parser_is_valid_case(parser, "\"''\"", true);
+	test_parser_is_valid_case(parser, "'\"\"'", true);
+	test_parser_is_valid_case(parser, "\"'", false);
+	test_parser_is_valid_case(parser, "'\"", false);
+	test_parser_is_valid_case(parser, "\"'\"''", true);
+	test_parser_is_valid_case(parser, "'\"'\"'\"", true);
 
 	// parentheses
-	s = "()";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "(())";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "()()";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "((()))";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "(";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = ")";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "((";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "))";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = ")(";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "(()";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "())";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
+	test_parser_is_valid_case(parser, "()", true);
+	test_parser_is_valid_case(parser, "(())", true);
+	test_parser_is_valid_case(parser, "()()", true);
+	test_parser_is_valid_case(parser, "((()))", true);
+	test_parser_is_valid_case(parser, "(", false);
+	test_parser_is_valid_case(parser, ")", false);
+	test_parser_is_valid_case(parser, "((", false);
+	test_parser_is_valid_case(parser, "))", false);
+	test_parser_is_valid_case(parser, ")(", false);
+	test_parser_is_valid_case(parser, "(()", false);
+	test_parser_is_valid_case(parser, "())", false);
 
 	// parentheses inside quotes (should be ignored)
-	s = "'()'";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "'('";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "')'";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "\"()\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "\"(\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "\")\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
+	test_parser_is_valid_case(parser, "'()'", true);
+	test_parser_is_valid_case(parser, "'('", true);
+	test_parser_is_valid_case(parser, "')'", true);
+	test_parser_is_valid_case(parser, "\"()\"", true);
+	test_parser_is_valid_case(parser, "\"(\"", true);
+	test_parser_is_valid_case(parser, "\")\"", true);
 
 	// quotes inside parentheses
-	s = "('hello')";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "(\"hello\")";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
+	test_parser_is_valid_case(parser, "('hello')", true);
+	test_parser_is_valid_case(parser, "(\"hello\")", true);
 
 	// combined edge cases
-	s = "''()()";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "(\")\"";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "(')'";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "\"(\")";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "'(')";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
+	test_parser_is_valid_case(parser, "''()()", true);
+	test_parser_is_valid_case(parser, "(\")\"", false);
+	test_parser_is_valid_case(parser, "(')'", false);
+	test_parser_is_valid_case(parser, "\"(\")", false);
+	test_parser_is_valid_case(parser, "'(')", false);
 
 	// realistic commands
-	s = "(echo hello && echo world)";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "(echo hello && (echo world))";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == true);
-	s = "echo 'unclosed";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
-	s = "echo \"unclosed";
-	ft_printf("Testing %s\n", s);
-	assert(parser->is_valid_cmd(s) == false);
+	test_parser_is_valid_case(parser, "(echo hello && echo world)", true);
+	test_parser_is_valid_case(parser, "(echo hello && (echo world))", true);
+	test_parser_is_valid_case(parser, "echo 'unclosed", false);
+	test_parser_is_valid_case(parser, "echo \"unclosed", false);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }

@@ -18,6 +18,7 @@
 
 typedef struct s_parser	t_parser;
 typedef struct s_token	t_token;
+typedef struct s_ast	t_ast;
 
 typedef enum e_lexer_state
 {
@@ -50,6 +51,8 @@ struct s_parser
 {
 	bool			(*is_valid_cmd)(char *cmd);
 	t_darray		*(*tokenize)(char *cmd, t_gc *gc);
+	t_btree			*(*parse)(t_darray *tokens);
+	bool			(*is_valid_tree)(t_btree * ast);
 };
 
 t_parser	*init_parser(t_gc *gc);

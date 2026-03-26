@@ -14,7 +14,7 @@
 
 void	*peek_i(t_darray *self, size_t i)
 {
-	if (i + 1 > self->len)
+	if (i >= self->len)
 	{
 		ft_printf("IndexError: max len is %d, peeked at %d\n", self->len, i);
 		return (NULL);

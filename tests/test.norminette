@@ -214,6 +214,110 @@ static void	test_parser_is_valid_cmd(t_gc *gc)
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
+static void	test_parser_parse_case(t_parser *parser, t_gc *gc, char *s,
+		bool expected)
+{
+	t_darray	*tokens;
+	t_btree		*ast;
+
+	ft_printf("Testing %s\n", s);
+	tokens = parser->tokenize(s, gc);
+	ast = parser->parse(tokens);
+	ast->repr(ast, repr_token);
+	assert(parser->is_valid_tree(ast) == expected);
+	ft_printf("\n");
+}
+
+void	test_parser_parse(t_gc *gc)
+{
+	t_parser	*parser;
+
+	ft_printf("==========TEST_PARSER_PARSE==========\n");
+	parser = init_parser(gc);
+
+	test_parser_parse_case(parser, gc, "ls -l", true);
+	test_parser_parse_case(parser, gc, "ls -l && grep something", true);
+	test_parser_parse_case(parser, gc, "expr1 && expr2 || expr3 | expr4", true);
+	test_parser_parse_case(parser, gc, "a | b && c || d", true);
+	test_parser_parse_case(parser, gc, "a | b | c && d | e || f && g", true);
+
+	// Invalid trees
+	test_parser_parse_case(parser, gc, "ls |", false);
+	test_parser_parse_case(parser, gc, "|| | && echo hello", false);
+
+	// operator at the beginning
+	test_parser_parse_case(parser, gc, "&& ls", false);
+	test_parser_parse_case(parser, gc, "| ls", false);
+	test_parser_parse_case(parser, gc, "|| ls", false);
+
+	// operator at the end
+	test_parser_parse_case(parser, gc, "ls &&", false);
+	test_parser_parse_case(parser, gc, "ls ||", false);
+
+	// consecutive operators
+	test_parser_parse_case(parser, gc, "ls && || echo hi", false);
+	test_parser_parse_case(parser, gc, "ls | | echo hi", false);
+	test_parser_parse_case(parser, gc, "ls || && echo hi", false);
+
+	// only operators
+	test_parser_parse_case(parser, gc, "|", false);
+	test_parser_parse_case(parser, gc, "&&", false);
+	test_parser_parse_case(parser, gc, "||", false);
+
+	// parentheses - valid
+	test_parser_parse_case(parser, gc, "(a)", true);
+	test_parser_parse_case(parser, gc, "(a && b)", true);
+	test_parser_parse_case(parser, gc, "(a) && b", true);
+	test_parser_parse_case(parser, gc, "a && (b)", true);
+	test_parser_parse_case(parser, gc, "(a) && (b)", true);
+	test_parser_parse_case(parser, gc, "a || (b && c)", true);
+	test_parser_parse_case(parser, gc, "(a | b) && c", true);
+	test_parser_parse_case(parser, gc, "(a && (b || c))", true);
+	test_parser_parse_case(parser, gc, "((a || b) && (c || d))", true);
+	test_parser_parse_case(parser, gc, "a && (b | c) || d", true);
+	test_parser_parse_case(parser, gc, "(ls -l | grep foo) && echo yes || echo no", true);
+
+	// parentheses - invalid
+
+	// empty subshell
+	test_parser_parse_case(parser, gc, "()", false);
+
+	// subshell with only an operator inside
+	test_parser_parse_case(parser, gc, "(|)", false);
+	test_parser_parse_case(parser, gc, "(&&)", false);
+
+	// operator before subshell (no left operand)
+	test_parser_parse_case(parser, gc, "&& (a)", false);
+	test_parser_parse_case(parser, gc, "| (a)", false);
+	test_parser_parse_case(parser, gc, "|| (a)", false);
+
+	// operator after subshell with nothing following
+	test_parser_parse_case(parser, gc, "(a) &&", false);
+	test_parser_parse_case(parser, gc, "(a) |", false);
+	test_parser_parse_case(parser, gc, "(a) ||", false);
+
+	// consecutive operators inside subshell
+	test_parser_parse_case(parser, gc, "(a && || b)", false);
+	test_parser_parse_case(parser, gc, "(a | | b)", false);
+
+	// operator at start inside subshell
+	test_parser_parse_case(parser, gc, "(| a)", false);
+	test_parser_parse_case(parser, gc, "(&& a)", false);
+
+	// operator at end inside subshell
+	test_parser_parse_case(parser, gc, "(a |)", false);
+	test_parser_parse_case(parser, gc, "(a &&)", false);
+
+	// nested empty subshell
+	test_parser_parse_case(parser, gc, "(())", false);
+
+	// subshell with command on right side (invalid: subshell cannot have right child)
+	test_parser_parse_case(parser, gc, "(a) b", false);
+
+	ft_printf("==========ALL TESTS PASSED==========\n\n");
+}
+
+
 int main(void)
 {
 	t_gc	*gc;
@@ -222,5 +326,6 @@ int main(void)
 	test_t_token(gc);
 	test_parser_is_valid_cmd(gc);
 	test_parser_tokenize(gc);
+	test_parser_parse(gc);
 	gc->clean(gc);
 }

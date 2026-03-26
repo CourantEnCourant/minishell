@@ -13,6 +13,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdbool.h>
 # include "gc_libft.h"
 # include "datastructures.h"
 

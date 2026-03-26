@@ -42,8 +42,8 @@ void	test_darray(t_gc *gc)
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
-	ft_printf("Test peep() from empty darray\n");
-	assert(list->peep(list) == NULL);
+	ft_printf("Test peek() from empty darray\n");
+	assert(list->peek(list) == NULL);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
@@ -68,8 +68,8 @@ void	test_darray(t_gc *gc)
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
-	ft_printf("Test peep() returns last element\n");
-	assert(strcmp((char *)list->peep(list), "Craft") == 0);
+	ft_printf("Test peek() returns last element\n");
+	assert(strcmp((char *)list->peek(list), "Craft") == 0);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 

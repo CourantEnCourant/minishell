@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <assert.h>
+#include <string.h>
 #include "libft.h"
 #include "gc_libft.h"
 #include "datastructures.h"
@@ -31,27 +33,29 @@ void	test_darray(t_gc *gc)
 	ft_printf("\n");
 
 	ft_printf("Test pop() from empty darray\n");
-	list->pop(list);
+	assert(list->pop(list) == NULL);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
 	ft_printf("Test pop_i() from empty darray\n");
-	list->pop_i(list, 1);
+	assert(list->pop_i(list, 1) == NULL);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
 	ft_printf("Test peep() from empty darray\n");
-	list->peep(list);
+	assert(list->peep(list) == NULL);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
 	ft_printf("Test insert(OUT_OF_RANGE_INDEX)\n");
 	list->insert(list, 50000, gc_strdup("OUT_OF_RANGE_INDEX test", gc));
+	assert(list->len == 0);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
 	ft_printf("Test insert(NEGATIVE_INDEX)\n");
 	list->insert(list, -5, gc_strdup("NEGATIVE_INDEX test", gc));
+	assert(list->len == 0);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
@@ -60,31 +64,32 @@ void	test_darray(t_gc *gc)
 	list->push(list, gc_strdup("World", gc));
 	list->push(list, gc_strdup("Mine", gc));
 	list->push(list, gc_strdup("Craft", gc));
+	assert(list->len == 4);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
-	ft_printf("Test peep()\n");
-	ft_printf("Peep result: %s\n", (char *)list->peep(list));
+	ft_printf("Test peep() returns last element\n");
+	assert(strcmp((char *)list->peep(list), "Craft") == 0);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
 	ft_printf("Test pop()\n");
-	list->pop(list);
+	assert(strcmp((char *)list->pop(list), "Craft") == 0);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
 	ft_printf("Test pop_i(1)\n");
-	list->pop_i(list, 1);
+	assert(strcmp((char *)list->pop_i(list, 1), "World") == 0);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
 	ft_printf("Test pop_i(OUT_OF_RANGE_INDEX)\n");
-	list->pop_i(list, 5000);
+	assert(list->pop_i(list, 5000) == NULL);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
 	ft_printf("Test pop_i(NEGATIVE_INDEX)\n");
-	list->pop_i(list, -50000);
+	assert(list->pop_i(list, -50000) == NULL);
 	list->repr(list, repr_str);
 	ft_printf("\n");
 }

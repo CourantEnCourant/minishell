@@ -214,6 +214,48 @@ static void	test_parser_is_valid_cmd(t_gc *gc)
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
+static void	test_parser_parse_case(t_parser *parser, t_gc *gc, char *s)
+{
+	t_darray	*tokens;
+	t_btree		*ast;
+
+	ft_printf("Testing %s\n", s);
+	tokens = parser->tokenize(s, gc);
+	ast = parser->parse(tokens);
+	ast->repr(ast, repr_token);
+	ft_printf("\n");
+}
+
+void	test_parser_parse(t_gc *gc)
+{
+	t_parser	*parser;
+
+	ft_printf("==========TEST_PARSER_PARSE==========\n");
+	parser = init_parser(gc);
+
+	test_parser_parse_case(parser, gc, "ls -l");
+	test_parser_parse_case(parser, gc, "ls -l && grep something");
+	test_parser_parse_case(parser, gc, "expr1 && expr2 || expr3 | expr4");
+	test_parser_parse_case(parser, gc, "a | b && c || d");
+	test_parser_parse_case(parser, gc, "a | b | c && d | e || f && g");
+
+	// parentheses
+	test_parser_parse_case(parser, gc, "(a)");
+	test_parser_parse_case(parser, gc, "(a && b)");
+	test_parser_parse_case(parser, gc, "(a) && b");
+	test_parser_parse_case(parser, gc, "a && (b)");
+	test_parser_parse_case(parser, gc, "(a) && (b)");
+	test_parser_parse_case(parser, gc, "a || (b && c)");
+	test_parser_parse_case(parser, gc, "(a | b) && c");
+	test_parser_parse_case(parser, gc, "(a && (b || c))");
+	test_parser_parse_case(parser, gc, "((a || b) && (c || d))");
+	test_parser_parse_case(parser, gc, "a && (b | c) || d");
+	test_parser_parse_case(parser, gc, "(ls -l | grep foo) && echo yes || echo no");
+
+	ft_printf("==========ALL TESTS PASSED==========\n\n");
+}
+
+
 int main(void)
 {
 	t_gc	*gc;
@@ -222,5 +264,6 @@ int main(void)
 	test_t_token(gc);
 	test_parser_is_valid_cmd(gc);
 	test_parser_tokenize(gc);
+	test_parser_parse(gc);
 	gc->clean(gc);
 }

@@ -9,6 +9,7 @@ INCLUDE = -I ./include
 SRC = ./src/main.c \
 	  ./src/lexer.c \
 	  ./src/parser.c \
+	  ./src/utils.c \
 	  ./src/utils/gc_getcwd.c \
 	  ./src/utils/gc_readline.c 
 

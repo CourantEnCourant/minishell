@@ -11,13 +11,59 @@
 /* ************************************************************************** */
 
 #include <assert.h>
+#include <string.h>
+#include "libft.h"
 #include "datastructures.h"
 #include "gc_libft.h"
 #include "minishell.h"
 
-static void	repr_str(void *value)
+void	repr_token(void *token);
+
+static void	test_t_token_case(t_gc *gc, char *s, char *expected_value,
+		t_token_type expected_type)
 {
-	ft_printf("\"%s\"", (char *)value);
+	t_token	*token;
+
+	ft_printf("Testing %s\n", s);
+	token = init_token(s, gc);
+	if (expected_value != NULL)
+		assert(strcmp(token->value, expected_value) == 0);
+	assert(token->type == expected_type);
+	token->repr(token);
+	ft_printf("\n");
+}
+
+static void	test_t_token(t_gc *gc)
+{
+	ft_printf("==========TEST_T_CMD==========\n");
+
+	// operand
+	test_t_token_case(gc, "ls -l", "ls -l", OPERAND);
+	test_t_token_case(gc, "echo hello world", "echo hello world", OPERAND);
+	test_t_token_case(gc, "", "", OPERAND);
+
+	// pipe operator
+	test_t_token_case(gc, "|", "|", PIPE);
+
+	// and operator
+	test_t_token_case(gc, "&&", "&&", AND);
+
+	// or operator
+	test_t_token_case(gc, "||", "||", OR);
+
+	// subshell open
+	test_t_token_case(gc, "(", "(", SUBSHELL);
+
+	// subshell close
+	test_t_token_case(gc, ")", ")", CLOSE_PAREN);
+
+	// edge cases: similar but not operators
+	test_t_token_case(gc, "&", NULL, OPERAND);
+	test_t_token_case(gc, "|||", NULL, OPERAND);
+	test_t_token_case(gc, "&&&", NULL, OPERAND);
+	test_t_token_case(gc, "()", NULL, OPERAND);
+
+	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
 static void	test_parser_tokenize_case(t_parser *parser, t_gc *gc, char *s)
@@ -26,7 +72,7 @@ static void	test_parser_tokenize_case(t_parser *parser, t_gc *gc, char *s)
 
 	ft_printf("Tokenizing %s\n", s);
 	cmds = parser->tokenize(s, gc);
-	cmds->repr(cmds, repr_str);
+	cmds->repr(cmds, repr_token);
 	ft_printf("\n");
 }
 
@@ -173,6 +219,7 @@ int main(void)
 	t_gc	*gc;
 
 	gc = init_gc();
+	test_t_token(gc);
 	test_parser_is_valid_cmd(gc);
 	test_parser_tokenize(gc);
 	gc->clean(gc);

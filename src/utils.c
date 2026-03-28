@@ -12,10 +12,18 @@
 
 #include <stdbool.h>
 #include "libft.h"
+#include "minishell.h"
 
 bool	str_iseq(char *s1, char *s2)
 {
 	if (ft_strlen(s1) != ft_strlen(s2))
 		return (false);
 	return (ft_strncmp(s1, s2, ft_strlen(s1)) == 0);
+}
+
+void	repr_token(void *token)
+{
+	if (!token)
+		return ;
+	ft_printf("\"%s\"", ((t_token *)token)->value);
 }

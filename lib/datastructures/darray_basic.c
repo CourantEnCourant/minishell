@@ -14,6 +14,7 @@
 #include "gc_libft.h"
 #include "datastructures.h"
 
+void	*peek_i(t_darray *self, size_t i);
 void	*peek(t_darray *self);
 void	insert(t_darray *self, size_t i, void *item);
 void	push(t_darray *self, void *item);
@@ -51,6 +52,7 @@ t_darray	*init_darray(t_gc *gc)
 	darray->capacity = DARRAY_LEN;
 	darray->gc = gc;
 	darray->repr = repr;
+	darray->peek_i = peek_i;
 	darray->peek = peek;
 	darray->insert = insert;
 	darray->push = push;

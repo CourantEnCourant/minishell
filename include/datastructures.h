@@ -30,6 +30,7 @@ struct s_darray
 	size_t	capacity;
 	t_gc	*gc;
 	void	(*repr)(t_darray *self, void (*repr_item)(void *value));
+	void	*(*peek_i)(t_darray *self, size_t i);
 	void	*(*peek)(t_darray *self);
 	void	(*insert)(t_darray *self, size_t i, void *item);
 	void	(*push)(t_darray *self, void *item);

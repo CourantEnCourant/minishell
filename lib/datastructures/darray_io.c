@@ -15,16 +15,6 @@
 #include "gc_libft.h"
 #include "datastructures.h"
 
-void	*peek(t_darray *self)
-{
-	if (self->len == 0)
-	{
-		ft_printf("IndexError: peeked from empty darray\n");
-		return (NULL);
-	}
-	return (self->arr[self->len - 1]);
-}
-
 void	insert(t_darray *s, size_t i, void *item)
 {
 	void	**arr_ext;

@@ -47,6 +47,16 @@ void	test_darray(t_gc *gc)
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
+	ft_printf("Test peek_i(0) from empty darray\n");
+	assert(list->peek_i(list, 0) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(5) from empty darray\n");
+	assert(list->peek_i(list, 5) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
 	ft_printf("Test insert(OUT_OF_RANGE_INDEX)\n");
 	list->insert(list, 50000, gc_strdup("OUT_OF_RANGE_INDEX test", gc));
 	assert(list->len == 0);
@@ -73,6 +83,38 @@ void	test_darray(t_gc *gc)
 	list->repr(list, repr_str);
 	ft_printf("\n");
 
+	ft_printf("Test peek_i(0)\n");
+	assert(strcmp((char *)list->peek_i(list, 0), "Hello") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(1)\n");
+	assert(strcmp((char *)list->peek_i(list, 1), "World") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(2)\n");
+	assert(strcmp((char *)list->peek_i(list, 2), "Mine") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(3)\n");
+	assert(strcmp((char *)list->peek_i(list, 3), "Craft") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(OUT_OF_RANGE)\n");
+	assert(list->peek_i(list, 100) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek() does not remove elements\n");
+	list->peek(list);
+	list->peek(list);
+	assert(list->len == 4);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
 	ft_printf("Test pop()\n");
 	assert(strcmp((char *)list->pop(list), "Craft") == 0);
 	list->repr(list, repr_str);
@@ -91,6 +133,37 @@ void	test_darray(t_gc *gc)
 	ft_printf("Test pop_i(NEGATIVE_INDEX)\n");
 	assert(list->pop_i(list, -50000) == NULL);
 	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test pop/peek on empty does not change len\n");
+	assert(list->len == 2);
+	list->pop(list);
+	list->pop(list);
+	assert(list->len == 0);
+	list->pop(list);
+	list->pop_i(list, 0);
+	list->peek(list);
+	list->peek_i(list, 0);
+	assert(list->len == 0);
+	ft_printf("\n");
+
+	ft_printf("Test len tracks push and pop correctly\n");
+	list->push(list, gc_strdup("a", gc));
+	assert(list->len == 1);
+	list->push(list, gc_strdup("b", gc));
+	assert(list->len == 2);
+	list->push(list, gc_strdup("c", gc));
+	assert(list->len == 3);
+	list->pop(list);
+	assert(list->len == 2);
+	list->pop_i(list, 0);
+	assert(list->len == 1);
+	list->peek(list);
+	assert(list->len == 1);
+	list->peek_i(list, 0);
+	assert(list->len == 1);
+	list->pop(list);
+	assert(list->len == 0);
 	ft_printf("\n");
 }
 

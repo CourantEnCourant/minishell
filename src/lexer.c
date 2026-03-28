@@ -12,6 +12,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include "datastructures.h"
 #include "minishell.h"
 
 static t_lexer_state	update_state(char c, t_lexer_state current_state)
@@ -60,14 +61,21 @@ bool	is_valid_cmd(char *cmd)
 
 static size_t	process(t_darray *tokens, char *cmd, int len, char *operator)
 {
-	char	*token;
+	char	*token_value;
+	t_token	*token;
 
-	token = gc_substr(cmd, 0, len, tokens->gc);
-	token = gc_strtrim(token, " ", tokens->gc);
-	if (token[0])
+	token_value = gc_substr(cmd, 0, len, tokens->gc);
+	token_value = gc_strtrim(token_value, " ", tokens->gc);
+	if (token_value[0])
+	{
+		token = init_token(token_value, tokens->gc);
 		tokens->push(tokens, token);
+	}
 	if (operator[0])
-		tokens->push(tokens, operator);
+	{
+		token = init_token(operator, tokens->gc);
+		tokens->push(tokens, token);
+	}
 	return (len + ft_strlen(operator));
 }
 

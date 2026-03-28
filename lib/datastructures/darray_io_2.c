@@ -21,3 +21,13 @@ void	*peek_i(t_darray *self, size_t i)
 	}
 	return (self->arr[i]);
 }
+
+void	*peek(t_darray *self)
+{
+	if (self->len == 0)
+	{
+		ft_printf("IndexError: peeked from empty darray\n");
+		return (NULL);
+	}
+	return (self->arr[self->len - 1]);
+}

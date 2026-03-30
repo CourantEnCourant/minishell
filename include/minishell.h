@@ -6,7 +6,7 @@
 /*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 21:07:26 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/26 15:21:30 by anying           ###   ########.fr       */
+/*   Updated: 2026/03/29 00:00:55 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 typedef struct s_parser	t_parser;
 typedef struct s_token	t_token;
-typedef struct s_ast	t_ast;
+typedef struct s_exec	t_exec;
+typedef struct s_pipe	t_pipe;
 
 typedef enum e_lexer_state
 {
@@ -55,8 +56,14 @@ struct s_parser
 	t_btree			*(*parse)(t_darray *tokens);
 	bool			(*is_valid_tree)(t_btree * ast);
 };
-
 t_parser	*init_parser(t_gc *gc);
+
+struct s_exec
+{
+	t_gc	*gc;
+	int		(*execute)(t_btree *ast);
+};
+t_exec		*init_exec(t_gc *gc);
 
 char		*gc_readline(const char *prompt, t_gc *gc);
 char		*gc_getcwd(t_gc *gc);

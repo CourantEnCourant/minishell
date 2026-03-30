@@ -6,10 +6,12 @@ AR = ar rcs
 RM = rm -rf
 
 INCLUDE = -I ./include
-SRC = ./src/lexer.c \
+SRC = ./src/executor.c \
+	  ./src/lexer.c \
 	  ./src/main.c \
 	  ./src/parser.c \
 	  ./src/token.c \
+	  ./src/utils/gc_execvp.c \
 	  ./src/utils/gc_getcwd.c \
 	  ./src/utils/gc_readline.c \
 	  ./src/utils/utils.c

@@ -12,6 +12,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <unistd.h>
 #include "libft.h"
 #include "datastructures.h"
 #include "gc_libft.h"
@@ -318,6 +319,36 @@ void	test_parser_parse(t_gc *gc)
 }
 
 
+static void	test_exec_case(t_exec *exec, t_gc *gc, char *cmd)
+{
+	t_parser	*parser;
+	t_btree		*ast;
+
+	ft_printf("Testing exec: %s\n", cmd);
+	parser = init_parser(gc);
+	ast = parser->parse(parser->tokenize(cmd, gc));
+	exec->execute(ast);
+	ft_printf("\n");
+}
+
+static void	test_exec(t_gc *gc)
+{
+	t_exec	*exec;
+
+	ft_printf("==========TEST_EXEC==========\n");
+
+	// test single cmd
+	exec = init_exec(gc);
+	test_exec_case(exec, gc, "echo hello");
+	test_exec_case(exec, gc, "echo hello world");
+	test_exec_case(exec, gc, "echo -n hello");
+	test_exec_case(exec, gc, "ls -l");
+	test_exec_case(exec, gc, "/bin/echo bonjour");
+
+	ft_printf("==========ALL TESTS PASSED==========\n\n");
+}
+
+
 int main(void)
 {
 	t_gc	*gc;
@@ -327,5 +358,6 @@ int main(void)
 	test_parser_is_valid_cmd(gc);
 	test_parser_tokenize(gc);
 	test_parser_parse(gc);
+	test_exec(gc);
 	gc->clean(gc);
 }

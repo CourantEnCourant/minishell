@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdbool.h>
+#include <unistd.h>
 #include "libft.h"
 #include "minishell.h"
 

@@ -13,21 +13,34 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <stdio.h>
+#include "datastructures.h"
 #include "gc_libft.h"
 #include "minishell.h"
 
 int	main(void)
 {
-	char	*input;
-	t_gc	*gc;
+	char		*input;
+	t_gc		*gc;
+	t_darray	*tokens;
+	t_btree		*ast;
+	t_parser	*parser;
+	t_exec		*executor;
 
 	gc = init_gc();
+	parser = init_parser(gc);
+	executor = init_exec(gc);
 	while (true)
 	{
 		input = gc_readline("minishell> ", gc);
 		if (!input)
 			break ;
-		printf("%s\n", input);
+		if (!parser->is_valid_cmd(input))
+			continue ;
+		tokens = parser->tokenize(input, gc);
+		ast = parser->parse(tokens);
+		if (!parser->is_valid_tree(ast))
+			continue ;
+		executor->execute(ast);
 	}
 	printf("exit\n");
 	gc->clean(gc);

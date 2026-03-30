@@ -353,6 +353,47 @@ static void	test_exec(t_gc *gc)
 	test_exec_case(exec, gc, "ls -l || echo wrong");
 	test_exec_case(exec, gc, "invalid || echo wrong");
 
+	// test |
+	test_exec_case(exec, gc, "echo hello | cat -e | cat -e");
+
+	// test && || | combined (no parentheses)
+	test_exec_case(exec, gc, "echo hello | cat -e && echo done");
+	test_exec_case(exec, gc, "ls nonexistent && echo yes || echo no");
+	test_exec_case(exec, gc, "echo start && echo hello | cat -e");
+	test_exec_case(exec, gc,
+		"ls nonexistent || echo b && echo c | cat -e");
+
+	ft_printf("==========ALL TESTS PASSED==========\n\n");
+}
+
+
+t_darray	*flatten(t_btree *ast);
+static void	test_flatten_case(char *cmd, t_parser *parser, t_gc *gc)
+{
+	t_darray	*tokens;
+	t_btree		*ast;
+	t_darray	*flattened;
+
+	ft_printf("Testing %s\n", cmd);
+	tokens = parser->tokenize(cmd, gc);
+	ast = parser->parse(tokens);
+	flattened = flatten(ast);
+	flattened->repr(flattened, repr_token);
+	ft_printf("\n");
+}
+
+static void	test_flatten(t_gc *gc)
+{
+	t_parser	*parser;
+
+	parser = init_parser(gc);
+
+	ft_printf("==========TEST_FLATTEN==========\n\n");
+
+	test_flatten_case("ls -l | cat -e", parser, gc);
+	test_flatten_case("a | b | c | d", parser, gc);
+	test_flatten_case("a|b|c", parser, gc);
+
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
@@ -366,6 +407,7 @@ int main(void)
 	test_parser_is_valid_cmd(gc);
 	test_parser_tokenize(gc);
 	test_parser_parse(gc);
+	test_flatten(gc);
 	test_exec(gc);
 	gc->clean(gc);
 }

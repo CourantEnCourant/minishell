@@ -13,20 +13,14 @@ make        # Build the minishell executable
 make clean  # Remove object files
 make fclean # Remove object files and the executable
 make re     # Rebuild from scratch
+make test   # Build tests
 ```
 
-### Run minishell
+### Run
 
 ```bash
-./minishell
-```
-
-### Run tests
-
-```bash
-mv ./tests/test.norminette ./tests/test.c
-make test
-./test
+./minishell # Run minishell
+./test      # Run tests
 ```
 
 ## Resources

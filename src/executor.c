@@ -15,7 +15,8 @@
 #include <sys/wait.h>
 #include "minishell.h"
 
-int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
+int			gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
+static int	execute(t_btree *ast);
 
 static int	exec_operand(t_token *operand, t_gc *gc)
 {
@@ -36,6 +37,16 @@ static int	exec_operand(t_token *operand, t_gc *gc)
 	return (status >> 8);
 }
 
+static int	exec_and(t_btree *ast)
+{
+	int	status;
+
+	status = execute(ast->left);
+	if (status == 0)
+		return (execute(ast->right));
+	return (status);
+}
+
 static int	execute(t_btree *ast)
 {
 	t_token	*current;
@@ -43,6 +54,8 @@ static int	execute(t_btree *ast)
 	current = ast->value;
 	if (current->type == OPERAND)
 		return (exec_operand(current, ast->gc));
+	else if (current->type == AND)
+		return (exec_and(ast));
 	else
 		return (execute(ast->left));
 }

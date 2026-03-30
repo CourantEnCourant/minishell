@@ -345,6 +345,10 @@ static void	test_exec(t_gc *gc)
 	test_exec_case(exec, gc, "ls -l");
 	test_exec_case(exec, gc, "/bin/echo bonjour");
 
+
+	// test &&
+	test_exec_case(exec, gc, "ls -l && echo success");
+
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 

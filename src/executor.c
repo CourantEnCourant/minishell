@@ -16,6 +16,7 @@
 #include "minishell.h"
 
 int			gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
+int			exec_pipe(t_btree *ast);
 static int	execute(t_btree *ast);
 
 static int	exec_operand(t_token *operand, t_gc *gc)
@@ -64,6 +65,8 @@ static int	execute(t_btree *ast)
 			return (execute(ast->right));
 		return (status);
 	}
+	else if (current->type == PIPE)
+		return (exec_pipe(ast));
 	else
 		return (execute(ast->left));
 }

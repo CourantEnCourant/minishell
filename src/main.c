@@ -10,10 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdbool.h>
+#include <unistd.h>
 #include <stdio.h>
+#include "gc_libft.h"
+#include "minishell.h"
 
 int	main(void)
 {
-	printf("Hello World\n");
-	return (0);
+	char	*input;
+	t_gc	*gc;
+
+	gc = init_gc();
+	while (true)
+	{
+		input = gc_readline("minishell> ", gc);
+		if (!input)
+			break ;
+		printf("%s\n", input);
+	}
+	printf("exit\n");
+	gc->clean(gc);
 }

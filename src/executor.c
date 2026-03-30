@@ -38,6 +38,23 @@ static int	exec_operand(t_token *operand, t_gc *gc)
 	return (status >> 8);
 }
 
+int	exec_subshell(t_btree *ast)
+{
+	pid_t	pid;
+	int		exit_code;
+	int		status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		exit_code = execute(ast->left);
+		ast->gc->clean(ast->gc);
+		exit(exit_code);
+	}
+	waitpid(pid, &status, 0);
+	return (status >> 8);
+}
+
 static int	exec_and(t_btree *ast)
 {
 	int	status;
@@ -67,6 +84,8 @@ static int	execute(t_btree *ast)
 	}
 	else if (current->type == PIPE)
 		return (exec_pipe(ast));
+	else if (current->type == SUBSHELL)
+		return (exec_subshell(ast));
 	else
 		return (execute(ast->left));
 }

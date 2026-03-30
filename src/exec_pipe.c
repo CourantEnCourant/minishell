@@ -18,6 +18,7 @@
 #include "datastructures.h"
 
 int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
+int	exec_subshell(t_btree *ast);
 
 static void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
 {
@@ -36,8 +37,14 @@ static void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
 		close(out_fd);
 	}
 	token = node->value;
-	argv = gc_split(token->value, ' ', gc);
-	exit_code = gc_execvp(argv[0], argv, gc);
+	if (token->type == OPERAND)
+	{
+		argv = gc_split(token->value, ' ', gc);
+		exit_code = gc_execvp(argv[0], argv, gc);
+		gc->clean(gc);
+		exit(exit_code);
+	}
+	exit_code = exec_subshell(node);
 	gc->clean(gc);
 	exit(exit_code);
 }
@@ -74,7 +81,7 @@ static void	flatten_recur(t_btree *ast, t_darray *nodes)
 	t_token		*current;
 
 	current = ast->value;
-	if (current->type == OPERAND)
+	if (current->type == OPERAND || current->type == SUBSHELL)
 		nodes->push(nodes, ast);
 	if (current->type == PIPE)
 	{

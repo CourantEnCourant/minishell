@@ -363,6 +363,34 @@ static void	test_exec(t_gc *gc)
 	test_exec_case(exec, gc,
 		"ls nonexistent || echo b && echo c | cat -e");
 
+	// test subshell
+	test_exec_case(exec, gc, "(echo hello)");
+	test_exec_case(exec, gc, "(echo hello && echo world)");
+	test_exec_case(exec, gc, "(echo hello || echo world)");
+	test_exec_case(exec, gc, "(echo hello | cat -e)");
+
+	// subshell with && / ||
+	test_exec_case(exec, gc, "(echo hello) && echo after");
+	test_exec_case(exec, gc, "(ls nonexistent) || echo fallback");
+	test_exec_case(exec, gc, "(ls nonexistent) && echo no || echo yes");
+
+	// subshell with pipe
+	test_exec_case(exec, gc, "(echo hello) | cat -e");
+	test_exec_case(exec, gc, "echo start | (cat -e)");
+
+	// nested subshell
+	test_exec_case(exec, gc, "((echo nested))");
+	test_exec_case(exec, gc, "(echo a && (echo b || echo c))");
+	test_exec_case(exec, gc, "((echo a | cat -e) && echo b)");
+
+	// subshell combined with operators outside
+	test_exec_case(exec, gc,
+		"(echo a && echo b) || (echo c && echo d)");
+	test_exec_case(exec, gc,
+		"(ls nonexistent || echo recover) && echo done");
+	test_exec_case(exec, gc,
+		"(echo hello | cat -e) && (echo world | cat -e)");
+
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 

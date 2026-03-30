@@ -50,12 +50,20 @@ static int	exec_and(t_btree *ast)
 static int	execute(t_btree *ast)
 {
 	t_token	*current;
+	int		status;
 
 	current = ast->value;
 	if (current->type == OPERAND)
 		return (exec_operand(current, ast->gc));
 	else if (current->type == AND)
 		return (exec_and(ast));
+	else if (current->type == OR)
+	{
+		status = execute(ast->left);
+		if (status != 0)
+			return (execute(ast->right));
+		return (status);
+	}
 	else
 		return (execute(ast->left));
 }

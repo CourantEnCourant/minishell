@@ -40,7 +40,10 @@ int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
 	extern char	**environ;
 
 	if (ft_strchr(cmd, '/'))
+	{
 		execve(cmd, argv, environ);
+		return (127);
+	}
 	paths = get_paths(gc);
 	if (!paths)
 		return (127);

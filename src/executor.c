@@ -34,7 +34,7 @@ static int	exec_operand(t_token *operand, t_gc *gc)
 		gc->clean(gc);
 		exit(exit_code);
 	}
-	wait(&status);
+	waitpid(pid, &status, 0);
 	return (status >> 8);
 }
 

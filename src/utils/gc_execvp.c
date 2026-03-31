@@ -23,7 +23,7 @@ char	**get_paths(t_gc *gc)
 	i = 0;
 	while (environ[i])
 	{
-		if (ft_strncmp(environ[i], "PATH", 4) == 0)
+		if (ft_strncmp(environ[i], "PATH=", 5) == 0)
 			break ;
 		i++;
 	}

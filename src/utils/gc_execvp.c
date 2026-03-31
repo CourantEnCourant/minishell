@@ -42,6 +42,8 @@ int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
 	if (ft_strchr(cmd, '/'))
 		execve(cmd, argv, environ);
 	paths = get_paths(gc);
+	if (!paths)
+		return (127);
 	i = 0;
 	while (paths[i])
 	{

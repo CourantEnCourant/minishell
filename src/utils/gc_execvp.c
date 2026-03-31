@@ -15,7 +15,7 @@
 #include "libft.h"
 #include "gc_libft.h"
 
-char	**get_paths(t_gc *gc)
+static char	**get_paths(t_gc *gc)
 {
 	size_t		i;
 	extern char	**environ;

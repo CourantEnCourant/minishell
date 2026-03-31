@@ -48,9 +48,7 @@ fclean: clean
 	@echo "Removed $(NAME) and test"
 
 test: $(LIB_ARCHIVES) $(TEST_OBJ)
-	@cp tests/test.norminette tests/test.c
-	@$(CC) $(CFLAGS) $(INCLUDE) tests/test.c $(TEST_OBJ) $(LIB_ARCHIVES) -lreadline -o test
-	@rm tests/test.c
+	@$(CC) $(CFLAGS) $(INCLUDE) $(TEST_OBJ) -x c tests/test.norminette -x none $(LIB_ARCHIVES) -lreadline -o test
 	@echo "Compiled ./test"
 
 re: fclean all

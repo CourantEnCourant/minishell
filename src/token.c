@@ -11,9 +11,8 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include "libft.h"
 #include "minishell.h"
-
-bool	str_iseq(char *s1, char *s2);
 
 static void	match_binding_power(t_token *token)
 {
@@ -62,15 +61,15 @@ t_token	*init_token(char *value, t_gc *gc)
 
 	token = gc_malloc(sizeof(t_token), gc);
 	token->value = value;
-	if (str_iseq(value, "&&"))
+	if (ft_strcmp(value, "&&") == 0)
 		token->type = AND;
-	else if (str_iseq(value, "||"))
+	else if (ft_strcmp(value, "||") == 0)
 		token->type = OR;
-	else if (str_iseq(value, "|"))
+	else if (ft_strcmp(value, "|") == 0)
 		token->type = PIPE;
-	else if (str_iseq(value, "("))
+	else if (ft_strcmp(value, "(") == 0)
 		token->type = SUBSHELL;
-	else if (str_iseq(value, ")"))
+	else if (ft_strcmp(value, ")") == 0)
 		token->type = CLOSE_PAREN;
 	else
 		token->type = OPERAND;

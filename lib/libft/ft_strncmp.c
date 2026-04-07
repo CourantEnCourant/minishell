@@ -6,7 +6,7 @@
 /*   By: weiqizhang <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 20:58:32 by weiqizhang        #+#    #+#             */
-/*   Updated: 2025/11/22 02:44:02 by weiqizhang       ###   ########.fr       */
+/*   Updated: 2026/04/02 21:55:38 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,3 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 	return (0);
 }
-
-/*
-#include <stdio.h>
-int	main(void)
-{
-	char s1[] = "Hello world";
-	char s2[] = "He";
-
-	printf("%d", ft_strncmp(s1, s2, 4));
-}
-*/

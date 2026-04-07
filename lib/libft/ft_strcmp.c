@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/18 17:11:12 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/18 17:12:57 by weizhang         ###   ########.fr       */
+/*   Created: 2026/04/02 21:54:29 by weizhang          #+#    #+#             */
+/*   Updated: 2026/04/02 21:57:51 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include <unistd.h>
 #include "libft.h"
-#include "minishell.h"
 
-void	repr_token(void *token)
+int	ft_strcmp(char *s1, char *s2)
 {
-	if (!token)
-		return ;
-	ft_printf("\"%s\"", ((t_token *)token)->value);
+	size_t	i;
+
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			break ;
+		i++;
+	}
+	return (s1[i] - s2[i]);
 }

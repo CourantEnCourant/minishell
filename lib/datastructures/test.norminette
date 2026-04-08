@@ -241,12 +241,42 @@ void	test_btree(t_gc *gc)
 	ft_printf("\n");
 }
 
+static void	test_reduce_helper(t_darray *list, char *init, char *expected)
+{
+	char	*result;
+
+	result = (char *)list->reduce(list,
+			(void *(*)(void *, void *, t_gc *))gc_strjoin, init);
+	assert(strcmp(result, expected) == 0);
+	ft_printf("result: \"%s\"\n\n", result);
+}
+
+void	test_darray_functional(t_gc *gc)
+{
+	t_darray	*list;
+
+	ft_printf("==========darray functional test==========\n");
+	list = init_darray(gc);
+
+	ft_printf("Test reduce with gc_strjoin on empty darray\n");
+	test_reduce_helper(list, gc_strdup("", gc), "");
+
+	ft_printf("Test reduce with [\"Hello\", \" \", \"World\"]\n");
+	list->push(list, gc_strdup("Hello", gc));
+	list->push(list, gc_strdup(" ", gc));
+	list->push(list, gc_strdup("World", gc));
+	test_reduce_helper(list, gc_strdup("", gc), "Hello World");
+	ft_printf("Test reduce with gc_strjoin and initial value \"Say: \"\n");
+	test_reduce_helper(list, gc_strdup("Say: ", gc), "Say: Hello World");
+}
+
 int	main(void)
 {
 	t_gc	*gc;
 	gc = init_gc();
 	test_darray(gc);
 	test_btree(gc);
+	test_darray_functional(gc);
 	gc->clean(gc);
 	return (0);
 }

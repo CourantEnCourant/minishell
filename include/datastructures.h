@@ -35,6 +35,8 @@ struct s_darray
 	void	(*push)(t_darray *self, void *item);
 	void	*(*pop_i)(t_darray *self, size_t i);
 	void	*(*pop)(t_darray *self);
+	void	*(*reduce)(t_darray *s,
+			void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
 };
 t_darray	*init_darray(t_gc *gc);
 

@@ -35,7 +35,7 @@ fclean: clean
 test: $(NAME)
 	@$(MAKE) -C ../libft
 	@$(MAKE) -C ../gc_libft
-	@$(CC) $(CFLAGS) $(INCLUDE) test.c $(NAME) ../gc_libft/gc_libft.a ../libft/libft.a -o $(TEST)
+	@$(CC) $(CFLAGS) $(INCLUDE) -x c test.norminette -x none $(NAME) ../gc_libft/gc_libft.a ../libft/libft.a -o $(TEST)
 	@echo "Compiled ./${TEST}"
 
 re: fclean all

@@ -24,11 +24,9 @@ int	main(void)
 	t_darray	*tokens;
 	t_btree		*ast;
 	t_parser	*parser;
-	t_exec		*executor;
 
 	gc = init_gc();
 	parser = init_parser(gc);
-	executor = init_exec(gc);
 	while (true)
 	{
 		input = gc_readline("minishell> ", gc);
@@ -40,7 +38,7 @@ int	main(void)
 		ast = parser->parse(tokens);
 		if (!parser->is_valid_tree(ast))
 			continue ;
-		executor->execute(ast);
+		execute(ast);
 	}
 	printf("exit\n");
 	gc->clean(gc);

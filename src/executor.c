@@ -17,7 +17,7 @@
 
 int			gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 int			exec_pipe(t_btree *ast);
-static int	execute(t_btree *ast);
+int			execute(t_btree *ast);
 
 static int	exec_operand(t_token *operand, t_gc *gc)
 {
@@ -65,7 +65,7 @@ static int	exec_and(t_btree *ast)
 	return (status);
 }
 
-static int	execute(t_btree *ast)
+int	execute(t_btree *ast)
 {
 	t_token	*current;
 	int		status;
@@ -90,12 +90,3 @@ static int	execute(t_btree *ast)
 		return (execute(ast->left));
 }
 
-t_exec	*init_exec(t_gc *gc)
-{
-	t_exec	*executor;
-
-	executor = gc_malloc(sizeof(t_exec), gc);
-	executor->execute = execute;
-	executor->gc = gc;
-	return (executor);
-}

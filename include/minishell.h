@@ -19,7 +19,6 @@
 
 typedef struct s_parser	t_parser;
 typedef struct s_exec	t_exec;
-typedef struct s_pipe	t_pipe;
 
 typedef enum e_lexer_state
 {

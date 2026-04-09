@@ -319,7 +319,7 @@ void	test_parser_parse(t_gc *gc)
 }
 
 
-static void	test_exec_case(t_exec *exec, t_gc *gc, char *cmd)
+static void	test_exec_case(t_gc *gc, char *cmd)
 {
 	t_parser	*parser;
 	t_btree		*ast;
@@ -327,68 +327,65 @@ static void	test_exec_case(t_exec *exec, t_gc *gc, char *cmd)
 	ft_printf("Testing exec: %s\n", cmd);
 	parser = init_parser(gc);
 	ast = parser->parse(parser->tokenize(cmd, gc));
-	exec->execute(ast);
+	execute(ast);
 	ft_printf("\n");
 }
 
 static void	test_exec(t_gc *gc)
 {
-	t_exec	*exec;
-
 	ft_printf("==========TEST_EXEC==========\n");
 
 	// test single cmd
-	exec = init_exec(gc);
-	test_exec_case(exec, gc, "echo hello");
-	test_exec_case(exec, gc, "echo hello world");
-	test_exec_case(exec, gc, "echo -n hello");
-	test_exec_case(exec, gc, "ls -l");
-	test_exec_case(exec, gc, "/bin/echo bonjour");
+	test_exec_case(gc, "echo hello");
+	test_exec_case(gc, "echo hello world");
+	test_exec_case(gc, "echo -n hello");
+	test_exec_case(gc, "ls -l");
+	test_exec_case(gc, "/bin/echo bonjour");
 
 
 	// test &&
-	test_exec_case(exec, gc, "ls -l && echo success");
+	test_exec_case(gc, "ls -l && echo success");
 
 	// test ||
-	test_exec_case(exec, gc, "ls -l || echo wrong");
-	test_exec_case(exec, gc, "invalid || echo wrong");
+	test_exec_case(gc, "ls -l || echo wrong");
+	test_exec_case(gc, "invalid || echo wrong");
 
 	// test |
-	test_exec_case(exec, gc, "echo hello | cat -e | cat -e");
+	test_exec_case(gc, "echo hello | cat -e | cat -e");
 
 	// test && || | combined (no parentheses)
-	test_exec_case(exec, gc, "echo hello | cat -e && echo done");
-	test_exec_case(exec, gc, "ls nonexistent && echo yes || echo no");
-	test_exec_case(exec, gc, "echo start && echo hello | cat -e");
-	test_exec_case(exec, gc,
+	test_exec_case(gc, "echo hello | cat -e && echo done");
+	test_exec_case(gc, "ls nonexistent && echo yes || echo no");
+	test_exec_case(gc, "echo start && echo hello | cat -e");
+	test_exec_case(gc,
 		"ls nonexistent || echo b && echo c | cat -e");
 
 	// test subshell
-	test_exec_case(exec, gc, "(echo hello)");
-	test_exec_case(exec, gc, "(echo hello && echo world)");
-	test_exec_case(exec, gc, "(echo hello || echo world)");
-	test_exec_case(exec, gc, "(echo hello | cat -e)");
+	test_exec_case(gc, "(echo hello)");
+	test_exec_case(gc, "(echo hello && echo world)");
+	test_exec_case(gc, "(echo hello || echo world)");
+	test_exec_case(gc, "(echo hello | cat -e)");
 
 	// subshell with && / ||
-	test_exec_case(exec, gc, "(echo hello) && echo after");
-	test_exec_case(exec, gc, "(ls nonexistent) || echo fallback");
-	test_exec_case(exec, gc, "(ls nonexistent) && echo no || echo yes");
+	test_exec_case(gc, "(echo hello) && echo after");
+	test_exec_case(gc, "(ls nonexistent) || echo fallback");
+	test_exec_case(gc, "(ls nonexistent) && echo no || echo yes");
 
 	// subshell with pipe
-	test_exec_case(exec, gc, "(echo hello) | cat -e");
-	test_exec_case(exec, gc, "echo start | (cat -e)");
+	test_exec_case(gc, "(echo hello) | cat -e");
+	test_exec_case(gc, "echo start | (cat -e)");
 
 	// nested subshell
-	test_exec_case(exec, gc, "((echo nested))");
-	test_exec_case(exec, gc, "(echo a && (echo b || echo c))");
-	test_exec_case(exec, gc, "((echo a | cat -e) && echo b)");
+	test_exec_case(gc, "((echo nested))");
+	test_exec_case(gc, "(echo a && (echo b || echo c))");
+	test_exec_case(gc, "((echo a | cat -e) && echo b)");
 
 	// subshell combined with operators outside
-	test_exec_case(exec, gc,
+	test_exec_case(gc,
 		"(echo a && echo b) || (echo c && echo d)");
-	test_exec_case(exec, gc,
+	test_exec_case(gc,
 		"(ls nonexistent || echo recover) && echo done");
-	test_exec_case(exec, gc,
+	test_exec_case(gc,
 		"(echo hello | cat -e) && (echo world | cat -e)");
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");

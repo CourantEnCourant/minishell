@@ -18,7 +18,6 @@
 # include "datastructures.h"
 
 typedef struct s_parser	t_parser;
-typedef struct s_exec	t_exec;
 
 typedef enum e_lexer_state
 {
@@ -57,14 +56,8 @@ struct s_parser
 };
 t_parser	*init_parser(t_gc *gc);
 
-struct s_exec
-{
-	t_gc	*gc;
-	int		(*execute)(t_btree *ast);
-};
-t_exec		*init_exec(t_gc *gc);
-
 char		*gc_readline(const char *prompt, t_gc *gc);
 char		*gc_getcwd(t_gc *gc);
+int			execute(t_btree *ast);
 
 #endif

@@ -12,6 +12,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include "libft.h"
 #include "datastructures.h"
 #include "minishell.h"
 
@@ -53,12 +54,12 @@ static size_t	process(t_darray *tokens, char *cmd, int len, char *operator)
 
 static size_t	lookup(t_darray *tokens, char *cmd, size_t start, size_t i)
 {
-	if (cmd[i] == '&' && cmd[i + 1] == '&')
+	if (ft_strncmp(&cmd[i], "&&", 2) == 0)
 		start += process(tokens, &cmd[start], i - start, "&&");
+	else if (ft_strncmp(&cmd[i], "||", 2) == 0)
+		start += process(tokens, &cmd[start], i - start, "||");
 	else if (cmd[i] == '|' && cmd[i + 1] != '|')
 		start += process(tokens, &cmd[start], i - start, "|");
-	else if (cmd[i] == '|' && cmd[i + 1] == '|')
-		start += process(tokens, &cmd[start], i - start, "||");
 	else if (cmd[i] == '(')
 		start += process(tokens, &cmd[start], i - start, "(");
 	else if (cmd[i] == ')')

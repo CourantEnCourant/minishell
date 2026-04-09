@@ -11,9 +11,35 @@
 /* ************************************************************************** */
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <unistd.h>
+#include "datastructures.h"
 #include "libft.h"
 #include "minishell.h"
+
+size_t	len(void **arr)
+{
+	size_t	i;
+
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
+}
+
+void	repr_strs(char **strs)
+{
+	size_t	i;
+
+	ft_printf("\"");
+	i = 0;
+	while (i < len((void **)strs) - 1)
+	{
+		ft_printf("%s ", strs[i]);
+		i++;
+	}
+	ft_printf("%s\"", strs[i]);
+}
 
 void	repr_token(void *token)
 {

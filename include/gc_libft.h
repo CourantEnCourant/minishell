@@ -23,8 +23,8 @@ struct				s_gc
 	void			(*clean)(t_gc *self);
 	void			(*add)(t_gc *self, void *item);
 };
-
 t_gc	*init_gc(void);
+
 void	*gc_malloc(size_t size, t_gc *gc);
 void	*gc_calloc(size_t nmemb, size_t size, t_gc *gc);
 char	*gc_strdup(char *s, t_gc *gc);

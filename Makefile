@@ -6,7 +6,8 @@ AR = ar rcs
 RM = rm -rf
 
 INCLUDE = -I ./include
-SRC = ./src/exec_pipe.c \
+SRC = ./src/checker.c \
+	  ./src/exec_pipe.c \
 	  ./src/executor.c \
 	  ./src/lexer.c \
 	  ./src/main.c \

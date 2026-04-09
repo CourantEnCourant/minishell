@@ -17,24 +17,8 @@
 #include "minishell.h"
 
 bool			quotes_paren_match(char *cmd);
+bool			is_valid_tree(t_btree *ast);
 t_darray		*tokenize(char *cmd, t_gc *gc);
-
-static bool	is_valid_tree(t_btree *ast)
-{
-	t_token	*current;
-
-	if (!ast || !ast->value)
-		return (false);
-	current = ast->value;
-	if (current->type == OPERAND)
-		return (!ast->left && !ast->right);
-	else if (current->type == SUBSHELL)
-		return (is_valid_tree(ast->left) && !ast->right);
-	else if (current->type == CLOSE_PAREN)
-		return (false);
-	else
-		return (is_valid_tree(ast->left) && is_valid_tree(ast->right));
-}
 
 static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp);
 

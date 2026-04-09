@@ -21,22 +21,16 @@ int	main(void)
 {
 	char		*input;
 	t_gc		*gc;
-	t_darray	*tokens;
 	t_btree		*ast;
-	t_parser	*parser;
 
 	gc = init_gc();
-	parser = init_parser(gc);
 	while (true)
 	{
 		input = gc_readline("minishell> ", gc);
 		if (!input)
 			break ;
-		if (!parser->is_valid_cmd(input))
-			continue ;
-		tokens = parser->tokenize(input, gc);
-		ast = parser->parse(tokens);
-		if (!parser->is_valid_tree(ast))
+		ast = parse(input, gc);
+		if (!ast)
 			continue ;
 		execute(ast);
 	}

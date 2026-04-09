@@ -62,22 +62,20 @@ static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp)
 	return (node);
 }
 
-static t_btree	*parse(t_darray *tokens)
+t_btree	*parse(char *input, t_gc *gc)
 {
-	size_t	i;
+	size_t		i;
+	t_darray	*tokens;
+	t_btree		*ast;
 
+	if (!quotes_paren_match(input))
+		return (NULL);
+	tokens = tokenize(input, gc);
+	if (!tokens)
+		return (NULL);
 	i = 0;
-	return (parse_recur(tokens, &i, 0));
-}
-
-t_parser	*init_parser(t_gc *gc)
-{
-	t_parser	*parser;
-
-	parser = gc_malloc(sizeof(t_parser), gc);
-	parser->is_valid_cmd = quotes_paren_match;
-	parser->tokenize = tokenize;
-	parser->parse = parse;
-	parser->is_valid_tree = is_valid_tree;
-	return (parser);
+	ast = parse_recur(tokens, &i, 0);
+	if (!is_valid_tree(ast))
+		return (NULL);
+	return (ast);
 }

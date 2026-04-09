@@ -31,7 +31,7 @@ static t_lexer_state	update_state(char c, t_lexer_state current_state)
 	return (current_state);
 }
 
-bool	is_valid_cmd(char *cmd)
+bool	quotes_paren_match(char *cmd)
 {
 	size_t			i;
 	t_lexer_state	state;

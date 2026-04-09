@@ -16,7 +16,7 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
-bool			is_valid_cmd(char *cmd);
+bool			quotes_paren_match(char *cmd);
 t_darray		*tokenize(char *cmd, t_gc *gc);
 
 static bool	is_valid_tree(t_btree *ast)
@@ -91,7 +91,7 @@ t_parser	*init_parser(t_gc *gc)
 	t_parser	*parser;
 
 	parser = gc_malloc(sizeof(t_parser), gc);
-	parser->is_valid_cmd = is_valid_cmd;
+	parser->is_valid_cmd = quotes_paren_match;
 	parser->tokenize = tokenize;
 	parser->parse = parse;
 	parser->is_valid_tree = is_valid_tree;

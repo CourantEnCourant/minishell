@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "libft.h"
 #include "minishell.h"
+
+void	repr_strs(char **strs);
 
 static void	match_binding_power(t_token *token)
 {
@@ -40,19 +41,10 @@ static void	match_binding_power(t_token *token)
 
 static void	repr(t_token *self)
 {
-	printf("value: %s\n", self->value);
-	if (self->type == AND)
-		printf("type: AND\n");
-	if (self->type == OR)
-		printf("type: OR\n");
-	if (self->type == PIPE)
-		printf("type: PIPE\n");
-	if (self->type == SUBSHELL)
-		printf("type: SUBSHELL\n");
-	if (self->type == CLOSE_PAREN)
-		printf("type: CLOSE_PAREN\n");
-	if (self->type == OPERAND)
-		printf("type: OPERAND\n");
+	if (self->type == CMD)
+		repr_strs(self->cmd->argv);
+	else
+		ft_printf("\"%s\"", self->value);
 }
 
 t_token	*init_token(char *value, t_gc *gc)

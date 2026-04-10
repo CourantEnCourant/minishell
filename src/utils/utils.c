@@ -41,9 +41,20 @@ void	repr_strs(char **strs)
 	ft_printf("%s\"", strs[i]);
 }
 
-void	repr_token(void *token)
+void	repr_token(void *ptr)
 {
-	if (!token)
+	t_token	*token;
+
+	if (!ptr)
 		return ;
-	ft_printf("\"%s\"", ((t_token *)token)->value);
+	token = ptr;
+	token->repr(token);
+}
+
+void	repr_node(void *ptr)
+{
+	t_btree	*node;
+
+	node = ptr;
+	repr_token(node->value);
 }

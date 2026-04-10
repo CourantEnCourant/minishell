@@ -19,6 +19,7 @@
 #include "minishell.h"
 
 void		repr_token(void *ptr);
+void		repr_node(void *ptr);
 bool		quotes_paren_match(char *input);
 bool		is_valid_tree(t_btree *ast);
 t_darray	*tokenize(char *cmd, t_gc *gc);
@@ -394,7 +395,7 @@ static void	test_flatten_case(char *cmd, t_gc *gc)
 	ft_printf("Testing %s\n", cmd);
 	ast = parse(cmd, gc);
 	flattened = flatten(ast);
-	flattened->repr(flattened, repr_token);
+	flattened->repr(flattened, repr_node);
 	ft_printf("\n");
 }
 

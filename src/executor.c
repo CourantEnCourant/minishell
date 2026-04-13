@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
@@ -19,18 +20,16 @@ int			gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 int			exec_pipe(t_btree *ast);
 int			execute(t_btree *ast);
 
-static int	exec_operand(t_token *operand, t_gc *gc)
+static int	exec_cmd(t_cmd *cmd, t_gc *gc)
 {
 	pid_t	pid;
-	char	**cmds;
 	int		exit_code;
 	int		status;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		cmds = gc_split(operand->value, ' ', gc);
-		exit_code = gc_execvp(cmds[0], cmds, gc);
+		exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
 		gc->clean(gc);
 		exit(exit_code);
 	}
@@ -71,8 +70,8 @@ int	execute(t_btree *ast)
 	int		status;
 
 	current = ast->value;
-	if (current->type == OPERAND)
-		return (exec_operand(current, ast->gc));
+	if (current->type == CMD)
+		return (exec_cmd(current->cmd, ast->gc));
 	else if (current->type == AND)
 		return (exec_and(ast));
 	else if (current->type == OR)

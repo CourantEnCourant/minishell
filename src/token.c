@@ -34,7 +34,7 @@ static void	match_binding_power(t_token *token)
 	}
 	else
 	{
-		token->bind_left = 0;
+		token->bind_left = 1;
 		token->bind_right = 0;
 	}
 }

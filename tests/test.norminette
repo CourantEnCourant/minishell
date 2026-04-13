@@ -23,6 +23,7 @@ void		repr_node(void *ptr);
 bool		quotes_paren_match(char *input);
 bool		is_valid_tree(t_btree *ast);
 t_darray	*tokenize(char *cmd, t_gc *gc);
+t_darray	*postprocess(t_darray *operands);
 
 static void	test_t_token_case(t_gc *gc, char *s, char *expected_value,
 		t_token_type expected_type)
@@ -88,49 +89,30 @@ static void	test_parser_tokenize(t_gc *gc)
 	// empty string
 	test_parser_tokenize_case(gc, "");
 
-	// single pipe
+	// simple command
+	test_parser_tokenize_case(gc, "echo hello world");
+
+	// pipe
 	test_parser_tokenize_case(gc, "ls -l | grep -la");
-
-	// pipe without spaces
 	test_parser_tokenize_case(gc, "ls -l|grep -la");
+	test_parser_tokenize_case(gc, "cat file | grep foo | wc -l");
 
-	// pipe + and
-	test_parser_tokenize_case(gc, "ls -l | grep -la && cat -e");
-
-	// and without spaces
-	test_parser_tokenize_case(gc, "ls -l | grep -la&&cat -e");
-
-	// pipe + and + or
-	test_parser_tokenize_case(gc, "ls -l | grep -la && cat -e || ls -la");
-
-	// or without spaces
-	test_parser_tokenize_case(gc, "ls -l | grep -la&&cat -e|| ls -la");
-
-	// operators inside double quotes (should not tokenize)
+	// quotes
 	test_parser_tokenize_case(gc, "ls -l | \"grep -la&&cat -e\"|| ls -la");
-
-	// operators inside single quotes (should not tokenize)
 	test_parser_tokenize_case(gc, "echo '|| && |' | cat");
 
 	// parentheses
 	test_parser_tokenize_case(gc, "(echo hello && echo world)");
-
-	// nested parentheses
 	test_parser_tokenize_case(gc, "(echo hello && (echo world || echo foo))");
-
-	// parentheses without spaces
 	test_parser_tokenize_case(gc, "(ls -l)&&(echo hello)");
-
-	// parentheses inside quotes (should not tokenize)
 	test_parser_tokenize_case(gc, "echo \"(hello)\" | cat");
 
-	// simple command, no operators
-	test_parser_tokenize_case(gc, "echo hello world");
-
-	// multiple pipes
-	test_parser_tokenize_case(gc, "cat file | grep foo | wc -l");
-
 	// all operators combined
+	test_parser_tokenize_case(gc, "ls -l | grep -la && cat -e");
+	test_parser_tokenize_case(gc, "ls -l | grep -la&&cat -e");
+	test_parser_tokenize_case(gc, "ls -l | grep -la && cat -e || ls -la");
+	test_parser_tokenize_case(gc, "ls -l | grep -la&&cat -e|| ls -la");
+
 	test_parser_tokenize_case(gc, "(ls | grep foo) && echo yes || echo no");
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
@@ -209,6 +191,25 @@ static void	test_parser_is_valid_cmd(void)
 	test_parser_is_valid_case("(echo hello && (echo world))", true);
 	test_parser_is_valid_case("echo 'unclosed", false);
 	test_parser_is_valid_case("echo \"unclosed", false);
+
+	ft_printf("==========ALL TESTS PASSED==========\n\n");
+}
+
+static void	postprocess_helper(char *cmd, t_gc *gc)
+{
+	t_darray	*cmds;
+
+	ft_printf("Testing %s\n", cmd);
+	cmds = postprocess(tokenize(cmd, gc));
+	cmds->repr(cmds, repr_token);
+	return ;
+}
+
+static void	test_parser_postprocess(t_gc *gc)
+{
+	ft_printf("==========TEST_PARSER_POSTPROCESS==========\n");
+
+	postprocess_helper( "ls -la | grep hello", gc);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
@@ -418,6 +419,7 @@ int main(void)
 	test_t_token(gc);
 	test_parser_is_valid_cmd();
 	test_parser_tokenize(gc);
+	test_parser_postprocess(gc);
 	test_parser_parse(gc);
 	test_flatten(gc);
 	test_exec(gc);

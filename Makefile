@@ -11,6 +11,7 @@ SRC = ./src/checker.c \
 	  ./src/exec_pipe.c \
 	  ./src/executor.c \
 	  ./src/lexer.c \
+	  ./src/lexer_postprocess.c \
 	  ./src/main.c \
 	  ./src/parser.c \
 	  ./src/token.c \

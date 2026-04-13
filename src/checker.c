@@ -49,7 +49,7 @@ bool	is_valid_tree(t_btree *ast)
 	if (!ast || !ast->value)
 		return (false);
 	current = ast->value;
-	if (current->type == OPERAND)
+	if (current->type == CMD)
 		return (!ast->left && !ast->right);
 	else if (current->type == SUBSHELL)
 		return (is_valid_tree(ast->left) && !ast->right);

@@ -19,6 +19,7 @@
 bool			quotes_paren_match(char *cmd);
 bool			is_valid_tree(t_btree *ast);
 t_darray		*tokenize(char *cmd, t_gc *gc);
+t_darray		*postprocess(t_darray *operands);
 
 static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp);
 
@@ -70,7 +71,7 @@ t_btree	*parse(char *input, t_gc *gc)
 
 	if (!quotes_paren_match(input))
 		return (NULL);
-	tokens = tokenize(input, gc);
+	tokens = postprocess(tokenize(input, gc));
 	if (!tokens)
 		return (NULL);
 	i = 0;

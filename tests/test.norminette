@@ -107,6 +107,10 @@ static void	test_parser_tokenize(t_gc *gc)
 	test_parser_tokenize_case(gc, "(ls -l)&&(echo hello)");
 	test_parser_tokenize_case(gc, "echo \"(hello)\" | cat");
 
+	// redirections
+	test_parser_tokenize_case(gc, "< file1 cmd1 | cmd2 > file2");
+	test_parser_tokenize_case(gc, "<file1 cmd1|cmd2>>file2");
+
 	// all operators combined
 	test_parser_tokenize_case(gc, "ls -l | grep -la && cat -e");
 	test_parser_tokenize_case(gc, "ls -l | grep -la&&cat -e");
@@ -209,7 +213,7 @@ static void	test_parser_postprocess(t_gc *gc)
 {
 	ft_printf("==========TEST_PARSER_POSTPROCESS==========\n");
 
-	postprocess_helper( "ls -la | grep hello", gc);
+	postprocess_helper( "ls -la | grep hello > test.txt", gc);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }

@@ -22,8 +22,8 @@ int	exec_subshell(t_btree *ast);
 
 static void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
 {
-	char	**argv;
 	t_token	*token;
+	t_cmd	*cmd;
 	int		exit_code;
 
 	if (in_fd != STDIN_FILENO)
@@ -37,10 +37,10 @@ static void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
 		close(out_fd);
 	}
 	token = node->value;
-	if (token->type == OPERAND)
+	if (token->type == CMD)
 	{
-		argv = gc_split(token->value, ' ', gc);
-		exit_code = gc_execvp(argv[0], argv, gc);
+		cmd = token->cmd;
+		exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
 		gc->clean(gc);
 		exit(exit_code);
 	}
@@ -81,7 +81,7 @@ static void	flatten_recur(t_btree *ast, t_darray *nodes)
 	t_token		*current;
 
 	current = ast->value;
-	if (current->type == OPERAND || current->type == SUBSHELL)
+	if (current->type == CMD || current->type == SUBSHELL)
 		nodes->push(nodes, ast);
 	if (current->type == PIPE)
 	{

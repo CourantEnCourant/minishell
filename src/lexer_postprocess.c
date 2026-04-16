@@ -42,19 +42,19 @@ static size_t	collect_argv(t_darray *operands, size_t i, t_darray *cmds)
 			if (ft_strcmp(current->value, ">") == 0)
 			{
 				cmd->push_redir(cmd,
-						init_redir(TO_FILE, next->value, operands->gc));
+					init_redir(TO_FILE, next->value, operands->gc));
 				i += 2;
 			}
 			else if (ft_strcmp(current->value, ">>") == 0)
 			{
 				cmd->push_redir(cmd,
-						init_redir(APPEND_FILE, next->value, operands->gc));
+					init_redir(APPEND_FILE, next->value, operands->gc));
 				i += 2;
 			}
 			else if (ft_strcmp(current->value, "<") == 0)
 			{
 				cmd->push_redir(cmd,
-						init_redir(FROM_FILE, next->value, operands->gc));
+					init_redir(FROM_FILE, next->value, operands->gc));
 				i += 2;
 			}
 		}

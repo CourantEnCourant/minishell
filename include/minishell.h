@@ -24,20 +24,20 @@ typedef enum e_lexer_state
 	DOUBLE,
 }	t_lexer_state;
 
-typedef	enum e_redir_type
+typedef enum e_redir_type
 {
 	TO_FILE,
 	APPEND_FILE,
 	FROM_FILE,
 }	t_redir_type;
 
-typedef	struct s_redir
+typedef struct s_redir
 {
 	t_redir_type	redir_type;
 	char			*filename;
 	t_gc			*gc;
 }	t_redir;
-t_redir	*init_redir(t_redir_type type, char *filename, t_gc *gc);
+t_redir		*init_redir(t_redir_type type, char *filename, t_gc *gc);
 
 typedef struct s_cmd	t_cmd;
 struct s_cmd

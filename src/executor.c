@@ -90,4 +90,3 @@ int	execute(t_btree *ast)
 	else
 		return (execute(ast->left));
 }
-

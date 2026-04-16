@@ -73,7 +73,7 @@ t_token	*init_token(char *value, t_gc *gc)
 	return (token);
 }
 
-t_token *init_cmd_token(t_cmd *cmd, t_gc *gc)
+t_token	*init_cmd_token(t_cmd *cmd, t_gc *gc)
 {
 	t_token	*token;
 

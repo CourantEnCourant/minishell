@@ -2,6 +2,12 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wextra -Werror -Wall -g3
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	READLINE_DIR := $(shell brew --prefix readline)
+	CFLAGS += -I$(READLINE_DIR)/include
+	LDFLAGS += -L$(READLINE_DIR)/lib
+endif
 AR = ar rcs
 RM = rm -rf
 
@@ -36,7 +42,7 @@ $(LIB_ARCHIVES):
 	@make -C $(dir $@)
 
 $(NAME): $(LIB_ARCHIVES) $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIB_ARCHIVES) -lreadline -o $(NAME)
+	@$(CC) $(CFLAGS) $(LDFLAGS) $(OBJ) $(LIB_ARCHIVES) -lreadline -o $(NAME)
 	@echo "Created $(NAME)"
 
 %.o: %.c
@@ -52,7 +58,7 @@ fclean: clean
 	@echo "Removed $(NAME) and test"
 
 test: $(LIB_ARCHIVES) $(TEST_OBJ)
-	@$(CC) $(CFLAGS) -Wno-error=unused-function $(INCLUDE) $(TEST_OBJ) -x c tests/test.norminette -x none $(LIB_ARCHIVES) -lreadline -o test
+	@$(CC) $(CFLAGS) $(LDFLAGS) -Wno-error=unused-function $(INCLUDE) $(TEST_OBJ) -x c tests/test.norminette -x none $(LIB_ARCHIVES) -lreadline -o test
 	@echo "Compiled ./test"
 
 re: fclean all

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <readline/history.h>
+#include <readline/readline.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -27,6 +29,7 @@ int	main(void)
 	while (true)
 	{
 		input = gc_readline("minishell> ", gc);
+		add_history(input);
 		if (!input)
 			break ;
 		ast = parse(input, gc);
@@ -35,5 +38,6 @@ int	main(void)
 		execute(ast);
 	}
 	printf("exit\n");
+	rl_clear_history();
 	gc->clean(gc);
 }

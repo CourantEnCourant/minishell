@@ -30,6 +30,7 @@ t_cmd	*init_cmd(t_gc *gc)
 
 	cmd = gc_malloc(sizeof(t_cmd), gc);
 	cmd->redirs = init_darray(gc);
+	cmd->gc = gc;
 	cmd->set_argv = set_argv;
 	cmd->push_redir = push_redir;
 	return (cmd);

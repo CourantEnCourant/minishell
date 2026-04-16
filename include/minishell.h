@@ -44,6 +44,7 @@ struct s_cmd
 {
 	char		**argv;
 	t_darray	*redirs;
+	t_gc		*gc;
 	void		(*set_argv)(t_cmd *self, char **argv);
 	void		(*push_redir)(t_cmd *self, t_redir *redir);
 };

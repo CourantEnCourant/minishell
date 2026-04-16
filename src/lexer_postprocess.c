@@ -15,11 +15,33 @@
 #include "datastructures.h"
 #include "minishell.h"
 
+static size_t	add_to_cmd(t_cmd *cmd, t_darray *ops, size_t i)
+{
+	t_token	*cur;
+	t_token	*next;
+
+	if (i + 1 >= ops->len)
+		return (0);
+	cur = ops->peek_i(ops, i);
+	next = ops->peek_i(ops, i + 1);
+	if (next->type != OPERAND)
+		return (0);
+	if (ft_strcmp(cur->value, ">") == 0)
+		cmd->push_redir(cmd,
+			init_redir(TO_FILE, next->value, cmd->gc));
+	else if (ft_strcmp(cur->value, ">>") == 0)
+		cmd->push_redir(cmd,
+			init_redir(APPEND_FILE, next->value, cmd->gc));
+	else if (ft_strcmp(cur->value, "<") == 0)
+		cmd->push_redir(cmd,
+			init_redir(FROM_FILE, next->value, cmd->gc));
+	return (i + 2);
+}
+
 static size_t	collect_argv(t_darray *operands, size_t i, t_darray *cmds)
 {
 	t_darray	*argv;
 	t_token		*current;
-	t_token		*next;
 	t_cmd		*cmd;
 
 	argv = init_darray(cmds->gc);
@@ -27,36 +49,13 @@ static size_t	collect_argv(t_darray *operands, size_t i, t_darray *cmds)
 	while (i < operands->len)
 	{
 		current = operands->peek_i(operands, i);
-		if (current->type == OPERAND)
-		{
+		if (current->type == OPERAND && ++i)
 			argv->push(argv, current->value);
-			i++;
-		}
 		else if (current->type == REDIR)
 		{
-			if (i + 1 >= operands->len)
+			i = add_to_cmd(cmd, operands, i);
+			if (i == 0)
 				return (0);
-			next = operands->peek_i(operands, i + 1);
-			if (next->type != OPERAND)
-				return (0);
-			if (ft_strcmp(current->value, ">") == 0)
-			{
-				cmd->push_redir(cmd,
-					init_redir(TO_FILE, next->value, operands->gc));
-				i += 2;
-			}
-			else if (ft_strcmp(current->value, ">>") == 0)
-			{
-				cmd->push_redir(cmd,
-					init_redir(APPEND_FILE, next->value, operands->gc));
-				i += 2;
-			}
-			else if (ft_strcmp(current->value, "<") == 0)
-			{
-				cmd->push_redir(cmd,
-					init_redir(FROM_FILE, next->value, operands->gc));
-				i += 2;
-			}
 		}
 		else
 			break ;

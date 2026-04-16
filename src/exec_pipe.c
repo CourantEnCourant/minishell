@@ -21,12 +21,8 @@ int		gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 int		exec_subshell(t_btree *ast);
 void	apply_redirs(t_cmd *cmd);
 
-static void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
+static void manage_dup(int in_fd, int out_fd)
 {
-	t_token	*token;
-	t_cmd	*cmd;
-	int		exit_code;
-
 	if (in_fd != STDIN_FILENO)
 	{
 		dup2(in_fd, STDIN_FILENO);
@@ -37,6 +33,15 @@ static void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
 		dup2(out_fd, STDOUT_FILENO);
 		close(out_fd);
 	}
+}
+
+static void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
+{
+	t_token	*token;
+	t_cmd	*cmd;
+	int		exit_code;
+
+	manage_dup(in_fd, out_fd);
 	token = node->value;
 	if (token->type == CMD)
 	{

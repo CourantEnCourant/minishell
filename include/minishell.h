@@ -24,6 +24,14 @@ typedef enum e_lexer_state
 	DOUBLE,
 }	t_lexer_state;
 
+typedef struct s_cmd	t_cmd;
+struct s_cmd
+{
+	char		**argv;
+	void		(*set_argv)(t_cmd *self, char **argv);
+};
+t_cmd		*init_cmd(t_gc *gc);
+
 typedef enum e_token_type
 {
 	AND,
@@ -32,18 +40,24 @@ typedef enum e_token_type
 	SUBSHELL,
 	CLOSE_PAREN,
 	OPERAND,
+	CMD,
 }	t_token_type;
 
 typedef struct s_token	t_token;
 struct s_token
 {
-	char			*value;
+	union
+	{
+		char	*value;
+		t_cmd	*cmd;
+	};
 	t_token_type	type;
 	int				bind_left;
 	int				bind_right;
 	void			(*repr)(t_token *cmd);
 };
 t_token		*init_token(char *value, t_gc *gc);
+t_token		*init_cmd_token(t_cmd *cmd, t_gc *gc);
 
 char		*gc_readline(const char *prompt, t_gc *gc);
 char		*gc_getcwd(t_gc *gc);

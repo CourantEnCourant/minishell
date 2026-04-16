@@ -69,3 +69,15 @@ t_token	*init_token(char *value, t_gc *gc)
 	token->repr = repr;
 	return (token);
 }
+
+t_token *init_cmd_token(t_cmd *cmd, t_gc *gc)
+{
+	t_token	*token;
+
+	token = gc_malloc(sizeof(t_token), gc);
+	token->cmd = cmd;
+	token->type = CMD;
+	token->repr = repr;
+	match_binding_power(token);
+	return (token);
+}

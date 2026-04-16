@@ -63,6 +63,8 @@ t_token	*init_token(char *value, t_gc *gc)
 		token->type = SUBSHELL;
 	else if (ft_strcmp(value, ")") == 0)
 		token->type = CLOSE_PAREN;
+	else if (ft_strcmp(value, ">") == 0)
+		token->type = REDIR;
 	else
 		token->type = OPERAND;
 	match_binding_power(token);

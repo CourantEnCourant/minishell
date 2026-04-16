@@ -19,6 +19,7 @@ static size_t	collect_argv(t_darray *operands, size_t i, t_darray *cmds)
 {
 	t_darray	*argv;
 	t_token		*current;
+	t_token		*next;
 	t_cmd		*cmd;
 
 	argv = init_darray(cmds->gc);
@@ -30,6 +31,20 @@ static size_t	collect_argv(t_darray *operands, size_t i, t_darray *cmds)
 		{
 			argv->push(argv, current->value);
 			i++;
+		}
+		else if (current->type == REDIR)
+		{
+			if (i + 1 >= operands->len)
+				return (0);
+			next = operands->peek_i(operands, i + 1);
+			if (next->type != OPERAND)
+				return (0);
+			if (ft_strcmp(current->value, ">") == 0)
+			{
+				cmd->push_redir(cmd,
+						init_redir(TO_FILE, next->value, operands->gc));
+				i += 2;
+			}
 		}
 		else
 			break ;
@@ -50,7 +65,7 @@ t_darray	*postprocess(t_darray *operands)
 	while (i < operands->len)
 	{
 		current = operands->peek_i(operands, i);
-		if (current->type == OPERAND)
+		if (current->type == OPERAND || current->type == REDIR)
 		{
 			i = collect_argv(operands, i, cmds);
 			if (i == 0)

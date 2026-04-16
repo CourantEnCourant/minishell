@@ -14,6 +14,7 @@ SRC = ./src/checker.c \
 	  ./src/lexer_postprocess.c \
 	  ./src/main.c \
 	  ./src/parser.c \
+	  ./src/redir.c \
 	  ./src/token.c \
 	  ./src/utils/gc_execvp.c \
 	  ./src/utils/gc_getcwd.c \

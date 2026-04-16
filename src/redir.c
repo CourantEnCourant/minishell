@@ -49,6 +49,12 @@ void	apply_redirs(t_cmd *cmd)
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
+		else if (redir->redir_type == FROM_FILE)
+		{
+			fd = open(redir->filename, O_RDONLY);
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+		}
 		i++;
 	}
 }

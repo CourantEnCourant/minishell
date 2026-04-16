@@ -28,6 +28,7 @@ typedef	enum e_redir_type
 {
 	TO_FILE,
 	APPEND_FILE,
+	FROM_FILE,
 }	t_redir_type;
 
 typedef	struct s_redir

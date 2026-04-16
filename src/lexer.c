@@ -93,6 +93,6 @@ t_darray	*tokenize(char *cmd, t_gc *gc)
 		start = lookup(tokens, cmd, start, i);
 		i++;
 	}
-	process(tokens, &cmd[start], i - start, "");
+	process(tokens, &cmd[start], i - start, NULL);
 	return (tokens);
 }

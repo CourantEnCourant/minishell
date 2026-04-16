@@ -14,37 +14,30 @@
 #include <stdarg.h>
 #include "libft.h"
 
-int	parse_arg(char placeholder, va_list *list);
+int	parse_arg(int fd, char placeholder, va_list *list);
 
-static int	norminette(const char *s, va_list *args_ptr, size_t i, int count)
+int	ft_vdprintf(int fd, const char *s, va_list ap)
 {
-	int	substr_count;
+	size_t	i;
+	int		count;
+	int		substr_count;
 
+	i = 0;
+	count = 0;
 	while (s[i])
 	{
 		if (s[i] == '%')
 		{
-			substr_count = parse_arg(s[i + 1], args_ptr);
+			substr_count = parse_arg(fd, s[i + 1], &ap);
 			if (substr_count < 0)
 				return (-1);
 			count += substr_count;
 			i += 2;
 			continue ;
 		}
-		ft_putchar_fd(s[i], 1);
+		ft_putchar_fd(s[i], fd);
 		i++;
 		count++;
 	}
-	return (count);
-}
-
-int	ft_printf(const char *s, ...)
-{
-	int		count;
-	va_list	args;
-
-	va_start(args, s);
-	count = norminette(s, &args, 0, 0);
-	va_end(args);
 	return (count);
 }

@@ -12,13 +12,13 @@
 
 #include "libft.h"
 
-int	parse_str(char *s)
+int	parse_str(int fd, char *s)
 {
 	if (!s)
 	{
-		ft_putstr_fd("(null)", 1);
+		ft_putstr_fd("(null)", fd);
 		return (ft_strlen("(null)"));
 	}
-	ft_putstr_fd(s, 1);
+	ft_putstr_fd(s, fd);
 	return (ft_strlen(s));
 }

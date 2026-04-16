@@ -64,14 +64,14 @@ static char	*itohexa(unsigned int n, bool upper)
 	return (hexa);
 }
 
-int	parse_unsigned_hex(unsigned int n, bool upper)
+int	parse_unsigned_hex(int fd, unsigned int n, bool upper)
 {
 	char	*hexa;
 	int		len;
 
 	hexa = itohexa(n, upper);
 	len = ft_strlen(hexa);
-	ft_putstr_fd(hexa, 1);
+	ft_putstr_fd(hexa, fd);
 	free(hexa);
 	return (len);
 }

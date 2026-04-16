@@ -56,7 +56,9 @@ static size_t	process(t_darray *tokens, char *cmd, int len, char *operator)
 
 static size_t	lookup(t_darray *tokens, char *cmd, size_t start, size_t i)
 {
-	if (ft_strncmp(&cmd[i], "&&", 2) == 0)
+	if (cmd[i] == ' ')
+		start += process(tokens, &cmd[start], i - start, NULL);
+	else if (ft_strncmp(&cmd[i], "&&", 2) == 0)
 		start += process(tokens, &cmd[start], i - start, "&&");
 	else if (ft_strncmp(&cmd[i], "||", 2) == 0)
 		start += process(tokens, &cmd[start], i - start, "||");

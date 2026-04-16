@@ -44,12 +44,14 @@ static size_t	process(t_darray *tokens, char *cmd, int len, char *operator)
 		token = init_token(token_value, tokens->gc);
 		tokens->push(tokens, token);
 	}
-	if (operator[0])
+	if (operator && operator[0])
 	{
 		token = init_token(operator, tokens->gc);
 		tokens->push(tokens, token);
+		return (len + ft_strlen(operator));
 	}
-	return (len + ft_strlen(operator));
+	else
+		return (len);
 }
 
 static size_t	lookup(t_darray *tokens, char *cmd, size_t start, size_t i)

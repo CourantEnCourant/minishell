@@ -27,6 +27,7 @@ typedef enum e_lexer_state
 typedef	enum e_redir_type
 {
 	TO_FILE,
+	APPEND_FILE,
 }	t_redir_type;
 
 typedef	struct s_redir

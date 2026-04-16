@@ -33,6 +33,7 @@ static void	apply_to_file(t_redir *redir)
 
 void	apply_redirs(t_cmd *cmd)
 {
+	int		fd;
 	t_redir	*redir;
 	size_t	i;
 
@@ -42,6 +43,12 @@ void	apply_redirs(t_cmd *cmd)
 		redir = cmd->redirs->peek_i(cmd->redirs, i);
 		if (redir->redir_type == TO_FILE)
 			apply_to_file(redir);
+		else if (redir->redir_type == APPEND_FILE)
+		{
+			fd = open(redir->filename, O_WRONLY | O_APPEND | O_CREAT, 0644);
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
+		}
 		i++;
 	}
 }

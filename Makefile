@@ -15,6 +15,7 @@ INCLUDE = -I ./include
 SRC = ./src/checker.c \
 	  ./src/cmd.c \
 	  ./src/exec_pipe.c \
+	  ./src/exec_pipe_2.c \
 	  ./src/executor.c \
 	  ./src/lexer.c \
 	  ./src/lexer_postprocess.c \

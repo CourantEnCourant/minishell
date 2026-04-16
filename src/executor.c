@@ -18,6 +18,7 @@
 
 int			gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 int			exec_pipe(t_btree *ast);
+void		apply_redirs(t_cmd *cmd);
 int			execute(t_btree *ast);
 
 static int	exec_cmd(t_cmd *cmd, t_gc *gc)
@@ -29,6 +30,7 @@ static int	exec_cmd(t_cmd *cmd, t_gc *gc)
 	pid = fork();
 	if (pid == 0)
 	{
+		apply_redirs(cmd);
 		exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
 		gc->clean(gc);
 		exit(exit_code);

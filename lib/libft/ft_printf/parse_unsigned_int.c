@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include "libft.h"
 
-int	parse_unsigned_int(unsigned int n)
+int	parse_unsigned_int(int fd, unsigned int n)
 {
 	int		count;
 
@@ -21,10 +21,10 @@ int	parse_unsigned_int(unsigned int n)
 	if (n < 10)
 	{
 		n += '0';
-		write(1, &n, 1);
+		write(fd, &n, 1);
 		return (1);
 	}
-	count += parse_unsigned_int(n / 10);
-	count += parse_unsigned_int(n % 10);
+	count += parse_unsigned_int(fd, n / 10);
+	count += parse_unsigned_int(fd, n % 10);
 	return (count);
 }

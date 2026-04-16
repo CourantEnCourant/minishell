@@ -49,7 +49,7 @@ SRC = ft_strnstr.c \
 	  ft_lstclear.c \
 	  ft_printf/parse_int.c \
 	  ft_printf/parse_char.c \
-	  ft_printf/ft_printf.c \
+	  ft_printf/ft_vdprintf.c \
 	  ft_printf/parse_unsigned_hex.c \
 	  ft_printf/parse_unsigned_int.c \
 	  ft_printf/parse_str.c \

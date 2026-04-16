@@ -13,6 +13,7 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <stdarg.h>
 # include <stddef.h>
 
 # define BUFFER_SIZE 42
@@ -66,7 +67,7 @@ int		ft_lstsize(t_list *lst);
 void	ft_lstadd_back(t_list **lst, t_list *node);
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
-int		ft_printf(const char *s, ...);
+int		ft_vdprintf(int fd, const char *s, va_list ap);
 char	*get_next_line(int fd);
 
 #endif

@@ -12,8 +12,8 @@
 
 #include "libft.h"
 
-int	parse_char(char a)
+int	parse_char(int fd, char a)
 {
-	ft_putchar_fd(a, 1);
+	ft_putchar_fd(a, fd);
 	return (1);
 }

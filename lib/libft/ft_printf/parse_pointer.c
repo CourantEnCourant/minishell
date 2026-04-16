@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include "libft.h"
 
-int	parse_str(char *s);
+int	parse_str(int fd, char *s);
 
 static int	ft_numlen_base(unsigned long n, int base)
 {
@@ -52,19 +52,19 @@ static char	*ptr_to_hex(unsigned long n)
 	return (num_str);
 }
 
-int	parse_pointer(void *ptr)
+int	parse_pointer(int fd, void *ptr)
 {
 	unsigned long	ptr_value;
 	char			*ptr_hex_str;
 	size_t			ptr_hex_str_len;
 
 	if (!ptr)
-		return (parse_str("(nil)"));
+		return (parse_str(fd, "(nil)"));
 	ptr_value = (unsigned long)ptr;
 	ptr_hex_str = ptr_to_hex(ptr_value);
 	if (!ptr_hex_str)
 		return (-1);
-	ft_putstr_fd(ptr_hex_str, 1);
+	ft_putstr_fd(ptr_hex_str, fd);
 	ptr_hex_str_len = ft_strlen(ptr_hex_str);
 	free(ptr_hex_str);
 	return (ptr_hex_str_len);

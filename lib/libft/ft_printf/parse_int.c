@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include "libft.h"
 
-int	parse_int(int nbr)
+int	parse_int(int fd, int nbr)
 {
 	char	*nbr_str;
 	int		nbr_len;
@@ -21,7 +21,7 @@ int	parse_int(int nbr)
 	nbr_str = ft_itoa(nbr);
 	if (!nbr_str)
 		return (-1);
-	ft_putstr_fd(nbr_str, 1);
+	ft_putstr_fd(nbr_str, fd);
 	nbr_len = ft_strlen(nbr_str);
 	free(nbr_str);
 	return (nbr_len);

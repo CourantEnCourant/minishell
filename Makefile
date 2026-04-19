@@ -61,6 +61,7 @@ fclean: clean
 test: $(LIB_ARCHIVES) $(TEST_OBJ)
 	@$(CC) $(CFLAGS) $(LDFLAGS) -Wno-error=unused-function $(INCLUDE) $(TEST_OBJ) -x c tests/test.norminette -x none $(LIB_ARCHIVES) -lreadline -o test
 	@echo "Compiled ./test"
+	@bash tests/test.sh
 
 re: fclean all
 

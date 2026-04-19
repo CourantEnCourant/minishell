@@ -426,6 +426,7 @@ static void	test_error_handling(t_gc *gc)
 	ft_printf("==========TEST_ERROR_HANDLING==========\n\n");
 
 	test_error_handling_case("echo hello > no_permisson.tmp", 1, gc);
+	test_error_handling_case("echo hello >> no_permisson.tmp", 1, gc);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }

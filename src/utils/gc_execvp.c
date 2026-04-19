@@ -57,5 +57,6 @@ int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
 			execve(cmd_abs, argv, environ);
 		i++;
 	}
+	ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd);
 	return (127);
 }

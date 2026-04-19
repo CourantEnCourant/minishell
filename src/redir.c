@@ -16,6 +16,21 @@
 #include <unistd.h>
 #include "minishell.h"
 
+static void	apply_from_file(t_redir *redir)
+{
+	int	fd;
+
+	fd = open(redir->filename, O_RDONLY);
+	if (fd == -1)
+	{
+		perror(redir->filename);
+		redir->gc->clean(redir->gc);
+		exit(1);
+	}
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+}
+
 static void	apply_append_file(t_redir *redir)
 {
 	int	fd;
@@ -48,7 +63,6 @@ static void	apply_to_file(t_redir *redir)
 
 void	apply_redirs(t_cmd *cmd)
 {
-	int		fd;
 	t_redir	*redir;
 	size_t	i;
 
@@ -61,11 +75,7 @@ void	apply_redirs(t_cmd *cmd)
 		else if (redir->redir_type == APPEND_FILE)
 			apply_append_file(redir);
 		else if (redir->redir_type == FROM_FILE)
-		{
-			fd = open(redir->filename, O_RDONLY);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
+			apply_from_file(redir);
 		i++;
 	}
 }

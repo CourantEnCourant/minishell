@@ -428,6 +428,7 @@ static void	test_error_handling(t_gc *gc)
 	test_error_handling_case("echo hello > no_permisson.tmp", 1, gc);
 	test_error_handling_case("echo hello >> no_permisson.tmp", 1, gc);
 	test_error_handling_case("echo hello >> no_permisson.tmp | echo hello", 0, gc);
+	test_error_handling_case("< no_permisson.tmp cat", 1, gc);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }

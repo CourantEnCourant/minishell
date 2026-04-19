@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <unistd.h>
 #include <stddef.h>
 #include "libft.h"
@@ -42,6 +43,7 @@ int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
 	if (ft_strchr(cmd, '/'))
 	{
 		execve(cmd, argv, environ);
+		perror(cmd);
 		return (127);
 	}
 	paths = get_paths(gc);

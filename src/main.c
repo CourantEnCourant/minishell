@@ -14,7 +14,6 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdbool.h>
-#include <unistd.h>
 #include "datastructures.h"
 #include "gc_libft.h"
 #include "minishell.h"

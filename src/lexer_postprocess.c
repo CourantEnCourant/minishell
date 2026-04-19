@@ -76,7 +76,7 @@ t_darray	*postprocess(t_darray *operands)
 	while (i < operands->len)
 	{
 		current = operands->peek_i(operands, i);
-		if (current->type == OPERAND || current->type == REDIR)
+		if (current->type & (OPERAND | REDIR))
 		{
 			i = collect_argv(operands, i, cmds);
 			if (i == 0)

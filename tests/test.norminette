@@ -414,6 +414,21 @@ static void	test_flatten(t_gc *gc)
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
+static void	test_error_handling_case(char *cmd, int expected_exit_code, t_gc *gc)
+{
+	ft_printf("%s\n", cmd);
+	assert(execute(parse(cmd, gc)) == expected_exit_code);
+	ft_printf("\n");
+}
+
+static void	test_error_handling(t_gc *gc)
+{
+	ft_printf("==========TEST_ERROR_HANDLING==========\n\n");
+
+	test_error_handling_case("echo hello > no_permisson.tmp", 1, gc);
+
+	ft_printf("==========ALL TESTS PASSED==========\n\n");
+}
 
 int main(void)
 {
@@ -427,5 +442,6 @@ int main(void)
 	test_parser_parse(gc);
 	test_flatten(gc);
 	test_exec(gc);
+	test_error_handling(gc);
 	gc->clean(gc);
 }

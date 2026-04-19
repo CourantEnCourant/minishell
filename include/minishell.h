@@ -52,14 +52,14 @@ t_cmd		*init_cmd(t_gc *gc);
 
 typedef enum e_token_type
 {
-	AND,
-	OR,
-	PIPE,
-	SUBSHELL,
-	CLOSE_PAREN,
-	OPERAND,
-	REDIR,
-	CMD,
+	AND = 1,
+	OR = 1 << 1,
+	PIPE = 1 << 2,
+	SUBSHELL = 1 << 3,
+	CLOSE_PAREN = 1 << 4,
+	OPERAND = 1 << 5,
+	REDIR = 1 << 6,
+	CMD = 1 << 7,
 }	t_token_type;
 
 typedef struct s_token	t_token;

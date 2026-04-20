@@ -28,9 +28,9 @@ int	main(void)
 	while (true)
 	{
 		input = gc_readline("minishell> ", gc);
-		add_history(input);
 		if (!input)
 			break ;
+		add_history(input);
 		ast = parse(input, gc);
 		if (!ast)
 			continue ;

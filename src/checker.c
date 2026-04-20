@@ -41,20 +41,3 @@ bool	quotes_paren_match(char *input)
 	}
 	return (state == TEXT && open_paren_count == 0);
 }
-
-bool	is_valid_tree(t_btree *ast)
-{
-	t_token	*current;
-
-	if (!ast || !ast->value)
-		return (false);
-	current = ast->value;
-	if (current->type == CMD)
-		return (!ast->left && !ast->right);
-	else if (current->type == SUBSHELL)
-		return (is_valid_tree(ast->left) && !ast->right);
-	else if (current->type == CLOSE_PAREN)
-		return (false);
-	else
-		return (is_valid_tree(ast->left) && is_valid_tree(ast->right));
-}

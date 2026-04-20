@@ -19,7 +19,6 @@
 #include "minishell.h"
 
 bool			quotes_paren_match(char *cmd);
-bool			is_valid_tree(t_btree *ast);
 t_darray		*tokenize(char *cmd, t_gc *gc);
 t_darray		*postprocess(t_darray *operands);
 
@@ -96,7 +95,5 @@ t_btree	*parse(char *input, t_gc *gc)
 		return (NULL);
 	i = 0;
 	ast = parse_recur(tokens, &i, 0);
-	if (!is_valid_tree(ast))
-		return (NULL);
 	return (ast);
 }

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
+#include "libft.h"
 #include "minishell.h"
 
 t_lexer_state	update_state(char c, t_lexer_state current_state);
@@ -33,11 +35,21 @@ bool	quotes_paren_match(char *input)
 			else if (input[i] == ')')
 			{
 				if (open_paren_count == 0)
+				{
+					ft_dprintf(STDERR_FILENO,
+							"syntax error with unmatched parenthesis\n");
 					return (false);
+				}
 				open_paren_count--;
 			}
 		}
 		i++;
 	}
+	if (open_paren_count != 0)
+		ft_dprintf(STDERR_FILENO,
+				"syntax error with unmatched parenthesis\n");
+	if (state != TEXT)
+		ft_dprintf(STDERR_FILENO,
+				"syntax error with unmatched quotes\n");
 	return (state == TEXT && open_paren_count == 0);
 }

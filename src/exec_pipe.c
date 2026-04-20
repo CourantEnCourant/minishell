@@ -34,18 +34,23 @@ static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_gc *gc)
 	}
 	else
 	{
-		fds[0] = -1;
+		fds[0] = STDIN_FILENO;
 		fds[1] = STDOUT_FILENO;
 	}
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
+		if (fds[1] != STDOUT_FILENO)
+		{
+			close(fds[0]);
+			close(fds[1]);
+		}
 		return (-1);
 	}
 	if (pid == 0)
 	{
-		if (fds[0] != -1)
+		if (fds[0] != STDIN_FILENO)
 			close(fds[0]);
 		exec_child(node, *prev_fd, fds[1], gc);
 	}
@@ -104,6 +109,8 @@ int	exec_pipe(t_btree *ast)
 			break ;
 		i++;
 	}
+	if (prev_fd != STDIN_FILENO)
+		close(prev_fd);
 	if (i == 0)
 		return (1);
 	i = 0;

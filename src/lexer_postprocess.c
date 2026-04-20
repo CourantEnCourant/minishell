@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stddef.h>
+#include <unistd.h>
 #include "libft.h"
 #include "datastructures.h"
 #include "minishell.h"
@@ -20,12 +21,20 @@ static size_t	add_to_cmd(t_cmd *cmd, t_darray *ops, size_t i)
 	t_token	*cur;
 	t_token	*next;
 
-	if (i + 1 >= ops->len)
-		return (0);
 	cur = ops->peek_i(ops, i);
+	if (i + 1 >= ops->len)
+	{
+		ft_dprintf(STDERR_FILENO,
+			"syntax error near unexpected token 'newline'\n");
+		return (0);
+	}
 	next = ops->peek_i(ops, i + 1);
 	if (next->type != OPERAND)
+	{
+		ft_dprintf(STDERR_FILENO,
+			"syntax error near unexpected token `%s'\n", next->value);
 		return (0);
+	}
 	if (ft_strcmp(cur->value, ">") == 0)
 		cmd->push_redir(cmd,
 			init_redir(TO_FILE, next->value, cmd->gc));

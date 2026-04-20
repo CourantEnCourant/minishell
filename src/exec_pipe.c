@@ -25,7 +25,13 @@ static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_gc *gc)
 	int		fds[2];
 
 	if (!is_last)
-		pipe(fds);
+	{
+		if (pipe(fds) == -1)
+		{
+			perror("pipe");
+			return (-1);
+		}
+	}
 	else
 	{
 		fds[0] = -1;
@@ -94,10 +100,18 @@ int	exec_pipe(t_btree *ast)
 		else
 			pids[i] = fork_cmd(nodes->peek_i(nodes, i),
 					&prev_fd, true, ast->gc);
+		if (pids[i] == -1)
+			break ;
 		i++;
 	}
+	if (i == 0)
+		return (1);
 	i = 0;
 	while (i < nodes->len)
-		waitpid(pids[i++], &status, 0);
+	{
+		if (pids[i] > 0)
+			waitpid(pids[i], &status, 0);
+		i++;
+	}
 	return (status >> 8);
 }

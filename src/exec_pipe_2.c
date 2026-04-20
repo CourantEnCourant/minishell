@@ -20,6 +20,29 @@ void	apply_redirs(t_cmd *cmd);
 int		exec_subshell(t_btree *ast);
 int		gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 
+static void	flatten_recur(t_btree *ast, t_darray *nodes)
+{
+	t_token		*current;
+
+	current = ast->value;
+	if (current->type == CMD || current->type == SUBSHELL)
+		nodes->push(nodes, ast);
+	if (current->type == PIPE)
+	{
+		flatten_recur(ast->left, nodes);
+		flatten_recur(ast->right, nodes);
+	}
+}
+
+t_darray	*flatten(t_btree *ast)
+{
+	t_darray	*nodes;
+
+	nodes = init_darray(ast->gc);
+	flatten_recur(ast, nodes);
+	return (nodes);
+}
+
 static void	manage_dup(int in_fd, int out_fd, t_gc *gc)
 {
 	if (in_fd != STDIN_FILENO)

@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stddef.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -28,6 +29,11 @@ static int	exec_cmd(t_cmd *cmd, t_gc *gc)
 	int		status;
 
 	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return (1);
+	}
 	if (pid == 0)
 	{
 		apply_redirs(cmd);
@@ -46,6 +52,11 @@ int	exec_subshell(t_btree *ast)
 	int		status;
 
 	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return (1);
+	}
 	if (pid == 0)
 	{
 		exit_code = execute(ast->left);

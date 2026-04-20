@@ -41,7 +41,7 @@ static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_gc *gc)
 	if (pid == -1)
 	{
 		perror("fork");
-		return (1);
+		return (-1);
 	}
 	if (pid == 0)
 	{

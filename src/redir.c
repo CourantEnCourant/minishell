@@ -27,7 +27,12 @@ static void	apply_from_file(t_redir *redir)
 		redir->gc->clean(redir->gc);
 		exit(1);
 	}
-	dup2(fd, STDIN_FILENO);
+	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		perror("dup2");
+		redir->gc->clean(redir->gc);
+		exit(1);
+	}
 	close(fd);
 }
 
@@ -42,7 +47,12 @@ static void	apply_append_file(t_redir *redir)
 		redir->gc->clean(redir->gc);
 		exit(1);
 	}
-	dup2(fd, STDOUT_FILENO);
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("dup2");
+		redir->gc->clean(redir->gc);
+		exit(1);
+	}
 	close(fd);
 }
 
@@ -57,7 +67,12 @@ static void	apply_to_file(t_redir *redir)
 		redir->gc->clean(redir->gc);
 		exit(1);
 	}
-	dup2(fd, STDOUT_FILENO);
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("dup2");
+		redir->gc->clean(redir->gc);
+		exit(1);
+	}
 	close(fd);
 }
 

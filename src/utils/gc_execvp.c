@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stddef.h>
@@ -44,6 +45,8 @@ int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
 	{
 		execve(cmd, argv, environ);
 		perror(cmd);
+		if (errno == EACCES)
+			return (126);
 		return (127);
 	}
 	paths = get_paths(gc);

@@ -34,6 +34,17 @@ static char	**get_paths(t_gc *gc)
 	return (gc_split(environ[i] + 5, ':', gc));
 }
 
+static int	exec_with_path(const char *cmd, char *const argv[])
+{
+	extern char	**environ;
+
+	execve(cmd, argv, environ);
+	perror(cmd);
+	if (errno == EACCES)
+		return (126);
+	return (127);
+}
+
 int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
 {
 	size_t		i;
@@ -42,23 +53,16 @@ int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
 	extern char	**environ;
 
 	if (ft_strchr(cmd, '/'))
-	{
-		execve(cmd, argv, environ);
-		perror(cmd);
-		if (errno == EACCES)
-			return (126);
-		return (127);
-	}
+		return (exec_with_path(cmd, argv));
 	paths = get_paths(gc);
 	if (!paths)
 		return (127);
-	i = 0;
-	while (paths[i])
+	i = -1;
+	while (paths[++i])
 	{
 		cmd_abs = gc_strjoin(gc_strjoin(paths[i], "/", gc), cmd, gc);
 		if (access(cmd_abs, X_OK) == 0)
 			execve(cmd_abs, argv, environ);
-		i++;
 	}
 	ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd);
 	return (127);

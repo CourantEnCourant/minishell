@@ -45,13 +45,11 @@ static t_btree	*join_op(t_btree *left, t_darray *tokens, size_t *i)
 	return (node);
 }
 
-static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp)
+static t_btree	*parse_atom(t_darray *tokens, size_t *i)
 {
 	t_token	*token;
 	t_btree	*node;
 
-	if (*i >= tokens->len)
-		return (NULL);
 	token = tokens->peek_i(tokens, *i);
 	if (token->type == SUBSHELL)
 	{
@@ -60,15 +58,27 @@ static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp)
 		node->left = parse_recur(tokens, i, 0);
 		if (!node->left)
 			return (NULL);
+		return (node);
 	}
-	else if (token->type & (PIPE | AND | OR | CLOSE_PAREN))
+	if (token->type & (PIPE | AND | OR | CLOSE_PAREN))
 	{
 		ft_dprintf(STDERR_FILENO,
 			"syntax error near unexpected token `%s'\n", token->value);
 		return (NULL);
 	}
-	else
-		node = init_btree(token, tokens->gc);
+	return (init_btree(token, tokens->gc));
+}
+
+static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp)
+{
+	t_token	*token;
+	t_btree	*node;
+
+	if (*i >= tokens->len)
+		return (NULL);
+	node = parse_atom(tokens, i);
+	if (!node)
+		return (NULL);
 	(*i)++;
 	while (*i < tokens->len)
 	{

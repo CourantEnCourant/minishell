@@ -6,15 +6,15 @@
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 01:47:19 by weizhang          #+#    #+#             */
-/*   Updated: 2026/04/03 01:52:41 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/04/20 23:02:19 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "libft.h"
 #include "minishell.h"
 
 t_lexer_state	update_state(char c, t_lexer_state current_state);
+bool			unmatched_parenthesis(void);
+bool			check_unmatched(t_lexer_state state, int open_paren_count);
 
 bool	quotes_paren_match(char *input)
 {
@@ -22,10 +22,10 @@ bool	quotes_paren_match(char *input)
 	t_lexer_state	state;
 	int				open_paren_count;
 
-	i = 0;
+	i = -1;
 	state = TEXT;
 	open_paren_count = 0;
-	while (input[i])
+	while (input[++i])
 	{
 		state = update_state(input[i], state);
 		if (state == TEXT)
@@ -35,21 +35,10 @@ bool	quotes_paren_match(char *input)
 			else if (input[i] == ')')
 			{
 				if (open_paren_count == 0)
-				{
-					ft_dprintf(STDERR_FILENO,
-							"syntax error with unmatched parenthesis\n");
-					return (false);
-				}
+					return (unmatched_parenthesis());
 				open_paren_count--;
 			}
 		}
-		i++;
 	}
-	if (open_paren_count != 0)
-		ft_dprintf(STDERR_FILENO,
-				"syntax error with unmatched parenthesis\n");
-	if (state != TEXT)
-		ft_dprintf(STDERR_FILENO,
-				"syntax error with unmatched quotes\n");
-	return (state == TEXT && open_paren_count == 0);
+	return (check_unmatched(state, open_paren_count));
 }

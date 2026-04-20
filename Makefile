@@ -14,6 +14,7 @@ RM = rm -rf
 INCLUDE = -I ./include
 SRC = ./src/checker.c \
 	  ./src/cmd.c \
+	  ./src/error_msg.c \
 	  ./src/exec_pipe.c \
 	  ./src/exec_pipe_2.c \
 	  ./src/executor.c \

@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stddef.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -31,6 +32,11 @@ static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_gc *gc)
 		fds[1] = STDOUT_FILENO;
 	}
 	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return (1);
+	}
 	if (pid == 0)
 	{
 		if (fds[0] != -1)

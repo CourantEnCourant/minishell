@@ -12,8 +12,10 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <unistd.h>
 #include "datastructures.h"
 #include "gc_libft.h"
+#include "libft.h"
 #include "minishell.h"
 
 bool			quotes_paren_match(char *cmd);
@@ -30,9 +32,17 @@ static t_btree	*join_op(t_btree *left, t_darray *tokens, size_t *i)
 
 	op = tokens->peek_i(tokens, *i);
 	(*i)++;
+	if (*i >= tokens->len)
+	{
+		ft_dprintf(STDERR_FILENO,
+			"syntax error near unexpected token `newline'\n");
+		return (NULL);
+	}
 	node = init_btree(op, tokens->gc);
 	node->left = left;
 	node->right = parse_recur(tokens, i, op->bind_right);
+	if (!node->right)
+		return (NULL);
 	return (node);
 }
 
@@ -49,6 +59,14 @@ static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp)
 		node = init_btree(token, tokens->gc);
 		(*i)++;
 		node->left = parse_recur(tokens, i, 0);
+		if (!node->left)
+			return (NULL);
+	}
+	else if (token->type & (PIPE | AND | OR | CLOSE_PAREN))
+	{
+		ft_dprintf(STDERR_FILENO,
+			"syntax error near unexpected token `%s'\n", token->value);
+		return (NULL);
 	}
 	else
 		node = init_btree(token, tokens->gc);
@@ -59,6 +77,8 @@ static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp)
 		if (token->type == CLOSE_PAREN || token->bind_left < min_bp)
 			break ;
 		node = join_op(node, tokens, i);
+		if (!node)
+			return (NULL);
 	}
 	return (node);
 }

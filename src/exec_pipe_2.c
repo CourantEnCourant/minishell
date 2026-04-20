@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "datastructures.h"
@@ -19,16 +20,28 @@ void	apply_redirs(t_cmd *cmd);
 int		exec_subshell(t_btree *ast);
 int		gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 
-static void	manage_dup(int in_fd, int out_fd)
+static void	manage_dup(int in_fd, int out_fd, t_gc *gc)
 {
 	if (in_fd != STDIN_FILENO)
 	{
-		dup2(in_fd, STDIN_FILENO);
+		if (dup2(in_fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			close(in_fd);
+			gc->clean(gc);
+			exit(1);
+		}
 		close(in_fd);
 	}
 	if (out_fd != STDOUT_FILENO)
 	{
-		dup2(out_fd, STDOUT_FILENO);
+		if (dup2(out_fd, STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			close(out_fd);
+			gc->clean(gc);
+			exit(1);
+		}
 		close(out_fd);
 	}
 }
@@ -39,7 +52,7 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
 	t_cmd	*cmd;
 	int		exit_code;
 
-	manage_dup(in_fd, out_fd);
+	manage_dup(in_fd, out_fd, gc);
 	token = node->value;
 	if (token->type == CMD)
 	{

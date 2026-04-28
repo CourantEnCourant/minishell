@@ -6,7 +6,7 @@
 /*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 21:07:26 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/29 00:00:55 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/04/28 23:42:21 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,12 @@ struct s_token
 };
 t_token		*init_token(char *value, t_gc *gc);
 t_token		*init_cmd_token(t_cmd *cmd, t_gc *gc);
+
+typedef struct s_env
+{
+	char	*cwd;
+}	t_env;
+t_env	*init_env(t_gc *gc);
 
 char		*gc_readline(const char *prompt, t_gc *gc);
 char		*gc_getcwd(t_gc *gc);

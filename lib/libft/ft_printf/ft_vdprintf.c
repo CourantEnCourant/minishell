@@ -14,7 +14,7 @@
 #include <stdarg.h>
 #include "libft.h"
 
-int	parse_arg(int fd, char placeholder, va_list *list);
+int	parse_arg(int fd, char placeholder, va_list ap);
 
 int	ft_vdprintf(int fd, const char *s, va_list ap)
 {
@@ -28,7 +28,7 @@ int	ft_vdprintf(int fd, const char *s, va_list ap)
 	{
 		if (s[i] == '%')
 		{
-			substr_count = parse_arg(fd, s[i + 1], &ap);
+			substr_count = parse_arg(fd, s[i + 1], ap);
 			if (substr_count < 0)
 				return (-1);
 			count += substr_count;

@@ -46,7 +46,7 @@ static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 	env->exit_code = status >> 8;
 }
 
-int	exec_subshell(t_btree *ast, t_env *env)
+void	exec_subshell(t_btree *ast, t_env *env)
 {
 	pid_t	pid;
 	int		status;
@@ -55,7 +55,8 @@ int	exec_subshell(t_btree *ast, t_env *env)
 	if (pid == -1)
 	{
 		perror("fork");
-		return (1);
+		env->exit_code = 1;
+		return ;
 	}
 	if (pid == 0)
 	{
@@ -64,7 +65,7 @@ int	exec_subshell(t_btree *ast, t_env *env)
 		exit(env->exit_code);
 	}
 	waitpid(pid, &status, 0);
-	return (status >> 8);
+	env->exit_code = status >> 8;
 }
 
 static void	exec_and(t_btree *ast, t_env *env)

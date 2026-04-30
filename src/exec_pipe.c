@@ -17,7 +17,7 @@
 #include "minishell.h"
 #include "datastructures.h"
 
-void		exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc);
+void		exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc);
 t_darray	*flatten(t_btree *ast);
 
 static int	setup_fds(int *fds, bool is_last, t_env *env)
@@ -68,7 +68,7 @@ static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_env *env, t_g
 	if (pid == 0 && fds[0] != STDIN_FILENO)
 		close(fds[0]);
 	if (pid == 0)
-		exec_child(node, *prev_fd, fds[1], gc);
+		exec_child(node, *prev_fd, fds[1], env, gc);
 	fork_cleanup(fds, prev_fd);
 	return (pid);
 }

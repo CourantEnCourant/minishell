@@ -69,12 +69,13 @@ static void	manage_dup(int in_fd, int out_fd, t_gc *gc)
 	}
 }
 
-void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
+void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc)
 {
 	t_token	*token;
 	t_cmd	*cmd;
 	int		exit_code;
 
+	(void)env;
 	manage_dup(in_fd, out_fd, gc);
 	token = node->value;
 	if (token->type == CMD)

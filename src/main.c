@@ -36,7 +36,7 @@ int	main(void)
 		ast = parse(input, env, gc);
 		if (!ast)
 			continue ;
-		execute(ast);
+		execute(ast, env);
 	}
 	printf("exit\n");
 	rl_clear_history();

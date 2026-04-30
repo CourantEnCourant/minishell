@@ -20,7 +20,7 @@
 int			gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 int			exec_pipe(t_btree *ast);
 void		apply_redirs(t_cmd *cmd);
-int			execute(t_btree *ast, t_env *env);
+void		execute(t_btree *ast, t_env *env);
 
 static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 {
@@ -49,7 +49,6 @@ static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 int	exec_subshell(t_btree *ast, t_env *env)
 {
 	pid_t	pid;
-	int		exit_code;
 	int		status;
 
 	pid = fork();
@@ -60,9 +59,9 @@ int	exec_subshell(t_btree *ast, t_env *env)
 	}
 	if (pid == 0)
 	{
-		exit_code = execute(ast->left, env);
+		execute(ast->left, env);
 		ast->gc->clean(ast->gc);
-		exit(exit_code);
+		exit(env->exit_code);
 	}
 	waitpid(pid, &status, 0);
 	return (status >> 8);
@@ -75,7 +74,7 @@ static void	exec_and(t_btree *ast, t_env *env)
 		execute(ast->right, env);
 }
 
-int	execute(t_btree *ast, t_env *env)
+void	execute(t_btree *ast, t_env *env)
 {
 	t_token	*current;
 
@@ -89,13 +88,11 @@ int	execute(t_btree *ast, t_env *env)
 		execute(ast->left, env);
 		if (env->exit_code != 0)
 			execute(ast->right, env);
-		return (env->exit_code);
 	}
 	else if (current->type == PIPE)
-		return (exec_pipe(ast));
+		exec_pipe(ast);
 	else if (current->type == SUBSHELL)
-		return (exec_subshell(ast, env));
+		exec_subshell(ast, env);
 	else
-		return (execute(ast->left, env));
-	return (env->exit_code);
+		execute(ast->left, env);
 }

@@ -15,25 +15,27 @@
 #include "libft.h"
 #include "minishell.h"
 
-bool	unmatched_parenthesis(void)
+bool	unmatched_parenthesis(t_env *env)
 {
 	ft_dprintf(STDERR_FILENO,
 		"syntax error with unmatched parenthesis\n");
+	env->exit_code = 2;
 	return (false);
 }
 
-static bool	unmatched_quotes(void)
+static bool	unmatched_quotes(t_env *env)
 {
 	ft_dprintf(STDERR_FILENO,
 		"syntax error with unmatched quotes\n");
+	env->exit_code = 2;
 	return (false);
 }
 
-bool	check_unmatched(t_lexer_state state, int open_paren_count)
+bool	check_unmatched(t_lexer_state state, int open_paren_count, t_env *env)
 {
 	if (state != TEXT)
-		return (unmatched_quotes());
+		return (unmatched_quotes(env));
 	if (open_paren_count != 0)
-		return (unmatched_parenthesis());
+		return (unmatched_parenthesis(env));
 	return (true);
 }

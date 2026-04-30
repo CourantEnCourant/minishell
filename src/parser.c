@@ -18,7 +18,7 @@
 #include "libft.h"
 #include "minishell.h"
 
-bool			quotes_paren_match(char *cmd);
+bool			quotes_paren_match(char *cmd, t_env *env);
 t_darray		*tokenize(char *cmd, t_gc *gc);
 t_darray		*postprocess(t_darray *operands);
 
@@ -98,8 +98,7 @@ t_btree	*parse(char *input, t_env *env, t_gc *gc)
 	t_darray	*tokens;
 	t_btree		*ast;
 
-	(void)env;
-	if (!quotes_paren_match(input))
+	if (!quotes_paren_match(input, env))
 		return (NULL);
 	tokens = postprocess(tokenize(input, gc));
 	if (!tokens)

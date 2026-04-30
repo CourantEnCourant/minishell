@@ -18,7 +18,7 @@
 #include "minishell.h"
 
 int			gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
-int			exec_pipe(t_btree *ast);
+int			exec_pipe(t_btree *ast, t_env *env);
 void		apply_redirs(t_cmd *cmd);
 void		execute(t_btree *ast, t_env *env);
 
@@ -90,7 +90,7 @@ void	execute(t_btree *ast, t_env *env)
 			execute(ast->right, env);
 	}
 	else if (current->type == PIPE)
-		exec_pipe(ast);
+		exec_pipe(ast, env);
 	else if (current->type == SUBSHELL)
 		exec_subshell(ast, env);
 	else

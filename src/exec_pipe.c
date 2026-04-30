@@ -86,13 +86,14 @@ static int	wait_children(pid_t *pids, size_t len)
 	return (status >> 8);
 }
 
-int	exec_pipe(t_btree *ast)
+int	exec_pipe(t_btree *ast, t_env *env)
 {
 	t_darray	*nodes;
 	pid_t		*pids;
 	int			prev_fd;
 	size_t		i;
 
+	(void)env;
 	nodes = flatten(ast);
 	pids = gc_calloc(nodes->len, sizeof(pid_t), ast->gc);
 	prev_fd = STDIN_FILENO;

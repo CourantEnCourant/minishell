@@ -6,7 +6,7 @@
 /*   By: weiqizhang <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 00:08:35 by weiqizhang        #+#    #+#             */
-/*   Updated: 2026/03/24 19:46:09 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/04/30 23:55:41 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	insert(t_darray *self, size_t i, void *item);
 void	push(t_darray *self, void *item);
 void	*pop_i(t_darray *self, size_t i);
 void	*pop(t_darray *self);
+bool	any(t_darray *s, bool (*pred)(void *elem, void *target), void *target);
 void	*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
 
 static void	**to_arr(t_darray *self)
@@ -76,6 +77,7 @@ t_darray	*init_darray(t_gc *gc)
 	darray->push = push;
 	darray->pop_i = pop_i;
 	darray->pop = pop;
+	darray->any = any;
 	darray->reduce = reduce;
 	return (darray);
 }

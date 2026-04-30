@@ -6,7 +6,7 @@
 /*   By: weiqizhang <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 12:58:22 by weiqizhang        #+#    #+#             */
-/*   Updated: 2026/03/17 17:47:20 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/04/30 23:52:34 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ struct s_darray
 	void	(*push)(t_darray *self, void *item);
 	void	*(*pop_i)(t_darray *self, size_t i);
 	void	*(*pop)(t_darray *self);
+	bool	(*any)(t_darray *s,
+			bool (*pred)(void *elem, void *target), void *target);
 	void	*(*reduce)(t_darray *s,
 			void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
 };

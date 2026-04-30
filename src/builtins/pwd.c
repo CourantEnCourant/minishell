@@ -1,35 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/28 23:40:06 by weizhang          #+#    #+#             */
-/*   Updated: 2026/04/30 21:18:58 by weizhang         ###   ########.fr       */
+/*   Created: 2026/04/30 21:10:30 by weizhang          #+#    #+#             */
+/*   Updated: 2026/04/30 21:12:24 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "datastructures.h"
-#include "gc_libft.h"
+#include <stdio.h>
 #include "minishell.h"
 
-t_darray	*init_builtins(t_gc *gc)
+void pwd(t_env *env)
 {
-	t_darray	*builtins;
-
-	builtins = init_darray(gc);
-	builtins->push(builtins, ft_strdup("pwd"));
-	return (builtins);
-}
-
-t_env	*init_env(t_gc *gc)
-{
-	t_env	*env;
-
-	env = gc_malloc(sizeof(t_env), gc);
+	printf("%s\n", env->cwd);
 	env->exit_code = 0;
-	env->cwd = gc_getcwd(gc);
-	env->builtins = init_builtins(gc);
-	return (env);
 }

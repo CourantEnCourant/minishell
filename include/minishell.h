@@ -6,7 +6,7 @@
 /*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 21:07:26 by weizhang          #+#    #+#             */
-/*   Updated: 2026/04/28 23:42:21 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/04/30 21:14:33 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,9 @@ t_token		*init_cmd_token(t_cmd *cmd, t_gc *gc);
 
 typedef struct s_env
 {
-	int		exit_code;
-	char	*cwd;
+	int			exit_code;
+	char		*cwd;
+	t_darray	*builtins;
 }	t_env;
 t_env	*init_env(t_gc *gc);
 

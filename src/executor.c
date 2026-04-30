@@ -25,7 +25,6 @@ void		execute(t_btree *ast, t_env *env);
 static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 {
 	pid_t	pid;
-	int		exit_code;
 	int		status;
 
 	pid = fork();
@@ -38,9 +37,9 @@ static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 	if (pid == 0)
 	{
 		apply_redirs(cmd);
-		exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
+		env->exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
 		gc->clean(gc);
-		exit(exit_code);
+		exit(env->exit_code);
 	}
 	waitpid(pid, &status, 0);
 	env->exit_code = status >> 8;

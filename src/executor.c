@@ -37,9 +37,9 @@ static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 	if (pid == 0)
 	{
 		apply_redirs(cmd);
-		env->exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
+		status = gc_execvp(cmd->argv[0], cmd->argv, gc);
 		gc->clean(gc);
-		exit(env->exit_code);
+		exit(status);
 	}
 	waitpid(pid, &status, 0);
 	env->exit_code = status >> 8;
@@ -60,8 +60,9 @@ void	exec_subshell(t_btree *ast, t_env *env)
 	if (pid == 0)
 	{
 		execute(ast->left, env);
+		status = env->exit_code;
 		ast->gc->clean(ast->gc);
-		exit(env->exit_code);
+		exit(status);
 	}
 	waitpid(pid, &status, 0);
 	env->exit_code = status >> 8;

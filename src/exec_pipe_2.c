@@ -75,7 +75,6 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc)
 	t_cmd	*cmd;
 	int		exit_code;
 
-	(void)env;
 	manage_dup(in_fd, out_fd, gc);
 	token = node->value;
 	if (token->type == CMD)
@@ -86,7 +85,7 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc)
 		gc->clean(gc);
 		exit(exit_code);
 	}
-	exit_code = exec_subshell(node);
+	env->exit_code = exec_subshell(node);
 	gc->clean(gc);
-	exit(exit_code);
+	exit(env->exit_code);
 }

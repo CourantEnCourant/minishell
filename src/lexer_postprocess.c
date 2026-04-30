@@ -16,7 +16,7 @@
 #include "datastructures.h"
 #include "minishell.h"
 
-static t_token	*validate_redir(t_darray *ops, size_t i)
+static t_token	*validate_redir(t_darray *ops, size_t i, t_env *env)
 {
 	t_token	*next;
 
@@ -24,6 +24,7 @@ static t_token	*validate_redir(t_darray *ops, size_t i)
 	{
 		ft_dprintf(STDERR_FILENO,
 			"syntax error near unexpected token 'newline'\n");
+		env->exit_code = 2;
 		return (NULL);
 	}
 	next = ops->peek_i(ops, i + 1);
@@ -31,18 +32,19 @@ static t_token	*validate_redir(t_darray *ops, size_t i)
 	{
 		ft_dprintf(STDERR_FILENO,
 			"syntax error near unexpected token `%s'\n", next->value);
+		env->exit_code = 2;
 		return (NULL);
 	}
 	return (next);
 }
 
-static size_t	add_to_cmd(t_cmd *cmd, t_darray *ops, size_t i)
+static size_t	add_to_cmd(t_cmd *cmd, t_darray *ops, size_t i, t_env *env)
 {
 	t_token	*cur;
 	t_token	*next;
 
 	cur = ops->peek_i(ops, i);
-	next = validate_redir(ops, i);
+	next = validate_redir(ops, i, env);
 	if (!next)
 		return (0);
 	if (ft_strcmp(cur->value, ">") == 0)
@@ -57,7 +59,7 @@ static size_t	add_to_cmd(t_cmd *cmd, t_darray *ops, size_t i)
 	return (i + 2);
 }
 
-static size_t	collect_argv(t_darray *operands, size_t i, t_darray *cmds)
+static size_t	collect_argv(t_darray *operands, size_t i, t_darray *cmds, t_env *env)
 {
 	t_darray	*argv;
 	t_token		*current;
@@ -72,7 +74,7 @@ static size_t	collect_argv(t_darray *operands, size_t i, t_darray *cmds)
 			argv->push(argv, current->value);
 		else if (current->type == REDIR)
 		{
-			i = add_to_cmd(cmd, operands, i);
+			i = add_to_cmd(cmd, operands, i, env);
 			if (i == 0)
 				return (0);
 		}
@@ -84,7 +86,7 @@ static size_t	collect_argv(t_darray *operands, size_t i, t_darray *cmds)
 	return (i);
 }
 
-t_darray	*postprocess(t_darray *operands)
+t_darray	*postprocess(t_darray *operands, t_env *env)
 {
 	t_darray	*cmds;
 	t_token		*current;
@@ -97,7 +99,7 @@ t_darray	*postprocess(t_darray *operands)
 		current = operands->peek_i(operands, i);
 		if (current->type & (OPERAND | REDIR))
 		{
-			i = collect_argv(operands, i, cmds);
+			i = collect_argv(operands, i, cmds, env);
 			if (i == 0)
 				return (NULL);
 		}

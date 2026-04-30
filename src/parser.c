@@ -20,7 +20,7 @@
 
 bool			quotes_paren_match(char *cmd, t_env *env);
 t_darray		*tokenize(char *cmd, t_gc *gc);
-t_darray		*postprocess(t_darray *operands);
+t_darray		*postprocess(t_darray *operands, t_env *env);
 
 static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp);
 
@@ -100,7 +100,7 @@ t_btree	*parse(char *input, t_env *env, t_gc *gc)
 
 	if (!quotes_paren_match(input, env))
 		return (NULL);
-	tokens = postprocess(tokenize(input, gc));
+	tokens = postprocess(tokenize(input, gc), env);
 	if (!tokens)
 		return (NULL);
 	i = 0;

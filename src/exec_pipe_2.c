@@ -86,6 +86,7 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc)
 		exit(exit_code);
 	}
 	exec_subshell(node, env);
+	exit_code = env->exit_code;
 	gc->clean(gc);
-	exit(env->exit_code);
+	exit(exit_code);
 }

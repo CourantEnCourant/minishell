@@ -14,6 +14,15 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
+void pwd(char **options, t_env *env);
+
+int	exec_builtins(char *cmd, char **options, t_env *env)
+{
+	if (ft_strcmp(cmd, "pwd") == 0)
+		pwd(options, env);
+	return (env->exit_code);
+}
+
 t_darray	*init_builtins(t_gc *gc)
 {
 	t_darray	*builtins;

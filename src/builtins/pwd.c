@@ -13,8 +13,11 @@
 #include <stdio.h>
 #include "minishell.h"
 
-void pwd(t_env *env)
+size_t	len(void **arr);
+
+void pwd(char **options, t_env *env)
 {
+	(void)(options);
 	printf("%s\n", env->cwd);
 	env->exit_code = 0;
 }

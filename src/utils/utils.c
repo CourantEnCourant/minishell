@@ -58,3 +58,8 @@ void	repr_node(void *ptr)
 	node = ptr;
 	repr_token(node->value);
 }
+
+bool	strs_eq(void *s1, void *s2)
+{
+	return (ft_strcmp(s1, s2) == 0);
+}

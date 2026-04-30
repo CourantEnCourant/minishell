@@ -80,13 +80,14 @@ t_token		*init_cmd_token(t_cmd *cmd, t_gc *gc);
 
 typedef struct s_env
 {
+	int		exit_code;
 	char	*cwd;
 }	t_env;
 t_env	*init_env(t_gc *gc);
 
 char		*gc_readline(const char *prompt, t_gc *gc);
 char		*gc_getcwd(t_gc *gc);
-t_btree		*parse(char *input, t_gc *gc);
+t_btree		*parse(char *input, t_env *env, t_gc *gc);
 int			execute(t_btree *ast);
 
 #endif

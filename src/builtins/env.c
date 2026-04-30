@@ -18,6 +18,7 @@ t_env	*init_env(t_gc *gc)
 	t_env	*env;
 
 	env = gc_malloc(sizeof(t_env), gc);
+	env->exit_code = 0;
 	env->cwd = gc_getcwd(gc);
 	return (env);
 }

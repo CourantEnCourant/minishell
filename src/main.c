@@ -23,15 +23,17 @@ int	main(void)
 	char		*input;
 	t_gc		*gc;
 	t_btree		*ast;
+	t_env		*env;
 
 	gc = init_gc();
+	env = init_env(gc);
 	while (true)
 	{
 		input = gc_readline("minishell> ", gc);
 		if (!input)
 			break ;
 		add_history(input);
-		ast = parse(input, gc);
+		ast = parse(input, env, gc);
 		if (!ast)
 			continue ;
 		execute(ast);

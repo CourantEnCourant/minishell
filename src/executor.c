@@ -68,14 +68,11 @@ int	exec_subshell(t_btree *ast, t_env *env)
 	return (status >> 8);
 }
 
-static int	exec_and(t_btree *ast, t_env *env)
+static void	exec_and(t_btree *ast, t_env *env)
 {
-	int	status;
-
-	status = execute(ast->left, env);
-	if (status == 0)
-		return (execute(ast->right, env));
-	return (status);
+	execute(ast->left, env);
+	if (env->exit_code == 0)
+		execute(ast->right, env);
 }
 
 int	execute(t_btree *ast, t_env *env)
@@ -87,7 +84,7 @@ int	execute(t_btree *ast, t_env *env)
 	if (current->type == CMD)
 		exec_cmd(current->cmd, ast->gc, env);
 	else if (current->type == AND)
-		return (exec_and(ast, env));
+		exec_and(ast, env);
 	else if (current->type == OR)
 	{
 		status = execute(ast->left, env);

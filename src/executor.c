@@ -22,7 +22,7 @@ int			exec_pipe(t_btree *ast);
 void		apply_redirs(t_cmd *cmd);
 int			execute(t_btree *ast, t_env *env);
 
-static int	exec_cmd(t_cmd *cmd, t_gc *gc)
+static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 {
 	pid_t	pid;
 	int		exit_code;
@@ -32,7 +32,8 @@ static int	exec_cmd(t_cmd *cmd, t_gc *gc)
 	if (pid == -1)
 	{
 		perror("fork");
-		return (1);
+		env->exit_code = 1;
+		return ;
 	}
 	if (pid == 0)
 	{
@@ -42,7 +43,7 @@ static int	exec_cmd(t_cmd *cmd, t_gc *gc)
 		exit(exit_code);
 	}
 	waitpid(pid, &status, 0);
-	return (status >> 8);
+	env->exit_code = status >> 8;
 }
 
 int	exec_subshell(t_btree *ast, t_env *env)
@@ -84,7 +85,7 @@ int	execute(t_btree *ast, t_env *env)
 
 	current = ast->value;
 	if (current->type == CMD)
-		return (exec_cmd(current->cmd, ast->gc));
+		exec_cmd(current->cmd, ast->gc, env);
 	else if (current->type == AND)
 		return (exec_and(ast, env));
 	else if (current->type == OR)
@@ -100,4 +101,5 @@ int	execute(t_btree *ast, t_env *env)
 		return (exec_subshell(ast, env));
 	else
 		return (execute(ast->left, env));
+	return (env->exit_code);
 }

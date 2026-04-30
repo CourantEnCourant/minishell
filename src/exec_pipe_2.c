@@ -17,7 +17,7 @@
 #include "minishell.h"
 
 void	apply_redirs(t_cmd *cmd);
-int		exec_subshell(t_btree *ast);
+void	exec_subshell(t_btree *ast, t_env *env);
 int		gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 
 static void	flatten_recur(t_btree *ast, t_darray *nodes)
@@ -85,7 +85,7 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc)
 		gc->clean(gc);
 		exit(exit_code);
 	}
-	env->exit_code = exec_subshell(node);
+	exec_subshell(node, env);
 	gc->clean(gc);
 	exit(env->exit_code);
 }

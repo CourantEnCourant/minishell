@@ -78,7 +78,6 @@ static void	exec_and(t_btree *ast, t_env *env)
 int	execute(t_btree *ast, t_env *env)
 {
 	t_token	*current;
-	int		status;
 
 	current = ast->value;
 	if (current->type == CMD)
@@ -87,10 +86,10 @@ int	execute(t_btree *ast, t_env *env)
 		exec_and(ast, env);
 	else if (current->type == OR)
 	{
-		status = execute(ast->left, env);
-		if (status != 0)
-			return (execute(ast->right, env));
-		return (status);
+		execute(ast->left, env);
+		if (env->exit_code != 0)
+			execute(ast->right, env);
+		return (env->exit_code);
 	}
 	else if (current->type == PIPE)
 		return (exec_pipe(ast));

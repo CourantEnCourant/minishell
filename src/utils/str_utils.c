@@ -17,3 +17,8 @@ bool	strs_eq(void *s1, void *s2)
 {
 	return (ft_strcmp(s1, s2) == 0);
 }
+
+bool	startswith(void *s, void *ref)
+{
+	return (ft_strncmp(s, ref, ft_strlen(ref)) == 0);
+}

@@ -81,3 +81,18 @@ t_darray	*init_darray(t_gc *gc)
 	darray->reduce = reduce;
 	return (darray);
 }
+
+t_darray	*init_from_arr(void *arr, t_gc *gc)
+{
+	t_darray	*darray;
+	size_t		i;
+
+	darray = init_darray(gc);
+	i = 0;
+	while (arr[i])
+	{
+		darray->push(darray, arr[i]);
+		i++;
+	}
+	return (darray);
+}

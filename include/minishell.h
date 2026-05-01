@@ -81,7 +81,6 @@ t_token		*init_cmd_token(t_cmd *cmd, t_gc *gc);
 typedef struct s_env
 {
 	int			exit_code;
-	char		*cwd;
 	t_darray	*builtins;
 	t_darray	*envp;
 }	t_env;

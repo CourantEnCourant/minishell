@@ -39,7 +39,6 @@ t_env	*init_env(t_gc *gc)
 
 	env = gc_malloc(sizeof(t_env), gc);
 	env->exit_code = 0;
-	env->cwd = gc_getcwd(gc);
 	env->builtins = init_builtins(gc);
 	env->envp = init_from_arr((void **)environ, gc);
 	return (env);

@@ -83,6 +83,7 @@ typedef struct s_env
 	int			exit_code;
 	char		*cwd;
 	t_darray	*builtins;
+	t_darray	*envp;
 }	t_env;
 t_env	*init_env(t_gc *gc);
 

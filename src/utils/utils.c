@@ -6,7 +6,7 @@
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 17:11:12 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/18 17:12:57 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/01 23:56:08 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,4 @@ void	repr_node(void *ptr)
 
 	node = ptr;
 	repr_token(node->value);
-}
-
-bool	strs_eq(void *s1, void *s2)
-{
-	return (ft_strcmp(s1, s2) == 0);
 }

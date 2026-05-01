@@ -20,7 +20,7 @@
 int			exec_pipe(t_btree *ast, t_env *env);
 void		apply_redirs(t_cmd *cmd);
 void		execute(t_btree *ast, t_env *env);
-int			exec_builtins(char *cmd, char **options, t_env *env);
+void		exec_builtins(char *cmd, char **options, t_env *env);
 bool		strs_eq(void *s1, void *s2);
 
 static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
@@ -28,6 +28,12 @@ static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 	pid_t	pid;
 	int		status;
 
+	if (env->builtins->any(env->builtins, strs_eq, cmd->argv[0]))
+	{
+		apply_redirs(cmd);
+		exec_builtins(cmd->argv[0], cmd->argv, env);
+		return ;
+	}
 	pid = fork();
 	if (pid == -1)
 	{
@@ -38,10 +44,7 @@ static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 	if (pid == 0)
 	{
 		apply_redirs(cmd);
-		if (env->builtins->any(env->builtins, strs_eq, cmd->argv[0]))
-			status = exec_builtins(cmd->argv[0], cmd->argv, env);
-		else
-			status = gc_execvp(cmd->argv[0], cmd->argv, 
+		status = gc_execvp(cmd->argv[0], cmd->argv, 
 					(char **)env->envp->to_arr(env->envp), gc);
 		gc->clean(gc);
 		exit(status);

@@ -87,6 +87,8 @@ typedef struct s_env
 }	t_env;
 t_env	*init_env(t_gc *gc);
 
+int			gc_execvp(const char *cmd, char *const argv[],
+		char **envp, t_gc *gc);
 char		*gc_readline(const char *prompt, t_gc *gc);
 char		*gc_getcwd(t_gc *gc);
 t_btree		*parse(char *input, t_env *env, t_gc *gc);

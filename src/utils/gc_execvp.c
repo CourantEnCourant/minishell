@@ -16,6 +16,7 @@
 #include <stddef.h>
 #include "libft.h"
 #include "gc_libft.h"
+#include "minishell.h"
 
 static char	**get_paths(t_gc *gc)
 {
@@ -45,12 +46,11 @@ static int	exec_with_path(const char *cmd, char *const argv[])
 	return (127);
 }
 
-int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
+int	gc_execvp(const char *cmd, char *const argv[], char **envp, t_gc *gc)
 {
 	size_t		i;
 	char		*cmd_abs;
 	char		**paths;
-	extern char	**environ;
 
 	if (ft_strchr(cmd, '/'))
 		return (exec_with_path(cmd, argv));
@@ -62,7 +62,7 @@ int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
 	{
 		cmd_abs = gc_strjoin(gc_strjoin(paths[i], "/", gc), cmd, gc);
 		if (access(cmd_abs, X_OK) == 0)
-			execve(cmd_abs, argv, environ);
+			execve(cmd_abs, argv, envp);
 	}
 	ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd);
 	return (127);

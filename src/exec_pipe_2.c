@@ -18,7 +18,6 @@
 
 void	apply_redirs(t_cmd *cmd);
 void	exec_subshell(t_btree *ast, t_env *env);
-int		gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 
 static void	flatten_recur(t_btree *ast, t_darray *nodes)
 {
@@ -81,7 +80,8 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc)
 	{
 		cmd = token->cmd;
 		apply_redirs(cmd);
-		exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
+		exit_code = gc_execvp(cmd->argv[0], cmd->argv, 
+				(char **)env->envp->to_arr(env->envp), gc);
 		gc->clean(gc);
 		exit(exit_code);
 	}

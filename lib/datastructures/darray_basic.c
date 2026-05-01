@@ -82,7 +82,7 @@ t_darray	*init_darray(t_gc *gc)
 	return (darray);
 }
 
-t_darray	*init_from_arr(void *arr, t_gc *gc)
+t_darray	*init_from_arr(void **arr, t_gc *gc)
 {
 	t_darray	*darray;
 	size_t		i;

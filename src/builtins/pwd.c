@@ -13,11 +13,11 @@
 #include <stdio.h>
 #include "minishell.h"
 
-size_t	len(void **arr);
+bool	startswith(void *s, void *ref);
 
 void pwd(char **options, t_env *env)
 {
 	(void)(options);
-	printf("%s\n", env->cwd);
+	printf("%s\n", (char *)env->envp->find(env->envp, startswith, "PWD=") + 4);
 	env->exit_code = 0;
 }

@@ -28,6 +28,20 @@ bool	any(t_darray *s, bool (*pred)(void *elem, void *target), void *target)
 	return (false);
 }
 
+void	*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < s->len)
+	{
+		if (f(s->peek_i(s, i), e2))
+			return (s->peek_i(s, i));
+		i++;
+	}
+	return (NULL);
+}
+
 void	*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc), void *a)
 {
 	size_t	i;

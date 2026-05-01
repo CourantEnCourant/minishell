@@ -38,6 +38,7 @@ struct s_darray
 	void	*(*pop)(t_darray *self);
 	bool	(*any)(t_darray *s,
 			bool (*pred)(void *elem, void *target), void *target);
+	void	*(*find)(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 	void	*(*reduce)(t_darray *s,
 			void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
 };

@@ -22,6 +22,7 @@ void	push(t_darray *self, void *item);
 void	*pop_i(t_darray *self, size_t i);
 void	*pop(t_darray *self);
 bool	any(t_darray *s, bool (*pred)(void *elem, void *target), void *target);
+void	*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 void	*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
 
 static void	**to_arr(t_darray *self)
@@ -78,6 +79,7 @@ t_darray	*init_darray(t_gc *gc)
 	darray->pop_i = pop_i;
 	darray->pop = pop;
 	darray->any = any;
+	darray->find = find;
 	darray->reduce = reduce;
 	return (darray);
 }

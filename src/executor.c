@@ -27,11 +27,19 @@ static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 {
 	pid_t	pid;
 	int		status;
+	int		saved_stdin;
+	int		saved_stdout;
 
 	if (env->builtins->any(env->builtins, strs_eq, cmd->argv[0]))
 	{
+		saved_stdin = dup(STDIN_FILENO);
+		saved_stdout = dup(STDOUT_FILENO);
 		apply_redirs(cmd);
 		exec_builtins(cmd->argv[0], cmd->argv, env);
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdin);
+		close(saved_stdout);
 		return ;
 	}
 	pid = fork();

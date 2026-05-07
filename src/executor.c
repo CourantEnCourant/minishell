@@ -18,7 +18,7 @@
 #include "minishell.h"
 
 int			exec_pipe(t_btree *ast, t_env *env);
-void		apply_redirs(t_cmd *cmd);
+int			apply_redirs(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
 void		exec_builtins(char *cmd, char **options, t_env *env);
 bool		strs_eq(void *s1, void *s2);
@@ -34,8 +34,8 @@ static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 	{
 		saved_stdin = dup(STDIN_FILENO);
 		saved_stdout = dup(STDOUT_FILENO);
-		apply_redirs(cmd);
-		exec_builtins(cmd->argv[0], cmd->argv, env);
+		if (apply_redirs(cmd, env) == 0)
+			exec_builtins(cmd->argv[0], cmd->argv, env);
 		dup2(saved_stdin, STDIN_FILENO);
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdin);
@@ -51,9 +51,10 @@ static void	exec_cmd(t_cmd *cmd, t_gc *gc, t_env *env)
 	}
 	if (pid == 0)
 	{
-		apply_redirs(cmd);
-		status = gc_execvp(cmd->argv[0], cmd->argv, 
-					(char **)env->envp->to_arr(env->envp), gc);
+		status = apply_redirs(cmd, env);
+		if (status == 0)
+			status = gc_execvp(cmd->argv[0], cmd->argv, 
+						(char **)env->envp->to_arr(env->envp), gc);
 		gc->clean(gc);
 		exit(status);
 	}

@@ -16,7 +16,7 @@
 #include "datastructures.h"
 #include "minishell.h"
 
-void	apply_redirs(t_cmd *cmd);
+int		apply_redirs(t_cmd *cmd, t_env *env);
 void	exec_subshell(t_btree *ast, t_env *env);
 
 static void	flatten_recur(t_btree *ast, t_darray *nodes)
@@ -79,9 +79,10 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc)
 	if (token->type == CMD)
 	{
 		cmd = token->cmd;
-		apply_redirs(cmd);
-		exit_code = gc_execvp(cmd->argv[0], cmd->argv, 
-				(char **)env->envp->to_arr(env->envp), gc);
+		exit_code = apply_redirs(cmd, env);
+		if (exit_code == 0)
+			exit_code = gc_execvp(cmd->argv[0], cmd->argv, 
+					(char **)env->envp->to_arr(env->envp), gc);
 		gc->clean(gc);
 		exit(exit_code);
 	}

@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include <fcntl.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include "minishell.h"
 
-static void	apply_from_file(t_redir *redir)
+static int	apply_from_file(t_redir *redir)
 {
 	int	fd;
 
@@ -24,19 +25,18 @@ static void	apply_from_file(t_redir *redir)
 	if (fd == -1)
 	{
 		perror(redir->filename);
-		redir->gc->clean(redir->gc);
-		exit(1);
+		return (1);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		perror("dup2");
-		redir->gc->clean(redir->gc);
-		exit(1);
+		return (1);
 	}
 	close(fd);
+	return (0);
 }
 
-static void	apply_append_file(t_redir *redir)
+static int	apply_append_file(t_redir *redir)
 {
 	int	fd;
 
@@ -44,19 +44,18 @@ static void	apply_append_file(t_redir *redir)
 	if (fd == -1)
 	{
 		perror(redir->filename);
-		redir->gc->clean(redir->gc);
-		exit(1);
+		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
-		redir->gc->clean(redir->gc);
-		exit(1);
+		return (1);
 	}
 	close(fd);
+	return (0);
 }
 
-static void	apply_to_file(t_redir *redir)
+static int	apply_to_file(t_redir *redir)
 {
 	int	fd;
 
@@ -64,35 +63,40 @@ static void	apply_to_file(t_redir *redir)
 	if (fd == -1)
 	{
 		perror(redir->filename);
-		redir->gc->clean(redir->gc);
-		exit(1);
+		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
-		redir->gc->clean(redir->gc);
-		exit(1);
+		return (1);
 	}
 	close(fd);
+	return (0);
 }
 
-void	apply_redirs(t_cmd *cmd)
+int	apply_redirs(t_cmd *cmd, t_env *env)
 {
 	t_redir	*redir;
 	size_t	i;
+	int		flag;
 
 	i = 0;
+	flag = 0;
 	while (i < cmd->redirs->len)
 	{
 		redir = cmd->redirs->peek_i(cmd->redirs, i);
 		if (redir->redir_type == TO_FILE)
-			apply_to_file(redir);
+			flag = apply_to_file(redir);
 		else if (redir->redir_type == APPEND_FILE)
-			apply_append_file(redir);
+			flag = apply_append_file(redir);
 		else if (redir->redir_type == FROM_FILE)
-			apply_from_file(redir);
+			flag = apply_from_file(redir);
+		if (flag != 0)
+			break ;
 		i++;
 	}
+	env->exit_code = flag;
+	return (flag);
 }
 
 t_redir	*init_redir(t_redir_type redir_type, char *filename, t_gc *gc)

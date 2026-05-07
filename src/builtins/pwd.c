@@ -18,6 +18,6 @@ bool	startswith(void *s, void *ref);
 void pwd(char **options, t_env *env)
 {
 	(void)(options);
-	printf("%s\n", (char *)env->envp->find(env->envp, startswith, "PWD=") + 4);
+	printf("%s\n", gc_getcwd(env->gc));
 	env->exit_code = 0;
 }

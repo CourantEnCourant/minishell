@@ -40,5 +40,6 @@ t_env	*init_env(t_gc *gc)
 	env->exit_code = 0;
 	env->builtins = init_builtins(gc);
 	env->envp = init_from_arr((void **)environ, gc);
+	env->gc = gc;
 	return (env);
 }

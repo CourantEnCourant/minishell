@@ -17,7 +17,7 @@
 #include "minishell.h"
 #include "datastructures.h"
 
-void		exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc);
+void		exec_child(t_btree *node, int in_fd, int out_fd, t_env *env);
 t_darray	*flatten(t_btree *ast);
 
 static int	setup_fds(int *fds, bool is_last, t_env *env)
@@ -46,7 +46,7 @@ static void	fork_cleanup(int *fds, int *prev_fd)
 	*prev_fd = fds[0];
 }
 
-static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_env *env, t_gc *gc)
+static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_env *env)
 {
 	pid_t	pid;
 	int		fds[2];
@@ -68,7 +68,7 @@ static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_env *env, t_g
 	if (pid == 0 && fds[0] != STDIN_FILENO)
 		close(fds[0]);
 	if (pid == 0)
-		exec_child(node, *prev_fd, fds[1], env, gc);
+		exec_child(node, *prev_fd, fds[1], env);
 	fork_cleanup(fds, prev_fd);
 	return (pid);
 }
@@ -102,7 +102,7 @@ int	exec_pipe(t_btree *ast, t_env *env)
 	while (i < nodes->len)
 	{
 		pids[i] = fork_cmd(nodes->peek_i(nodes, i),
-				&prev_fd, i == nodes->len - 1, env, ast->gc);
+				&prev_fd, i == nodes->len - 1, env);
 		if (pids[i] == -1)
 			break ;
 		i++;

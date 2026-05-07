@@ -94,7 +94,7 @@ static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp, t_env *env)
 	return (node);
 }
 
-t_btree	*parse(char *input, t_env *env, t_gc *gc)
+t_btree	*parse(char *input, t_env *env)
 {
 	size_t		i;
 	t_darray	*tokens;
@@ -102,7 +102,7 @@ t_btree	*parse(char *input, t_env *env, t_gc *gc)
 
 	if (!quotes_paren_match(input, env))
 		return (NULL);
-	tokens = postprocess(tokenize(input, gc), env);
+	tokens = postprocess(tokenize(input, env->gc), env);
 	if (!tokens)
 		return (NULL);
 	i = 0;

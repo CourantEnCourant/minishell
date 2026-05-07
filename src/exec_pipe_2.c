@@ -68,13 +68,13 @@ static void	manage_dup(int in_fd, int out_fd, t_gc *gc)
 	}
 }
 
-void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc)
+void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 {
 	t_token	*token;
 	t_cmd	*cmd;
 	int		exit_code;
 
-	manage_dup(in_fd, out_fd, gc);
+	manage_dup(in_fd, out_fd, env->gc);
 	token = node->value;
 	if (token->type == CMD)
 	{
@@ -82,12 +82,12 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env, t_gc *gc)
 		exit_code = apply_redirs(cmd, env);
 		if (exit_code == 0)
 			exit_code = gc_execvp(cmd->argv[0], cmd->argv, 
-					(char **)env->envp->to_arr(env->envp), gc);
-		gc->clean(gc);
+					(char **)env->envp->to_arr(env->envp), env->gc);
+		env->gc->clean(env->gc);
 		exit(exit_code);
 	}
 	exec_subshell(node, env);
 	exit_code = env->exit_code;
-	gc->clean(gc);
+	env->gc->clean(env->gc);
 	exit(exit_code);
 }

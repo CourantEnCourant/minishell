@@ -20,7 +20,9 @@
 static int	apply_from_file(t_redir *redir)
 {
 	int	fd;
+	int	flag;
 
+	flag = 0;
 	fd = open(redir->filename, O_RDONLY);
 	if (fd == -1)
 	{
@@ -30,16 +32,18 @@ static int	apply_from_file(t_redir *redir)
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		perror("dup2");
-		return (1);
+		flag = 1;
 	}
 	close(fd);
-	return (0);
+	return (flag);
 }
 
 static int	apply_append_file(t_redir *redir)
 {
 	int	fd;
+	int	flag;
 
+	flag = 0;
 	fd = open(redir->filename, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fd == -1)
 	{
@@ -49,16 +53,18 @@ static int	apply_append_file(t_redir *redir)
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
-		return (1);
+		flag = 1;
 	}
 	close(fd);
-	return (0);
+	return (flag);
 }
 
 static int	apply_to_file(t_redir *redir)
 {
 	int	fd;
+	int	flag;
 
+	flag = 0;
 	fd = open(redir->filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 	{
@@ -68,10 +74,10 @@ static int	apply_to_file(t_redir *redir)
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
-		return (1);
+		flag = 1;
 	}
 	close(fd);
-	return (0);
+	return (flag);
 }
 
 int	apply_redirs(t_cmd *cmd, t_env *env)

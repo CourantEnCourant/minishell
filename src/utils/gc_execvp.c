@@ -34,11 +34,9 @@ static char	**get_paths(char **envp, t_gc *gc)
 	return (gc_split(envp[i] + 5, ':', gc));
 }
 
-static int	exec_with_path(const char *cmd, char *const argv[])
+static int	exec_with_path(const char *cmd, char *const argv[], char **envp)
 {
-	extern char	**environ;
-
-	execve(cmd, argv, environ);
+	execve(cmd, argv, envp);
 	perror(cmd);
 	if (errno == EACCES)
 		return (126);
@@ -52,7 +50,7 @@ int	gc_execvp(const char *cmd, char *const argv[], char **envp, t_gc *gc)
 	char		**paths;
 
 	if (ft_strchr(cmd, '/'))
-		return (exec_with_path(cmd, argv));
+		return (exec_with_path(cmd, argv, envp));
 	paths = get_paths(envp, gc);
 	if (!paths)
 		return (127);

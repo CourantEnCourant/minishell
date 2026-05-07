@@ -18,21 +18,20 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
-static char	**get_paths(t_gc *gc)
+static char	**get_paths(char **envp, t_gc *gc)
 {
 	size_t		i;
-	extern char	**environ;
 
 	i = 0;
-	while (environ[i])
+	while (envp[i])
 	{
-		if (ft_strncmp(environ[i], "PATH=", 5) == 0)
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 			break ;
 		i++;
 	}
-	if (!environ[i])
+	if (!envp[i])
 		return (NULL);
-	return (gc_split(environ[i] + 5, ':', gc));
+	return (gc_split(envp[i] + 5, ':', gc));
 }
 
 static int	exec_with_path(const char *cmd, char *const argv[])
@@ -54,7 +53,7 @@ int	gc_execvp(const char *cmd, char *const argv[], char **envp, t_gc *gc)
 
 	if (ft_strchr(cmd, '/'))
 		return (exec_with_path(cmd, argv));
-	paths = get_paths(gc);
+	paths = get_paths(envp, gc);
 	if (!paths)
 		return (127);
 	i = -1;

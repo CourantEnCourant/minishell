@@ -13,8 +13,6 @@
 #include <stdio.h>
 #include "minishell.h"
 
-bool	startswith(void *s, void *ref);
-
 void pwd(char **options, t_env *env)
 {
 	(void)(options);

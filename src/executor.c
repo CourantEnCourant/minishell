@@ -20,6 +20,23 @@
 int			exec_pipe(t_btree *ast, t_env *env);
 int			apply_redirs(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
+void		exec_builtins(char *cmd, char **options, t_env *env);
+bool		strs_eq(void *s1, void *s2);
+
+static void	exec_builtin_cmd(t_cmd *cmd, t_env *env)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	if (apply_redirs(cmd, env) == 0)
+		exec_builtins(cmd->argv[0], cmd->argv, env);
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+}
 
 static void	exec_fork_child(t_cmd *cmd, t_env *env)
 {
@@ -38,6 +55,11 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 	pid_t	pid;
 	int		status;
 
+	if (env->builtins->any(env->builtins, strs_eq, cmd->argv[0]))
+	{
+		exec_builtin_cmd(cmd, env);
+		return ;
+	}
 	pid = fork();
 	if (pid == -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:40:06 by weizhang          #+#    #+#             */
-/*   Updated: 2026/04/30 21:18:58 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/09 20:01:34 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_darray	*init_builtins(t_gc *gc)
 	t_darray	*builtins;
 
 	builtins = init_darray(gc);
-	builtins->push(builtins, ft_strdup("pwd"));
+	builtins->push(builtins, "pwd");
 	return (builtins);
 }
 

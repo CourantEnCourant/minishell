@@ -20,13 +20,14 @@
 void		exec_child(t_btree *node, int in_fd, int out_fd, t_env *env);
 t_darray	*flatten(t_btree *ast);
 
-static int	setup_fds(int *fds, bool is_last)
+static int	setup_fds(int *fds, bool is_last, t_env *env)
 {
 	if (!is_last)
 	{
 		if (pipe(fds) == -1)
 		{
 			perror("pipe");
+			env->exit_code = 1;
 			return (-1);
 		}
 		return (0);
@@ -50,12 +51,13 @@ static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_env *env)
 	pid_t	pid;
 	int		fds[2];
 
-	if (setup_fds(fds, is_last) == -1)
+	if (setup_fds(fds, is_last, env) == -1)
 		return (-1);
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
+		env->exit_code = 1;
 		if (fds[1] != STDOUT_FILENO)
 		{
 			close(fds[0]);
@@ -71,7 +73,7 @@ static pid_t	fork_cmd(t_btree *node, int *prev_fd, bool is_last, t_env *env)
 	return (pid);
 }
 
-static int	wait_children(pid_t *pids, size_t len)
+static void	wait_children(pid_t *pids, size_t len, t_env *env)
 {
 	size_t	i;
 	int		status;
@@ -83,7 +85,7 @@ static int	wait_children(pid_t *pids, size_t len)
 			waitpid(pids[i], &status, 0);
 		i++;
 	}
-	return (status >> 8);
+	env->exit_code = status >> 8;
 }
 
 int	exec_pipe(t_btree *ast, t_env *env)
@@ -109,5 +111,6 @@ int	exec_pipe(t_btree *ast, t_env *env)
 		close(prev_fd);
 	if (i == 0)
 		return (1);
-	return (wait_children(pids, nodes->len));
+	wait_children(pids, nodes->len, env);
+	return (env->exit_code);
 }

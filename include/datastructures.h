@@ -42,6 +42,7 @@ struct s_darray
 			void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
 };
 t_darray	*init_darray(t_gc *gc);
+t_darray	*init_from_arr(void **arr, t_gc *gc);
 
 typedef struct s_btree	t_btree;
 struct s_btree

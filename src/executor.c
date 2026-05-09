@@ -17,7 +17,6 @@
 #include <sys/wait.h>
 #include "minishell.h"
 
-int			gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 int			exec_pipe(t_btree *ast);
 int			apply_redirs(t_cmd *cmd);
 int			execute(t_btree *ast);

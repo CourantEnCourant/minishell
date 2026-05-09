@@ -16,6 +16,7 @@
 #include <stddef.h>
 #include "libft.h"
 #include "gc_libft.h"
+#include "minishell.h"
 
 static char	**get_paths(t_gc *gc)
 {

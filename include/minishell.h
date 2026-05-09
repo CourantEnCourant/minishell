@@ -78,6 +78,15 @@ struct s_token
 t_token		*init_token(char *value, t_gc *gc);
 t_token		*init_cmd_token(t_cmd *cmd, t_gc *gc);
 
+typedef struct s_env
+{
+	int			exit_code;
+	t_darray	*builtins;
+	t_darray	*envp;
+	t_gc		*gc;
+}	t_env;
+t_env		*init_env(t_gc *gc);
+
 int			gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 char		*gc_readline(const char *prompt, t_gc *gc);
 char		*gc_getcwd(t_gc *gc);

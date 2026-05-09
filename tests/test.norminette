@@ -20,10 +20,9 @@
 
 void		repr_token(void *ptr);
 void		repr_node(void *ptr);
-bool		quotes_paren_match(char *input);
-bool		is_valid_tree(t_btree *ast);
+bool		quotes_paren_match(char *input, t_env *env);
 t_darray	*tokenize(char *cmd, t_gc *gc);
-t_darray	*postprocess(t_darray *operands);
+t_darray	*postprocess(t_darray *operands, t_env *env);
 
 static void	test_t_token_case(t_gc *gc, char *s, char *expected_value,
 		t_token_type expected_type)
@@ -122,108 +121,108 @@ static void	test_parser_tokenize(t_gc *gc)
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
-static void	test_parser_is_valid_case(char *s, bool expected)
+static void	test_parser_is_valid_case(char *s, bool expected, t_env *env)
 {
 	ft_printf("Testing %s\n", s);
-	assert(quotes_paren_match(s) == expected);
+	assert(quotes_paren_match(s, env) == expected);
 }
 
-static void	test_parser_is_valid_cmd(void)
+static void	test_parser_is_valid_cmd(t_env *env)
 {
 	ft_printf("==========TEST_PARSER_IS_VALID_CMD==========\n");
 
 	// basic
-	test_parser_is_valid_case("", true);
-	test_parser_is_valid_case("echo hello", true);
+	test_parser_is_valid_case("", true, env);
+	test_parser_is_valid_case("echo hello", true, env);
 
 	// single quotes
-	test_parser_is_valid_case("'hello'", true);
-	test_parser_is_valid_case("''", true);
-	test_parser_is_valid_case("'", false);
-	test_parser_is_valid_case("'hello", false);
+	test_parser_is_valid_case("'hello'", true, env);
+	test_parser_is_valid_case("''", true, env);
+	test_parser_is_valid_case("'", false, env);
+	test_parser_is_valid_case("'hello", false, env);
 
 	// double quotes
-	test_parser_is_valid_case("\"hello\"", true);
-	test_parser_is_valid_case("\"\"", true);
-	test_parser_is_valid_case("\"", false);
-	test_parser_is_valid_case("\"hello", false);
+	test_parser_is_valid_case("\"hello\"", true, env);
+	test_parser_is_valid_case("\"\"", true, env);
+	test_parser_is_valid_case("\"", false, env);
+	test_parser_is_valid_case("\"hello", false, env);
 
 	// mixed quotes
-	test_parser_is_valid_case("\"'\"", true);
-	test_parser_is_valid_case("'\"'", true);
-	test_parser_is_valid_case("\"''\"", true);
-	test_parser_is_valid_case("'\"\"'", true);
-	test_parser_is_valid_case("\"'", false);
-	test_parser_is_valid_case("'\"", false);
-	test_parser_is_valid_case("\"'\"''", true);
-	test_parser_is_valid_case("'\"'\"'\"", true);
+	test_parser_is_valid_case("\"'\"", true, env);
+	test_parser_is_valid_case("'\"'", true, env);
+	test_parser_is_valid_case("\"''\"", true, env);
+	test_parser_is_valid_case("'\"\"'", true, env);
+	test_parser_is_valid_case("\"'", false, env);
+	test_parser_is_valid_case("'\"", false, env);
+	test_parser_is_valid_case("\"'\"''", true, env);
+	test_parser_is_valid_case("'\"'\"'\"", true, env);
 
 	// parentheses
-	test_parser_is_valid_case("()", true);
-	test_parser_is_valid_case("(())", true);
-	test_parser_is_valid_case("()()", true);
-	test_parser_is_valid_case("((()))", true);
-	test_parser_is_valid_case("(", false);
-	test_parser_is_valid_case(")", false);
-	test_parser_is_valid_case("((", false);
-	test_parser_is_valid_case("))", false);
-	test_parser_is_valid_case(")(", false);
-	test_parser_is_valid_case("(()", false);
-	test_parser_is_valid_case("())", false);
+	test_parser_is_valid_case("()", true, env);
+	test_parser_is_valid_case("(())", true, env);
+	test_parser_is_valid_case("()()", true, env);
+	test_parser_is_valid_case("((()))", true, env);
+	test_parser_is_valid_case("(", false, env);
+	test_parser_is_valid_case(")", false, env);
+	test_parser_is_valid_case("((", false, env);
+	test_parser_is_valid_case("))", false, env);
+	test_parser_is_valid_case(")(", false, env);
+	test_parser_is_valid_case("(()", false, env);
+	test_parser_is_valid_case("())", false, env);
 
 	// parentheses inside quotes (should be ignored)
-	test_parser_is_valid_case("'()'", true);
-	test_parser_is_valid_case("'('", true);
-	test_parser_is_valid_case("')'", true);
-	test_parser_is_valid_case("\"()\"", true);
-	test_parser_is_valid_case("\"(\"", true);
-	test_parser_is_valid_case("\")\"", true);
+	test_parser_is_valid_case("'()'", true, env);
+	test_parser_is_valid_case("'('", true, env);
+	test_parser_is_valid_case("')'", true, env);
+	test_parser_is_valid_case("\"()\"", true, env);
+	test_parser_is_valid_case("\"(\"", true, env);
+	test_parser_is_valid_case("\")\"", true, env);
 
 	// quotes inside parentheses
-	test_parser_is_valid_case("('hello')", true);
-	test_parser_is_valid_case("(\"hello\")", true);
+	test_parser_is_valid_case("('hello')", true, env);
+	test_parser_is_valid_case("(\"hello\")", true, env);
 
 	// combined edge cases
-	test_parser_is_valid_case("''()()", true);
-	test_parser_is_valid_case("(\")\"", false);
-	test_parser_is_valid_case("(')'", false);
-	test_parser_is_valid_case("\"(\")", false);
-	test_parser_is_valid_case("'(')", false);
+	test_parser_is_valid_case("''()()", true, env);
+	test_parser_is_valid_case("(\")\"", false, env);
+	test_parser_is_valid_case("(')'", false, env);
+	test_parser_is_valid_case("\"(\")", false, env);
+	test_parser_is_valid_case("'(')", false, env);
 
 	// realistic commands
-	test_parser_is_valid_case("(echo hello && echo world)", true);
-	test_parser_is_valid_case("(echo hello && (echo world))", true);
-	test_parser_is_valid_case("echo 'unclosed", false);
-	test_parser_is_valid_case("echo \"unclosed", false);
+	test_parser_is_valid_case("(echo hello && echo world)", true, env);
+	test_parser_is_valid_case("(echo hello && (echo world))", true, env);
+	test_parser_is_valid_case("echo 'unclosed", false, env);
+	test_parser_is_valid_case("echo \"unclosed", false, env);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
-static void	postprocess_helper(char *cmd, t_gc *gc)
+static void	postprocess_helper(char *cmd, t_env *env)
 {
 	t_darray	*cmds;
 
 	ft_printf("Testing %s\n", cmd);
-	cmds = postprocess(tokenize(cmd, gc));
+	cmds = postprocess(tokenize(cmd, env->gc), env);
 	cmds->repr(cmds, repr_token);
 	return ;
 }
 
-static void	test_parser_postprocess(t_gc *gc)
+static void	test_parser_postprocess(t_env *env)
 {
 	ft_printf("==========TEST_PARSER_POSTPROCESS==========\n");
 
-	postprocess_helper( "ls -la | grep hello > test.txt", gc);
+	postprocess_helper("ls -la | grep hello > test.txt", env);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
-static void	test_parser_parse_case(t_gc *gc, char *s, bool expected)
+static void	test_parser_parse_case(t_env *env, char *s, bool expected)
 {
 	t_btree		*ast;
 
 	ft_printf("Testing %s\n", s);
-	ast = parse(s, gc);
+	ast = parse(s, env);
 	if (expected)
 	{
 		assert(ast != NULL);
@@ -234,205 +233,214 @@ static void	test_parser_parse_case(t_gc *gc, char *s, bool expected)
 	ft_printf("\n");
 }
 
-static void	test_parser_parse(t_gc *gc)
+static void	test_parser_parse(t_env *env)
 {
 	ft_printf("==========TEST_PARSER_PARSE==========\n");
 
-	test_parser_parse_case(gc, "ls -l", true);
-	test_parser_parse_case(gc, "ls -l && grep something", true);
-	test_parser_parse_case(gc, "expr1 && expr2 || expr3 | expr4", true);
-	test_parser_parse_case(gc, "a | b && c || d", true);
-	test_parser_parse_case(gc, "a | b | c && d | e || f && g", true);
+	test_parser_parse_case(env, "ls -l", true);
+	test_parser_parse_case(env, "ls -l && grep something", true);
+	test_parser_parse_case(env, "expr1 && expr2 || expr3 | expr4", true);
+	test_parser_parse_case(env, "a | b && c || d", true);
+	test_parser_parse_case(env, "a | b | c && d | e || f && g", true);
 
 	// Invalid trees
-	test_parser_parse_case(gc, "ls |", false);
-	test_parser_parse_case(gc, "|| | && echo hello", false);
+	test_parser_parse_case(env, "ls |", false);
+	test_parser_parse_case(env, "|| | && echo hello", false);
 
 	// operator at the beginning
-	test_parser_parse_case(gc, "&& ls", false);
-	test_parser_parse_case(gc, "| ls", false);
-	test_parser_parse_case(gc, "|| ls", false);
+	test_parser_parse_case(env, "&& ls", false);
+	test_parser_parse_case(env, "| ls", false);
+	test_parser_parse_case(env, "|| ls", false);
 
 	// operator at the end
-	test_parser_parse_case(gc, "ls &&", false);
-	test_parser_parse_case(gc, "ls ||", false);
+	test_parser_parse_case(env, "ls &&", false);
+	test_parser_parse_case(env, "ls ||", false);
 
 	// consecutive operators
-	test_parser_parse_case(gc, "ls && || echo hi", false);
-	test_parser_parse_case(gc, "ls | | echo hi", false);
-	test_parser_parse_case(gc, "ls || && echo hi", false);
+	test_parser_parse_case(env, "ls && || echo hi", false);
+	test_parser_parse_case(env, "ls | | echo hi", false);
+	test_parser_parse_case(env, "ls || && echo hi", false);
 
 	// only operators
-	test_parser_parse_case(gc, "|", false);
-	test_parser_parse_case(gc, "&&", false);
-	test_parser_parse_case(gc, "||", false);
+	test_parser_parse_case(env, "|", false);
+	test_parser_parse_case(env, "&&", false);
+	test_parser_parse_case(env, "||", false);
 
 	// parentheses - valid
-	test_parser_parse_case(gc, "(a)", true);
-	test_parser_parse_case(gc, "(a && b)", true);
-	test_parser_parse_case(gc, "(a) && b", true);
-	test_parser_parse_case(gc, "a && (b)", true);
-	test_parser_parse_case(gc, "(a) && (b)", true);
-	test_parser_parse_case(gc, "a || (b && c)", true);
-	test_parser_parse_case(gc, "(a | b) && c", true);
-	test_parser_parse_case(gc, "(a && (b || c))", true);
-	test_parser_parse_case(gc, "((a || b) && (c || d))", true);
-	test_parser_parse_case(gc, "a && (b | c) || d", true);
-	test_parser_parse_case(gc, "(ls -l | grep foo) && echo yes || echo no", true);
+	test_parser_parse_case(env, "(a)", true);
+	test_parser_parse_case(env, "(a && b)", true);
+	test_parser_parse_case(env, "(a) && b", true);
+	test_parser_parse_case(env, "a && (b)", true);
+	test_parser_parse_case(env, "(a) && (b)", true);
+	test_parser_parse_case(env, "a || (b && c)", true);
+	test_parser_parse_case(env, "(a | b) && c", true);
+	test_parser_parse_case(env, "(a && (b || c))", true);
+	test_parser_parse_case(env, "((a || b) && (c || d))", true);
+	test_parser_parse_case(env, "a && (b | c) || d", true);
+	test_parser_parse_case(env,
+		"(ls -l | grep foo) && echo yes || echo no", true);
 
 	// parentheses - invalid
 
 	// empty subshell
-	test_parser_parse_case(gc, "()", false);
+	test_parser_parse_case(env, "()", false);
 
 	// subshell with only an operator inside
-	test_parser_parse_case(gc, "(|)", false);
-	test_parser_parse_case(gc, "(&&)", false);
+	test_parser_parse_case(env, "(|)", false);
+	test_parser_parse_case(env, "(&&)", false);
 
 	// operator before subshell (no left operand)
-	test_parser_parse_case(gc, "&& (a)", false);
-	test_parser_parse_case(gc, "| (a)", false);
-	test_parser_parse_case(gc, "|| (a)", false);
+	test_parser_parse_case(env, "&& (a)", false);
+	test_parser_parse_case(env, "| (a)", false);
+	test_parser_parse_case(env, "|| (a)", false);
 
 	// operator after subshell with nothing following
-	test_parser_parse_case(gc, "(a) &&", false);
-	test_parser_parse_case(gc, "(a) |", false);
-	test_parser_parse_case(gc, "(a) ||", false);
+	test_parser_parse_case(env, "(a) &&", false);
+	test_parser_parse_case(env, "(a) |", false);
+	test_parser_parse_case(env, "(a) ||", false);
 
 	// consecutive operators inside subshell
-	test_parser_parse_case(gc, "(a && || b)", false);
-	test_parser_parse_case(gc, "(a | | b)", false);
+	test_parser_parse_case(env, "(a && || b)", false);
+	test_parser_parse_case(env, "(a | | b)", false);
 
 	// operator at start inside subshell
-	test_parser_parse_case(gc, "(| a)", false);
-	test_parser_parse_case(gc, "(&& a)", false);
+	test_parser_parse_case(env, "(| a)", false);
+	test_parser_parse_case(env, "(&& a)", false);
 
 	// operator at end inside subshell
-	test_parser_parse_case(gc, "(a |)", false);
-	test_parser_parse_case(gc, "(a &&)", false);
+	test_parser_parse_case(env, "(a |)", false);
+	test_parser_parse_case(env, "(a &&)", false);
 
 	// nested empty subshell
-	test_parser_parse_case(gc, "(())", false);
+	test_parser_parse_case(env, "(())", false);
 
-	// subshell with command on right side (invalid: subshell cannot have right child)
-	test_parser_parse_case(gc, "(a) b", false);
+	// subshell with command on right side
+	test_parser_parse_case(env, "(a) b", false);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
 
-static void	test_exec_case(t_gc *gc, char *cmd)
+static void	test_exec_case(t_env *env, char *cmd)
 {
 	t_btree		*ast;
 
 	ft_printf("Testing exec: %s\n", cmd);
-	ast = parse(cmd, gc);
-	execute(ast);
+	ast = parse(cmd, env);
+	execute(ast, env);
 	ft_printf("\n");
 }
 
-static void	test_exec(t_gc *gc)
+static void	test_exec(t_env *env)
 {
 	ft_printf("==========TEST_EXEC==========\n");
 
 	// test single cmd
-	test_exec_case(gc, "echo hello");
-	test_exec_case(gc, "echo hello world");
-	test_exec_case(gc, "echo -n hello");
-	test_exec_case(gc, "ls -l");
-	test_exec_case(gc, "/bin/echo bonjour");
+	test_exec_case(env, "echo hello");
+	test_exec_case(env, "echo hello world");
+	test_exec_case(env, "echo -n hello");
+	test_exec_case(env, "ls -l");
+	test_exec_case(env, "/bin/echo bonjour");
 
 
 	// test &&
-	test_exec_case(gc, "ls -l && echo success");
+	test_exec_case(env, "ls -l && echo success");
 
 	// test ||
-	test_exec_case(gc, "ls -l || echo wrong");
-	test_exec_case(gc, "invalid || echo wrong");
+	test_exec_case(env, "ls -l || echo wrong");
+	test_exec_case(env, "invalid || echo wrong");
 
 	// test |
-	test_exec_case(gc, "echo hello | cat -e | cat -e");
+	test_exec_case(env, "echo hello | cat -e | cat -e");
 
 	// test && || | combined (no parentheses)
-	test_exec_case(gc, "echo hello | cat -e && echo done");
-	test_exec_case(gc, "ls nonexistent && echo yes || echo no");
-	test_exec_case(gc, "echo start && echo hello | cat -e");
-	test_exec_case(gc,
+	test_exec_case(env, "echo hello | cat -e && echo done");
+	test_exec_case(env, "ls nonexistent && echo yes || echo no");
+	test_exec_case(env, "echo start && echo hello | cat -e");
+	test_exec_case(env,
 		"ls nonexistent || echo b && echo c | cat -e");
 
 	// test subshell
-	test_exec_case(gc, "(echo hello)");
-	test_exec_case(gc, "(echo hello && echo world)");
-	test_exec_case(gc, "(echo hello || echo world)");
-	test_exec_case(gc, "(echo hello | cat -e)");
+	test_exec_case(env, "(echo hello)");
+	test_exec_case(env, "(echo hello && echo world)");
+	test_exec_case(env, "(echo hello || echo world)");
+	test_exec_case(env, "(echo hello | cat -e)");
 
 	// subshell with && / ||
-	test_exec_case(gc, "(echo hello) && echo after");
-	test_exec_case(gc, "(ls nonexistent) || echo fallback");
-	test_exec_case(gc, "(ls nonexistent) && echo no || echo yes");
+	test_exec_case(env, "(echo hello) && echo after");
+	test_exec_case(env, "(ls nonexistent) || echo fallback");
+	test_exec_case(env, "(ls nonexistent) && echo no || echo yes");
 
 	// subshell with pipe
-	test_exec_case(gc, "(echo hello) | cat -e");
-	test_exec_case(gc, "echo start | (cat -e)");
+	test_exec_case(env, "(echo hello) | cat -e");
+	test_exec_case(env, "echo start | (cat -e)");
 
 	// nested subshell
-	test_exec_case(gc, "((echo nested))");
-	test_exec_case(gc, "(echo a && (echo b || echo c))");
-	test_exec_case(gc, "((echo a | cat -e) && echo b)");
+	test_exec_case(env, "((echo nested))");
+	test_exec_case(env, "(echo a && (echo b || echo c))");
+	test_exec_case(env, "((echo a | cat -e) && echo b)");
 
 	// subshell combined with operators outside
-	test_exec_case(gc,
+	test_exec_case(env,
 		"(echo a && echo b) || (echo c && echo d)");
-	test_exec_case(gc,
+	test_exec_case(env,
 		"(ls nonexistent || echo recover) && echo done");
-	test_exec_case(gc,
+	test_exec_case(env,
 		"(echo hello | cat -e) && (echo world | cat -e)");
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
 t_darray	*flatten(t_btree *ast);
-static void	test_flatten_case(char *cmd, t_gc *gc)
+static void	test_flatten_case(char *cmd, t_env *env)
 {
 	t_btree		*ast;
 	t_darray	*flattened;
 
 	ft_printf("Testing %s\n", cmd);
-	ast = parse(cmd, gc);
+	ast = parse(cmd, env);
 	flattened = flatten(ast);
 	flattened->repr(flattened, repr_node);
 	ft_printf("\n");
 }
 
-static void	test_flatten(t_gc *gc)
+static void	test_flatten(t_env *env)
 {
 	ft_printf("==========TEST_FLATTEN==========\n\n");
 
-	test_flatten_case("ls -l | cat -e", gc);
-	test_flatten_case("a | b | c | d", gc);
-	test_flatten_case("a|b|c", gc);
+	test_flatten_case("ls -l | cat -e", env);
+	test_flatten_case("a | b | c | d", env);
+	test_flatten_case("a|b|c", env);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
-static void	test_error_handling_case(char *cmd, int expected_exit_code, t_gc *gc)
+
+static void	test_error_handling_case(char *cmd, int expected_exit_code,
+		t_env *env)
 {
+	t_btree	*ast;
+
 	ft_printf("%s\n", cmd);
-	assert(execute(parse(cmd, gc)) == expected_exit_code);
+	ast = parse(cmd, env);
+	assert(ast != NULL);
+	execute(ast, env);
+	assert(env->exit_code == expected_exit_code);
 	ft_printf("\n");
 }
 
-static void	test_error_handling(t_gc *gc)
+static void	test_error_handling(t_env *env)
 {
 	ft_printf("==========TEST_ERROR_HANDLING==========\n\n");
 
-	test_error_handling_case("echo hello > no_permisson.tmp", 1, gc);
-	test_error_handling_case("echo hello >> no_permisson.tmp", 1, gc);
-	test_error_handling_case("echo hello >> no_permisson.tmp | echo hello", 0, gc);
-	test_error_handling_case("< no_permisson.tmp cat", 1, gc);
-	test_error_handling_case("./no_exist_file", 127, gc);
-	test_error_handling_case("/no_exist_file", 127, gc);
-	test_error_handling_case("no_exist_cmd", 127, gc);
-	test_error_handling_case("./no_permisson.tmp", 126, gc);
+	test_error_handling_case("echo hello > no_permisson.tmp", 1, env);
+	test_error_handling_case("echo hello >> no_permisson.tmp", 1, env);
+	test_error_handling_case(
+		"echo hello >> no_permisson.tmp | echo hello", 0, env);
+	test_error_handling_case("< no_permisson.tmp cat", 1, env);
+	test_error_handling_case("./no_exist_file", 127, env);
+	test_error_handling_case("/no_exist_file", 127, env);
+	test_error_handling_case("no_exist_cmd", 127, env);
+	test_error_handling_case("./no_permisson.tmp", 126, env);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
@@ -440,15 +448,17 @@ static void	test_error_handling(t_gc *gc)
 int main(void)
 {
 	t_gc	*gc;
+	t_env	*env;
 
 	gc = init_gc();
+	env = init_env(gc);
 	test_t_token(gc);
-	test_parser_is_valid_cmd();
+	test_parser_is_valid_cmd(env);
 	test_parser_tokenize(gc);
-	test_parser_postprocess(gc);
-	test_parser_parse(gc);
-	test_flatten(gc);
-	test_exec(gc);
-	test_error_handling(gc);
+	test_parser_postprocess(env);
+	test_parser_parse(env);
+	test_flatten(env);
+	test_exec(env);
+	test_error_handling(env);
 	gc->clean(gc);
 }

@@ -21,10 +21,21 @@ int			exec_pipe(t_btree *ast, t_env *env);
 int			apply_redirs(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
 
+static void	exec_fork_child(t_cmd *cmd, t_env *env)
+{
+	int	status;
+
+	status = apply_redirs(cmd, env);
+	if (status == 0)
+		status = gc_execvp(cmd->argv[0], cmd->argv,
+				(char **)env->envp->to_arr(env->envp), env->gc);
+	env->gc->clean(env->gc);
+	exit(status);
+}
+
 static void	exec_cmd(t_cmd *cmd, t_env *env)
 {
 	pid_t	pid;
-	int		exit_code;
 	int		status;
 
 	pid = fork();
@@ -35,14 +46,7 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 		return ;
 	}
 	if (pid == 0)
-	{
-		exit_code = apply_redirs(cmd, env);
-		if (exit_code == 0)
-			exit_code = gc_execvp(cmd->argv[0], cmd->argv,
-				(char **)env->envp->to_arr(env->envp), env->gc);
-		env->gc->clean(env->gc);
-		exit(exit_code);
-	}
+		exec_fork_child(cmd, env);
 	waitpid(pid, &status, 0);
 	env->exit_code = status >> 8;
 }

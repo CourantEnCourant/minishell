@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdbool.h>
+#include <stddef.h>
 #include "libft.h"
 
 bool	strs_eq(void *s1, void *s2)
@@ -21,4 +22,22 @@ bool	strs_eq(void *s1, void *s2)
 bool	startswith(void *s, void *ref)
 {
 	return (ft_strncmp(s, ref, ft_strlen(ref)) == 0);
+}
+
+bool	str_is_num(char *s)
+{
+	size_t	i;
+	
+	i = 0;
+	if (s[i] == '+' || s[i] == '-')
+		i++;
+	if (!ft_isdigit(s[i]))
+		return (false);
+	while (s[i])
+	{
+		if (!ft_isdigit(s[i]))
+			return (false);
+		i++;
+	}
+	return (true);
 }

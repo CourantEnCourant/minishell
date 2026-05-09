@@ -31,6 +31,7 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 	if (pid == -1)
 	{
 		perror("fork");
+		env->exit_code = 1;
 		return ;
 	}
 	if (pid == 0)
@@ -42,6 +43,7 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 		exit(exit_code);
 	}
 	waitpid(pid, &status, 0);
+	env->exit_code = status >> 8;
 }
 
 void	exec_subshell(t_btree *ast, t_env *env)
@@ -53,15 +55,18 @@ void	exec_subshell(t_btree *ast, t_env *env)
 	if (pid == -1)
 	{
 		perror("fork");
+		env->exit_code = 1;
 		return ;
 	}
 	if (pid == 0)
 	{
 		execute(ast->left, env);
+		status = env->exit_code;
 		ast->gc->clean(ast->gc);
-		exit(0);
+		exit(status);
 	}
 	waitpid(pid, &status, 0);
+	env->exit_code = status >> 8;
 }
 
 void	execute(t_btree *ast, t_env *env)
@@ -74,12 +79,14 @@ void	execute(t_btree *ast, t_env *env)
 	else if (current->type == AND)
 	{
 		execute(ast->left, env);
-		execute(ast->right, env);
+		if (env->exit_code == 0)
+			execute(ast->right, env);
 	}
 	else if (current->type == OR)
 	{
 		execute(ast->left, env);
-		execute(ast->right, env);
+		if (env->exit_code != 0)
+			execute(ast->right, env);
 	}
 	else if (current->type == PIPE)
 		exec_pipe(ast, env);

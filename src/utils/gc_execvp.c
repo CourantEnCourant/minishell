@@ -18,44 +18,40 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
-static char	**get_paths(t_gc *gc)
+static char	**get_paths(char **envp, t_gc *gc)
 {
 	size_t		i;
-	extern char	**environ;
 
 	i = 0;
-	while (environ[i])
+	while (envp[i])
 	{
-		if (ft_strncmp(environ[i], "PATH=", 5) == 0)
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 			break ;
 		i++;
 	}
-	if (!environ[i])
+	if (!envp[i])
 		return (NULL);
-	return (gc_split(environ[i] + 5, ':', gc));
+	return (gc_split(envp[i] + 5, ':', gc));
 }
 
-static int	exec_with_path(const char *cmd, char *const argv[])
+static int	exec_with_path(const char *cmd, char *const argv[], char **envp)
 {
-	extern char	**environ;
-
-	execve(cmd, argv, environ);
+	execve(cmd, argv, envp);
 	perror(cmd);
 	if (errno == EACCES)
 		return (126);
 	return (127);
 }
 
-int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
+int	gc_execvp(const char *cmd, char *const argv[], char **envp, t_gc *gc)
 {
 	size_t		i;
 	char		*cmd_abs;
 	char		**paths;
-	extern char	**environ;
 
 	if (ft_strchr(cmd, '/'))
-		return (exec_with_path(cmd, argv));
-	paths = get_paths(gc);
+		return (exec_with_path(cmd, argv, envp));
+	paths = get_paths(envp, gc);
 	if (!paths)
 		return (127);
 	i = -1;
@@ -63,7 +59,7 @@ int	gc_execvp(const char *cmd, char *const argv[], t_gc *gc)
 	{
 		cmd_abs = gc_strjoin(gc_strjoin(paths[i], "/", gc), cmd, gc);
 		if (access(cmd_abs, X_OK) == 0)
-			execve(cmd_abs, argv, environ);
+			execve(cmd_abs, argv, envp);
 	}
 	ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd);
 	return (127);

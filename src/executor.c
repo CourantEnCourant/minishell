@@ -38,7 +38,8 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 	{
 		exit_code = apply_redirs(cmd, env);
 		if (exit_code == 0)
-			exit_code = gc_execvp(cmd->argv[0], cmd->argv, env->gc);
+			exit_code = gc_execvp(cmd->argv[0], cmd->argv,
+				(char **)env->envp->to_arr(env->envp), env->gc);
 		env->gc->clean(env->gc);
 		exit(exit_code);
 	}

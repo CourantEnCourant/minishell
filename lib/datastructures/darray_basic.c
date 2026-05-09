@@ -6,7 +6,7 @@
 /*   By: weiqizhang <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 00:08:35 by weiqizhang        #+#    #+#             */
-/*   Updated: 2026/04/30 23:55:41 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/09 21:41:56 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	*pop_i(t_darray *self, size_t i);
 void	*pop(t_darray *self);
 bool	any(t_darray *s, bool (*f)(void *elem, void *target), void *target);
 void	*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
+size_t	find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 void	*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
 
 static void	**to_arr(t_darray *self)
@@ -80,6 +81,7 @@ t_darray	*init_darray(t_gc *gc)
 	darray->pop = pop;
 	darray->any = any;
 	darray->find = find;
+	darray->find_i = find_i;
 	darray->reduce = reduce;
 	return (darray);
 }

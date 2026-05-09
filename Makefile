@@ -25,6 +25,7 @@ SRC = ./src/checker.c \
 	  ./src/redir.c \
 	  ./src/token.c \
 	  ./src/builtins/env.c \
+	  ./src/builtins/pwd.c \
 	  ./src/utils/gc_execvp.c \
 	  ./src/utils/gc_getcwd.c \
 	  ./src/utils/gc_readline.c \

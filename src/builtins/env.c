@@ -6,7 +6,7 @@
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:40:06 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/09 20:01:34 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/09 20:05:09 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 #include "minishell.h"
 
 void	pwd(char **options, t_env *env);
+void	exit_minishell(char **options, t_env *env);
 
 void	exec_builtins(char *cmd, char **options, t_env *env)
 {
 	if (ft_strcmp(cmd, "pwd") == 0)
 		pwd(options, env);
+	else if (ft_strcmp(cmd, "exit") == 0)
+		exit_minishell(options, env);
 }
 
 t_darray	*init_builtins(t_gc *gc)
@@ -28,6 +31,7 @@ t_darray	*init_builtins(t_gc *gc)
 
 	builtins = init_darray(gc);
 	builtins->push(builtins, "pwd");
+	builtins->push(builtins, "exit");
 	return (builtins);
 }
 

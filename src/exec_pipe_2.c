@@ -18,7 +18,6 @@
 
 int		apply_redirs(t_cmd *cmd);
 int		exec_subshell(t_btree *ast);
-int		gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 
 static void	flatten_recur(t_btree *ast, t_darray *nodes)
 {

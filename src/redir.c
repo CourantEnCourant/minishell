@@ -20,7 +20,9 @@
 static int	apply_from_file(t_redir *redir)
 {
 	int	fd;
+	int	flag;
 
+	flag = 0;
 	fd = open(redir->filename, O_RDONLY);
 	if (fd == -1)
 	{
@@ -30,17 +32,18 @@ static int	apply_from_file(t_redir *redir)
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		perror("dup2");
-		close(fd);
-		return (1);
+		flag = 1;
 	}
 	close(fd);
-	return (0);
+	return (flag);
 }
 
 static int	apply_append_file(t_redir *redir)
 {
 	int	fd;
+	int	flag;
 
+	flag = 0;
 	fd = open(redir->filename, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fd == -1)
 	{
@@ -50,17 +53,18 @@ static int	apply_append_file(t_redir *redir)
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
-		close(fd);
-		return (1);
+		flag = 1;
 	}
 	close(fd);
-	return (0);
+	return (flag);
 }
 
 static int	apply_to_file(t_redir *redir)
 {
 	int	fd;
+	int	flag;
 
+	flag = 0;
 	fd = open(redir->filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 	{
@@ -70,21 +74,20 @@ static int	apply_to_file(t_redir *redir)
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
-		close(fd);
-		return (1);
+		flag = 1;
 	}
 	close(fd);
-	return (0);
+	return (flag);
 }
 
-int	apply_redirs(t_cmd *cmd)
+int	apply_redirs(t_cmd *cmd, t_env *env)
 {
 	t_redir	*redir;
-	int		flag;
 	size_t	i;
+	int		flag;
 
-	flag = 0;
 	i = 0;
+	flag = 0;
 	while (i < cmd->redirs->len)
 	{
 		redir = cmd->redirs->peek_i(cmd->redirs, i);
@@ -94,10 +97,11 @@ int	apply_redirs(t_cmd *cmd)
 			flag = apply_append_file(redir);
 		else if (redir->redir_type == FROM_FILE)
 			flag = apply_from_file(redir);
-		if (flag)
-			return (flag);
+		if (flag != 0)
+			break ;
 		i++;
 	}
+	env->exit_code = flag;
 	return (flag);
 }
 

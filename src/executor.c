@@ -18,7 +18,7 @@
 #include "minishell.h"
 
 int			exec_pipe(t_btree *ast, t_env *env);
-int			apply_redirs(t_cmd *cmd);
+int			apply_redirs(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
 
 static void	exec_cmd(t_cmd *cmd, t_env *env)
@@ -36,7 +36,7 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 	}
 	if (pid == 0)
 	{
-		exit_code = apply_redirs(cmd);
+		exit_code = apply_redirs(cmd, env);
 		if (exit_code == 0)
 			exit_code = gc_execvp(cmd->argv[0], cmd->argv, env->gc);
 		env->gc->clean(env->gc);

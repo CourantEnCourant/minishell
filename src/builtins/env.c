@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include <stddef.h>
 #include "datastructures.h"
 #include "gc_libft.h"
 #include "minishell.h"
@@ -17,12 +19,28 @@
 void	pwd(char **options, t_env *env);
 void	exit_minishell(char **options, t_env *env);
 
+void	print_env(char **options, t_env *env)
+{
+	size_t	i;
+
+	(void)options;
+	i = 0;
+	while (i < env->envp->len)
+	{
+		printf("%s\n", (char *)env->envp->peek_i(env->envp, i));
+		i++;
+	}
+	env->exit_code = 0;
+}
+
 void	exec_builtins(char *cmd, char **options, t_env *env)
 {
 	if (ft_strcmp(cmd, "pwd") == 0)
 		pwd(options, env);
 	else if (ft_strcmp(cmd, "exit") == 0)
 		exit_minishell(options, env);
+	else if (ft_strcmp(cmd, "env") == 0)
+		print_env(options, env);
 }
 
 t_darray	*init_builtins(t_gc *gc)
@@ -32,6 +50,7 @@ t_darray	*init_builtins(t_gc *gc)
 	builtins = init_darray(gc);
 	builtins->push(builtins, "pwd");
 	builtins->push(builtins, "exit");
+	builtins->push(builtins, "env");
 	return (builtins);
 }
 

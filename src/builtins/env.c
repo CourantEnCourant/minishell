@@ -14,6 +14,23 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
+void	pwd(char **options, t_env *env);
+
+void	exec_builtins(char *cmd, char **options, t_env *env)
+{
+	if (ft_strcmp(cmd, "pwd") == 0)
+		pwd(options, env);
+}
+
+t_darray	*init_builtins(t_gc *gc)
+{
+	t_darray	*builtins;
+
+	builtins = init_darray(gc);
+	builtins->push(builtins, ft_strdup("pwd"));
+	return (builtins);
+}
+
 t_env	*init_env(t_gc *gc)
 {
 	t_env		*env;
@@ -21,7 +38,7 @@ t_env	*init_env(t_gc *gc)
 
 	env = gc_malloc(sizeof(t_env), gc);
 	env->exit_code = 0;
-	env->builtins = NULL;
+	env->builtins = init_builtins(gc);
 	env->envp = init_from_arr((void **)environ, gc);
 	env->gc = gc;
 	return (env);

@@ -18,6 +18,7 @@
 
 void	pwd(char **options, t_env *env);
 void	exit_minishell(char **options, t_env *env);
+void	unset(char **options, t_env *env);
 
 void	print_env(char **options, t_env *env)
 {
@@ -41,6 +42,8 @@ void	exec_builtins(char *cmd, char **options, t_env *env)
 		exit_minishell(options, env);
 	else if (ft_strcmp(cmd, "env") == 0)
 		print_env(options, env);
+	else if (ft_strcmp(cmd, "unset") == 0)
+		unset(options, env);
 }
 
 t_darray	*init_builtins(t_gc *gc)
@@ -51,6 +54,7 @@ t_darray	*init_builtins(t_gc *gc)
 	builtins->push(builtins, "pwd");
 	builtins->push(builtins, "exit");
 	builtins->push(builtins, "env");
+	builtins->push(builtins, "unset");
 	return (builtins);
 }
 

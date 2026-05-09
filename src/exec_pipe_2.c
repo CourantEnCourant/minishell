@@ -17,7 +17,7 @@
 #include "minishell.h"
 
 int		apply_redirs(t_cmd *cmd);
-int		exec_subshell(t_btree *ast);
+int		exec_subshell(t_btree *ast, t_env *env);
 
 static void	flatten_recur(t_btree *ast, t_darray *nodes)
 {
@@ -68,24 +68,24 @@ static void	manage_dup(int in_fd, int out_fd, t_gc *gc)
 	}
 }
 
-void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
+void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 {
 	t_token	*token;
 	t_cmd	*cmd;
 	int		exit_code;
 
-	manage_dup(in_fd, out_fd, gc);
+	manage_dup(in_fd, out_fd, env->gc);
 	token = node->value;
 	if (token->type == CMD)
 	{
 		cmd = token->cmd;
 		exit_code = apply_redirs(cmd);
 		if (exit_code == 0)
-			exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
-		gc->clean(gc);
+			exit_code = gc_execvp(cmd->argv[0], cmd->argv, env->gc);
+		env->gc->clean(env->gc);
 		exit(exit_code);
 	}
-	exit_code = exec_subshell(node);
-	gc->clean(gc);
+	exit_code = exec_subshell(node, env);
+	env->gc->clean(env->gc);
 	exit(exit_code);
 }

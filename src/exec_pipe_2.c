@@ -16,7 +16,7 @@
 #include "datastructures.h"
 #include "minishell.h"
 
-void	apply_redirs(t_cmd *cmd);
+int		apply_redirs(t_cmd *cmd);
 int		exec_subshell(t_btree *ast);
 int		gc_execvp(const char *cmd, char *const argv[], t_gc *gc);
 
@@ -80,8 +80,9 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_gc *gc)
 	if (token->type == CMD)
 	{
 		cmd = token->cmd;
-		apply_redirs(cmd);
-		exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
+		exit_code = apply_redirs(cmd);
+		if (exit_code == 0)
+			exit_code = gc_execvp(cmd->argv[0], cmd->argv, gc);
 		gc->clean(gc);
 		exit(exit_code);
 	}

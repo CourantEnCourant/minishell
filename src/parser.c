@@ -22,9 +22,11 @@ bool			quotes_paren_match(char *cmd, t_env *env);
 t_darray		*tokenize(char *cmd, t_gc *gc);
 t_darray		*postprocess(t_darray *operands);
 
-static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp);
+static t_btree	*parse_recur(t_darray *tokens,
+					size_t *i, int min_bp, t_env *env);
 
-static t_btree	*join_op(t_btree *left, t_darray *tokens, size_t *i)
+static t_btree	*join_op(t_btree *left, t_darray *tokens,
+		size_t *i, t_env *env)
 {
 	t_token	*op;
 	t_btree	*node;
@@ -35,17 +37,18 @@ static t_btree	*join_op(t_btree *left, t_darray *tokens, size_t *i)
 	{
 		ft_dprintf(STDERR_FILENO,
 			"syntax error near unexpected token `newline'\n");
+		env->exit_code = 2;
 		return (NULL);
 	}
 	node = init_btree(op, tokens->gc);
 	node->left = left;
-	node->right = parse_recur(tokens, i, op->bind_right);
+	node->right = parse_recur(tokens, i, op->bind_right, env);
 	if (!node->right)
 		return (NULL);
 	return (node);
 }
 
-static t_btree	*parse_atom(t_darray *tokens, size_t *i)
+static t_btree	*parse_atom(t_darray *tokens, size_t *i, t_env *env)
 {
 	t_token	*token;
 	t_btree	*node;
@@ -55,7 +58,7 @@ static t_btree	*parse_atom(t_darray *tokens, size_t *i)
 	{
 		node = init_btree(token, tokens->gc);
 		(*i)++;
-		node->left = parse_recur(tokens, i, 0);
+		node->left = parse_recur(tokens, i, 0, env);
 		if (!node->left)
 			return (NULL);
 		return (node);
@@ -64,19 +67,21 @@ static t_btree	*parse_atom(t_darray *tokens, size_t *i)
 	{
 		ft_dprintf(STDERR_FILENO,
 			"syntax error near unexpected token `%s'\n", token->value);
+		env->exit_code = 2;
 		return (NULL);
 	}
 	return (init_btree(token, tokens->gc));
 }
 
-static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp)
+static t_btree	*parse_recur(t_darray *tokens,
+		size_t *i, int min_bp, t_env *env)
 {
 	t_token	*token;
 	t_btree	*node;
 
 	if (*i >= tokens->len)
 		return (NULL);
-	node = parse_atom(tokens, i);
+	node = parse_atom(tokens, i, env);
 	if (!node)
 		return (NULL);
 	(*i)++;
@@ -85,7 +90,7 @@ static t_btree	*parse_recur(t_darray *tokens, size_t *i, int min_bp)
 		token = tokens->peek_i(tokens, *i);
 		if (token->type == CLOSE_PAREN || token->bind_left < min_bp)
 			break ;
-		node = join_op(node, tokens, i);
+		node = join_op(node, tokens, i, env);
 		if (!node)
 			return (NULL);
 	}
@@ -104,6 +109,6 @@ t_btree	*parse(char *input, t_env *env)
 	if (!tokens)
 		return (NULL);
 	i = 0;
-	ast = parse_recur(tokens, &i, 0);
+	ast = parse_recur(tokens, &i, 0, env);
 	return (ast);
 }

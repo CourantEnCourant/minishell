@@ -36,6 +36,7 @@ struct s_darray
 	void	(*push)(t_darray *self, void *item);
 	void	*(*pop_i)(t_darray *self, size_t i);
 	void	*(*pop)(t_darray *self);
+	void	(*set)(t_darray *self, size_t i, void *item);
 	bool	(*any)(t_darray * self, bool (*f)(void *, void *), void *target);
 	void	*(*find)(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 	size_t	(*find_i)(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);

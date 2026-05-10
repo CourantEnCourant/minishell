@@ -70,13 +70,21 @@ char	*expand_arg(char *arg, t_env *env)
 
 void	expand_cmd(t_cmd *cmd, t_env *env)
 {
+	t_redir	*redir;
 	size_t	i;
 
 	i = 0;
 	while (i < cmd->argv->len)
 	{
 		cmd->argv->set(cmd->argv, i,
-				expand_arg(cmd->argv->peek_i(cmd->argv, i), env));
+			expand_arg(cmd->argv->peek_i(cmd->argv, i), env));
+		i++;
+	}
+	i = 0;
+	while (i < cmd->redirs->len)
+	{
+		redir = cmd->redirs->peek_i(cmd->redirs, i);
+		redir->set_filename(redir, expand_arg(redir->filename, env));
 		i++;
 	}
 }

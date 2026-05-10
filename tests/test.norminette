@@ -23,6 +23,7 @@ void		repr_node(void *ptr);
 bool		quotes_paren_match(char *input, t_env *env);
 t_darray	*tokenize(char *cmd, t_gc *gc);
 t_darray	*postprocess(t_darray *operands, t_env *env);
+char		*expand_arg(char *arg, t_env *env);
 
 static void	test_t_token_case(t_gc *gc, char *s, char *expected_value,
 		t_token_type expected_type)
@@ -445,6 +446,21 @@ static void	test_error_handling(t_env *env)
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
+static void	test_expander_case(char *arg, t_env *env)
+{
+	ft_printf("Before: %s\n", arg);
+	ft_printf("Expanded: %s\n\n", expand_arg(arg, env));
+}
+
+static void	test_expander(t_env *env)
+{
+	ft_printf("==========TEST_EXPANDER==========\n\n");
+
+	test_expander_case("\"hello\"", env);
+
+	ft_printf("==========ALL TESTS PASSED==========\n\n");
+}
+
 int main(void)
 {
 	t_gc	*gc;
@@ -460,5 +476,6 @@ int main(void)
 	test_flatten(env);
 	test_exec(env);
 	test_error_handling(env);
+	test_expander(env);
 	gc->clean(gc);
 }

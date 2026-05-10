@@ -13,6 +13,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "gc_libft.h"
 #include "libft.h"
 
 bool	strs_eq(void *s1, void *s2)
@@ -70,4 +71,9 @@ bool	int64_overflow(char *n)
 		i++;
 	}
 	return (false);
+}
+
+void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc)
+{
+	return (gc_strjoin(s1, s2, gc));
 }

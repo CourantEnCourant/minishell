@@ -5,9 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/14 21:07:26 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/29 00:00:55 by weizhang         ###   ########.fr       */
-/*                                                                            */
+/*   Created: 2026/03/14 21:07:26 by weizhang          #+#    #+#             */ /*   Updated: 2026/03/29 00:00:55 by weizhang         ###   ########.fr       */ /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
@@ -80,10 +78,10 @@ t_token		*init_cmd_token(t_cmd *cmd, t_gc *gc);
 
 typedef struct s_env
 {
-	int			exit_code;
-	t_darray	*builtins;
-	t_darray	*envp;
-	t_gc		*gc;
+	unsigned char	exit_code;
+	t_darray		*builtins;
+	t_darray		*envp;
+	t_gc			*gc;
 }	t_env;
 t_env		*init_env(t_gc *gc);
 

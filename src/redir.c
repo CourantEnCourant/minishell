@@ -11,83 +11,85 @@
 /* ************************************************************************** */
 
 #include <fcntl.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include "minishell.h"
 
-static int	apply_from_file(t_redir *redir)
+static bool	apply_from_file(t_redir *redir)
 {
-	int	fd;
-	int	flag;
+	int		fd;
+	bool	flag;
 
-	flag = 0;
+	flag = true;
 	fd = open(redir->filename, O_RDONLY);
 	if (fd == -1)
 	{
 		perror(redir->filename);
-		return (1);
+		return (false);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		perror("dup2");
-		flag = 1;
+		flag = false;
 	}
 	close(fd);
 	return (flag);
 }
 
-static int	apply_append_file(t_redir *redir)
+static bool	apply_append_file(t_redir *redir)
 {
-	int	fd;
-	int	flag;
+	int		fd;
+	bool	flag;
 
-	flag = 0;
+	flag = true;
 	fd = open(redir->filename, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fd == -1)
 	{
 		perror(redir->filename);
-		return (1);
+		return (false);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
-		flag = 1;
+		flag = false;
 	}
 	close(fd);
 	return (flag);
 }
 
-static int	apply_to_file(t_redir *redir)
+static bool	apply_to_file(t_redir *redir)
 {
-	int	fd;
-	int	flag;
+	int		fd;
+	bool	flag;
 
-	flag = 0;
+	flag = true;
 	fd = open(redir->filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 	{
 		perror(redir->filename);
-		return (1);
+		return (false);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
-		flag = 1;
+		flag = false;
 	}
 	close(fd);
 	return (flag);
 }
 
-int	apply_redirs(t_cmd *cmd, t_env *env)
+bool	apply_redirs(t_cmd *cmd, t_env *env)
 {
 	t_redir	*redir;
+	bool	flag;
 	size_t	i;
-	int		flag;
 
+	(void)env;
+	flag = true;
 	i = 0;
-	flag = 0;
 	while (i < cmd->redirs->len)
 	{
 		redir = cmd->redirs->peek_i(cmd->redirs, i);
@@ -97,11 +99,10 @@ int	apply_redirs(t_cmd *cmd, t_env *env)
 			flag = apply_append_file(redir);
 		else if (redir->redir_type == FROM_FILE)
 			flag = apply_from_file(redir);
-		if (flag != 0)
+		if (!flag)
 			break ;
 		i++;
 	}
-	env->exit_code = flag;
 	return (flag);
 }
 

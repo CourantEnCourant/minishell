@@ -16,7 +16,7 @@
 #include "datastructures.h"
 #include "minishell.h"
 
-int		apply_redirs(t_cmd *cmd, t_env *env);
+bool	apply_redirs(t_cmd *cmd, t_env *env);
 void	exec_subshell(t_btree *ast, t_env *env);
 
 static void	flatten_recur(t_btree *ast, t_darray *nodes)

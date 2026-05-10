@@ -18,7 +18,7 @@
 #include "minishell.h"
 
 int			exec_pipe(t_btree *ast, t_env *env);
-int			apply_redirs(t_cmd *cmd, t_env *env);
+bool		apply_redirs(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
 void		exec_builtins(char *cmd, char **options, t_env *env);
 bool		strs_eq(void *s1, void *s2);

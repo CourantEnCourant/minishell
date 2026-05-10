@@ -12,6 +12,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include "libft.h"
 
 bool	strs_eq(void *s1, void *s2)
@@ -29,6 +30,8 @@ bool	str_is_num(char *s)
 	size_t	i;
 	
 	i = 0;
+	while (ft_isspace(s[i]))
+		i++;
 	if (s[i] == '+' || s[i] == '-')
 		i++;
 	if (!ft_isdigit(s[i]))
@@ -40,4 +43,31 @@ bool	str_is_num(char *s)
 		i++;
 	}
 	return (true);
+}
+
+bool	int64_overflow(char *n)
+{
+	uint64_t	result;
+	uint64_t	limit;
+	size_t		i;
+
+	result = 0;
+	limit = INT64_MAX;
+	i = 0;
+	while (ft_isspace(n[i]))
+		i++;
+	if (n[i] == '+' || n[i] == '-')
+	{
+		if (n[i] == '-')
+			limit = (uint64_t)INT64_MIN;
+		i++;
+	}
+	while (n[i])
+	{
+		result = result * 10 + (n[i] - '0');
+		if (result > limit)
+			return (true);
+		i++;
+	}
+	return (false);
 }

@@ -40,10 +40,10 @@ t_redir		*init_redir(t_redir_type type, char *filename, t_gc *gc);
 typedef struct s_cmd	t_cmd;
 struct s_cmd
 {
-	char		**argv;
+	t_darray	*argv;
 	t_darray	*redirs;
 	t_gc		*gc;
-	void		(*set_argv)(t_cmd *self, char **argv);
+	void		(*set_argv)(t_cmd *self, t_darray *argv);
 	void		(*push_redir)(t_cmd *self, t_redir *redir);
 };
 t_cmd		*init_cmd(t_gc *gc);

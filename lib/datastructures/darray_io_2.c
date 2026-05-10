@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "datastructures.h"
 
 void	*peek_i(t_darray *self, size_t i)
@@ -30,4 +31,15 @@ void	*peek(t_darray *self)
 		return (NULL);
 	}
 	return (peek_i(self, self->len - 1));
+}
+
+void	set(t_darray *self, size_t i, void *item)
+{
+	if (i + 1 > self->len)
+	{
+		ft_dprintf(STDERR_FILENO,
+				"IndexError: darray len %d while set at %d\n", self->len, i);
+		return ;
+	}
+	self->arr[i] = item;
 }

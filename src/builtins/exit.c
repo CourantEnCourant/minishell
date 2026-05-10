@@ -22,12 +22,13 @@
 
 size_t	len(void **arr);
 bool	str_is_num(char *s);
+bool	int64_overflow(char *n);
 
 static bool	check_args(char **args, t_env *env)
 {
 	if (len((void **)args) == 1)
 		return (true);
-	if (!str_is_num(args[1]))
+	if (!str_is_num(args[1]) || int64_overflow(args[1]))
 	{
 		ft_dprintf(STDERR_FILENO,
 				"exit: %s: numeric argument required\n", args[1]);

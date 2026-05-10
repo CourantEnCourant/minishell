@@ -36,6 +36,7 @@ int	main(void)
 		ast = parse(input, env);
 		if (!ast)
 			continue ;
+		expand_ast(ast, env);
 		execute(ast, env);
 	}
 	printf("exit\n");

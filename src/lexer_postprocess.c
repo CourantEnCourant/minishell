@@ -82,7 +82,7 @@ static size_t	collect_argv(t_darray *operands, size_t i,
 		else
 			break ;
 	}
-	cmd->set_argv(cmd, (char **)argv->to_arr(argv));
+	cmd->set_argv(cmd, argv);
 	cmds->push(cmds, init_cmd_token(cmd, cmds->gc));
 	return (i);
 }

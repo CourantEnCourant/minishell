@@ -73,6 +73,7 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 	t_token	*token;
 	t_cmd	*cmd;
 	int		exit_code;
+	char	**argv;
 
 	manage_dup(in_fd, out_fd, env->gc);
 	token = node->value;
@@ -80,8 +81,11 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 	{
 		cmd = token->cmd;
 		if (apply_redirs(cmd, env))
-			exit_code = gc_execvp(cmd->argv[0], cmd->argv,
+		{
+			argv = (char **)cmd->argv->to_arr(cmd->argv);
+			exit_code = gc_execvp(argv[0], argv,
 					(char **)env->envp->to_arr(env->envp), env->gc);
+		}
 		else
 			exit_code = env->exit_code;
 		env->gc->clean(env->gc);

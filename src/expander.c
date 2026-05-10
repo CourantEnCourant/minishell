@@ -68,14 +68,14 @@ char	*expand_arg(char *arg, t_env *env)
 	return (fragments->reduce(fragments, gc_strjoin_wrap, ""));
 }
 
-void	expand_cmd(char **argv, t_env *env)
+void	expand_cmd(t_darray *argv, t_env *env)
 {
 	size_t	i;
 
 	i = 0;
-	while (argv[i])
+	while (i < argv->len)
 	{
-		argv[i] = expand_arg(argv[i], env);
+		argv->set(argv, i, expand_arg(argv->peek_i(argv, i), env));
 		i++;
 	}
 }
@@ -83,6 +83,7 @@ void	expand_cmd(char **argv, t_env *env)
 void	expand_ast(t_btree *ast, t_env *env)
 {
 	t_token	*token;
+
 	token = ast->value;
 	if (token->type == CMD)
 		expand_cmd(token->cmd->argv, env);

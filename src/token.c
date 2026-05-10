@@ -42,7 +42,7 @@ static void	match_binding_power(t_token *token)
 static void	repr(t_token *self)
 {
 	if (self->type == CMD)
-		repr_strs(self->cmd->argv);
+		repr_strs((char **)self->cmd->argv->to_arr(self->cmd->argv));
 	else
 		ft_printf("\"%s\"", self->value);
 }

@@ -21,6 +21,7 @@ SRC = ft_strnstr.c \
 	  ft_isascii.c \
 	  ft_memcpy.c \
 	  ft_isprint.c \
+	  ft_isspace.c \
 	  ft_putendl_fd.c \
 	  ft_toupper.c \
 	  ft_split.c \

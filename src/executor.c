@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <unistd.h>
@@ -30,7 +31,7 @@ static void	exec_builtin_cmd(t_cmd *cmd, t_env *env)
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	if (apply_redirs(cmd, env) == 0)
+	if (apply_redirs(cmd, env))
 		exec_builtins(cmd->argv[0], cmd->argv, env);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
@@ -42,10 +43,11 @@ static void	exec_fork_child(t_cmd *cmd, t_env *env)
 {
 	int	status;
 
-	status = apply_redirs(cmd, env);
-	if (status == 0)
+	if(apply_redirs(cmd, env))
 		status = gc_execvp(cmd->argv[0], cmd->argv,
 				(char **)env->envp->to_arr(env->envp), env->gc);
+	else
+		status = env->exit_code;
 	env->gc->clean(env->gc);
 	exit(status);
 }

@@ -79,10 +79,11 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 	if (token->type == CMD)
 	{
 		cmd = token->cmd;
-		exit_code = apply_redirs(cmd, env);
-		if (exit_code == 0)
+		if (apply_redirs(cmd, env))
 			exit_code = gc_execvp(cmd->argv[0], cmd->argv,
 					(char **)env->envp->to_arr(env->envp), env->gc);
+		else
+			exit_code = env->exit_code;
 		env->gc->clean(env->gc);
 		exit(exit_code);
 	}

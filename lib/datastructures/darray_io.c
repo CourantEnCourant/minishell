@@ -6,10 +6,11 @@
 /*   By: weiqizhang <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 21:31:04 by weiqizhang        #+#    #+#             */
-/*   Updated: 2026/03/24 19:44:56 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/11 22:47:51 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdbool.h>
 #include <stddef.h>
 #include "libft.h"
 #include "gc_libft.h"
@@ -69,4 +70,33 @@ void	*pop(t_darray *self)
 		return (NULL);
 	}
 	return (self->pop_i(self, self->len - 1));
+}
+
+void	sort(t_darray *self, bool (*f)(void *s1, void *s2))
+{
+	size_t	i;
+	size_t	j;
+	void	*tmp;
+	bool	is_sorted;
+
+	i = 0;
+	while (i < self->len)
+	{
+		is_sorted = true;
+		j = 0;
+		while (j < self->len - i - 1)
+		{
+			if (f(self->peek_i(self, j), self->peek_i(self, j + 1)))
+			{
+				tmp = self->peek_i(self, j);
+				self->set(self, j, self->peek_i(self, j + 1));
+				self->set(self, j + 1, tmp);
+				is_sorted = false;
+			}
+			j++;
+		}
+		if (is_sorted)
+			break ;
+		i++;
+	}
 }

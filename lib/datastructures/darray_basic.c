@@ -6,7 +6,7 @@
 /*   By: weiqizhang <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 00:08:35 by weiqizhang        #+#    #+#             */
-/*   Updated: 2026/05/09 21:41:56 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/11 22:47:17 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	insert(t_darray *self, size_t i, void *item);
 void	push(t_darray *self, void *item);
 void	*pop_i(t_darray *self, size_t i);
 void	*pop(t_darray *self);
+void	sort(t_darray *self, bool (*f)(void *s1, void *s2));
 void	set(t_darray *self, size_t i, void *item);
 bool	any(t_darray *s, bool (*f)(void *elem, void *target), void *target);
 void	*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
@@ -80,6 +81,7 @@ t_darray	*init_darray(t_gc *gc)
 	darray->push = push;
 	darray->pop_i = pop_i;
 	darray->pop = pop;
+	darray->sort = sort;
 	darray->set = set;
 	darray->any = any;
 	darray->find = find;

@@ -22,6 +22,7 @@ typedef enum e_dfa_state
 	TEXT,
 	SINGLE,
 	DOUBLE,
+	DOLLAR,
 }	t_dfa_state;
 
 typedef enum e_redir_type

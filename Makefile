@@ -37,6 +37,7 @@ SRC = ./src/checker.c \
 	  ./src/utils/gc_getcwd.c \
 	  ./src/utils/gc_readline.c \
 	  ./src/utils/str_utils.c \
+	  ./src/utils/str_utils_2.c \
 	  ./src/utils/utils.c
 
 OBJ = $(SRC:.c=.o)

@@ -31,7 +31,7 @@ static bool	unmatched_quotes(t_env *env)
 	return (false);
 }
 
-bool	check_unmatched(t_lexer_state state, int open_paren_count, t_env *env)
+bool	check_unmatched(t_dfa_state state, int open_paren_count, t_env *env)
 {
 	if (state != TEXT)
 		return (unmatched_quotes(env));

@@ -17,12 +17,12 @@
 # include "gc_libft.h"
 # include "datastructures.h"
 
-typedef enum e_lexer_state
+typedef enum e_dfa_state
 {
 	TEXT,
 	SINGLE,
 	DOUBLE,
-}	t_lexer_state;
+}	t_dfa_state;
 
 typedef enum e_redir_type
 {

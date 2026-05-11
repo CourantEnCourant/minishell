@@ -18,10 +18,10 @@ void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc);
 
 char	*expand_arg(char *arg, t_env *env)
 {
-	t_lexer_state	state;
-	t_darray		*fragments;
-	size_t			i;
-	size_t			start;
+	t_dfa_state	state;
+	t_darray	*fragments;
+	size_t		i;
+	size_t		start;
 
 	fragments = init_darray(env->gc);
 	state = TEXT;

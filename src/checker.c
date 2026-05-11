@@ -12,16 +12,16 @@
 
 #include "minishell.h"
 
-t_lexer_state	update_state(char c, t_lexer_state current_state);
-bool			unmatched_parenthesis(t_env *env);
-bool			check_unmatched(t_lexer_state state,
-					int open_paren_count, t_env *env);
+t_dfa_state	update_state(char c, t_dfa_state current_state);
+bool		unmatched_parenthesis(t_env *env);
+bool		check_unmatched(t_dfa_state state,
+				int open_paren_count, t_env *env);
 
 bool	quotes_paren_match(char *input, t_env *env)
 {
-	size_t			i;
-	t_lexer_state	state;
-	int				open_paren_count;
+	size_t		i;
+	t_dfa_state	state;
+	int			open_paren_count;
 
 	i = -1;
 	state = TEXT;

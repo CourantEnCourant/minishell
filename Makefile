@@ -31,6 +31,7 @@ SRC = ./src/checker.c \
 	  ./src/builtins/env.c \
 	  ./src/builtins/envar.c \
 	  ./src/builtins/exit.c \
+	  ./src/builtins/export.c \
 	  ./src/builtins/pwd.c \
 	  ./src/builtins/unset.c \
 	  ./src/utils/gc_execvp.c \

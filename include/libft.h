@@ -6,7 +6,7 @@
 /*   By: weizhang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 20:45:30 by weizhang          #+#    #+#             */
-/*   Updated: 2026/02/06 13:40:47 by weiqizhang       ###   ########.fr       */
+/*   Updated: 2026/05/11 23:19:01 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int		ft_isalnum(int a);
 int		ft_isascii(int a);
 int		ft_isprint(int a);
 int		ft_isspace(int a);
+size_t	ft_strcspn(char *s, char *reject);
 size_t	ft_strlen(const char *s);
 void	*ft_memset(void *s, int c, size_t n);
 void	ft_bzero(void *s, size_t n);

@@ -15,6 +15,7 @@ SRC = ft_strnstr.c \
 	  ft_putnbr_fd.c \
 	  ft_strchr.c \
 	  ft_strcmp.c \
+	  ft_strcspn.c \
 	  ft_striteri.c \
 	  ft_bzero.c \
 	  ft_strjoin.c \

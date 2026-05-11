@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 21:39:10 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 15:48:21 by fdong            ###   ########.fr       */
+/*   Updated: 2026/04/16 21:41:49 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 bool	apply_redirs(t_cmd *cmd, t_env *env);
 void	exec_subshell(t_btree *ast, t_env *env);
+void	exec_builtins(char *cmd, char **options, t_env *env);
+bool	strs_eq(void *s1, void *s2);
 
 static void	flatten_recur(t_btree *ast, t_darray *nodes)
 {
@@ -85,8 +87,14 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 		{
 			expand_cmd(cmd, env);
 			argv = (char **)cmd->argv->to_arr(cmd->argv);
-			exit_code = gc_execvp(argv[0], argv,
-					(char **)env->export_envp(env), env->gc);
+			if (env->builtins->any(env->builtins, strs_eq, argv[0]))
+			{
+				exec_builtins(argv[0], argv, env);
+				exit_code = env->exit_code;
+			}
+			else
+				exit_code = gc_execvp(argv[0], argv,
+						(char **)env->export_envp(env), env->gc);
 		}
 		else
 			exit_code = env->exit_code;

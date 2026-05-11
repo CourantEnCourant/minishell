@@ -446,17 +446,88 @@ static void	test_error_handling(t_env *env)
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }
 
-static void	test_expander_case(char *arg, t_env *env)
+static void	test_expander_case(char *arg, char *expected, t_env *env)
 {
-	ft_printf("Before: %s\n", arg);
-	ft_printf("Expanded: %s\n\n", expand_arg(arg, env));
+	char	*result;
+
+	result = expand_arg(arg, env);
+	ft_printf("Before expand: %s\n", arg);
+	ft_printf("After expand: %s\n", result);
+	ft_printf("Expected: %s\n\n", expected);
+	assert(strcmp(result, expected) == 0);
 }
 
 static void	test_expander(t_env *env)
 {
 	ft_printf("==========TEST_EXPANDER==========\n\n");
 
-	test_expander_case("\"hello\"", env);
+	// quote removal
+	test_expander_case("hello", "hello", env);
+	test_expander_case("\"hello\"", "hello", env);
+	test_expander_case("'hello'", "hello", env);
+	test_expander_case("\"hello\"world", "helloworld", env);
+	test_expander_case("'hello'world", "helloworld", env);
+	test_expander_case("hel'lo'world", "helloworld", env);
+	test_expander_case("hel\"lo\"world", "helloworld", env);
+	test_expander_case("''", "", env);
+	test_expander_case("\"\"", "", env);
+	test_expander_case("'hello'\"world\"", "helloworld", env);
+
+	// single quotes block expansion
+	test_expander_case("'$HOME'", "$HOME", env);
+	test_expander_case("'$?'", "$?", env);
+	test_expander_case("'$NONEXIST'", "$NONEXIST", env);
+
+	// $? expansion
+	env->exit_code = 0;
+	test_expander_case("$?", "0", env);
+	env->exit_code = 42;
+	test_expander_case("$?", "42", env);
+	test_expander_case("\"$?\"", "42", env);
+	test_expander_case("exit:$?", "exit:42", env);
+	test_expander_case("\"exit:$?\"", "exit:42", env);
+	env->exit_code = 130;
+	test_expander_case("$?$?", "130130", env);
+	env->exit_code = 0;
+
+	// variable expansion
+	env->envp->push(env->envp, "FOO=bar");
+	env->envp->push(env->envp, "GREETING=hello world");
+	env->envp->push(env->envp, "EMPTY=");
+	env->envp->push(env->envp, "A=1");
+	env->envp->push(env->envp, "AB=2");
+
+	test_expander_case("$FOO", "bar", env);
+	test_expander_case("\"$FOO\"", "bar", env);
+	test_expander_case("$GREETING", "hello world", env);
+	test_expander_case("$EMPTY", "", env);
+	test_expander_case("$NONEXIST", "", env);
+
+	// variable with surrounding text
+	test_expander_case("pre$FOO", "prebar", env);
+	test_expander_case("$FOOpost", "", env);
+	test_expander_case("pre$FOO.post", "prebar.post", env);
+	test_expander_case("\"pre$FOO\"", "prebar", env);
+	test_expander_case("\"$FOO.post\"", "bar.post", env);
+
+	// bare dollar sign
+	test_expander_case("$", "$", env);
+	test_expander_case("hello$", "hello$", env);
+	test_expander_case("\"$\"", "$", env);
+	test_expander_case("\"hello$\"", "hello$", env);
+
+	// $ followed by non-alpha non-underscore
+	test_expander_case("$.", "$.", env);
+	test_expander_case("$-x", "$-x", env);
+
+	// mixed quotes and expansion
+	test_expander_case("'$FOO'\"$FOO\"", "$FOObar", env);
+	test_expander_case("\"$FOO\"'$FOO'", "bar$FOO", env);
+	test_expander_case("pre'mid'\"$FOO\"end", "premidbarend", env);
+
+	// multiple variables
+	test_expander_case("$A$AB", "12", env);
+	test_expander_case("$A-$AB", "1-2", env);
 
 	ft_printf("==========ALL TESTS PASSED==========\n\n");
 }

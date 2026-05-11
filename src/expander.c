@@ -16,6 +16,18 @@
 #include "minishell.h"
 
 void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc);
+bool	startswith(void *s, void *ref);
+
+char	*find_var(char *var, t_env *env)
+{
+	size_t	var_len;
+
+	var_len = ft_strlen(var);
+	var = env->envp->find(env->envp, startswith, gc_strjoin(var, "=", env->gc));
+	if (!var)
+		return ("");
+	return (gc_strdup(&var[var_len + 1], env->gc));
+}
 
 char	*expand_arg(char *arg, t_env *env)
 {
@@ -86,16 +98,34 @@ char	*expand_arg(char *arg, t_env *env)
 				state = previous;
 				start = i + 1;
 			}
+			else if (ft_isalpha(arg[i]) || arg[i] == '_')
+				state = ALPHA;
 			else
 			{
 				fragments->push(fragments, "$");
 				state = previous;
-				start = i + 1;
+				start = i;
+				continue ;
+			}
+		}
+		else if (state == ALPHA)
+		{
+			if (!ft_isalnum(arg[i]))
+			{
+				fragments->push(fragments, find_var(gc_substr(arg, start, i - start, env->gc), env));
+				state = previous;
+				start = i;
+				continue ;
 			}
 		}
 		i++;
 	}
-	fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
+	if (state == DOLLAR)
+		fragments->push(fragments, "$");
+	else if (state == ALPHA)
+		fragments->push(fragments, find_var(gc_substr(arg, start, i - start, env->gc), env));
+	else
+		fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
 	return (fragments->reduce(fragments, gc_strjoin_wrap, ""));
 }
 

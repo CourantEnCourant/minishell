@@ -82,6 +82,7 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 		cmd = token->cmd;
 		if (apply_redirs(cmd, env))
 		{
+			expand_cmd(cmd, env);
 			argv = (char **)cmd->argv->to_arr(cmd->argv);
 			exit_code = gc_execvp(argv[0], argv,
 					(char **)env->envp->to_arr(env->envp), env->gc);

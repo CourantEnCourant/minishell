@@ -34,6 +34,7 @@ static void	exec_builtin_cmd(t_cmd *cmd, t_env *env)
 	saved_stdout = dup(STDOUT_FILENO);
 	if (apply_redirs(cmd, env))
 	{
+		expand_cmd(cmd, env);
 		argv = (char **)cmd->argv->to_arr(cmd->argv);
 		exec_builtins(argv[0], argv, env);
 	}
@@ -48,8 +49,9 @@ static void	exec_fork_child(t_cmd *cmd, t_env *env)
 	int		status;
 	char	**argv;
 
-	if(apply_redirs(cmd, env))
+	if (apply_redirs(cmd, env))
 	{
+		expand_cmd(cmd, env);
 		argv = (char **)cmd->argv->to_arr(cmd->argv);
 		status = gc_execvp(argv[0], argv,
 				(char **)env->envp->to_arr(env->envp), env->gc);

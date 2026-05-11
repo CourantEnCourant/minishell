@@ -149,19 +149,3 @@ void	expand_cmd(t_cmd *cmd, t_env *env)
 		i++;
 	}
 }
-
-void	expand_ast(t_btree *ast, t_env *env)
-{
-	t_token	*token;
-
-	token = ast->value;
-	if (token->type == CMD)
-		expand_cmd(token->cmd, env);
-	else if (token->type == SUBSHELL)
-		expand_ast(ast->left, env);
-	else
-	{
-		expand_ast(ast->left, env);
-		expand_ast(ast->right, env);
-	}
-}

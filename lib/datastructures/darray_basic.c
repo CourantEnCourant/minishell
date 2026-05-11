@@ -28,6 +28,21 @@ void	*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 size_t	find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 void	*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
 
+static t_darray *copy(t_darray *self)
+{
+	t_darray	*new;
+	size_t		i;
+
+	new = init_darray(self->gc);
+	i = 0;
+	while (i < self->len)
+	{
+		new->push(new, self->peek_i(self, i));
+		i++;
+	}
+	return (new);
+}
+
 static void	**to_arr(t_darray *self)
 {
 	void	**arr;
@@ -87,6 +102,7 @@ t_darray	*init_darray(t_gc *gc)
 	darray->find = find;
 	darray->find_i = find_i;
 	darray->reduce = reduce;
+	darray->copy = copy;
 	return (darray);
 }
 

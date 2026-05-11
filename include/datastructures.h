@@ -24,25 +24,26 @@
 typedef struct s_darray	t_darray;
 struct s_darray
 {
-	void	**arr;
-	size_t	len;
-	size_t	capacity;
-	t_gc	*gc;
-	void	(*repr)(t_darray *self, void (*repr_item)(void *value));
-	void	**(*to_arr)(t_darray *self);
-	void	*(*peek_i)(t_darray *self, size_t i);
-	void	*(*peek)(t_darray *self);
-	void	(*insert)(t_darray *self, size_t i, void *item);
-	void	(*push)(t_darray *self, void *item);
-	void	*(*pop_i)(t_darray *self, size_t i);
-	void	*(*pop)(t_darray *self);
-	void	(*sort)(t_darray *self, bool (*f)(void *, void *));
-	void	(*set)(t_darray *self, size_t i, void *item);
-	bool	(*any)(t_darray * self, bool (*f)(void *, void *), void *target);
-	void	*(*find)(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
-	size_t	(*find_i)(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
-	void	*(*reduce)(t_darray *s,
-			void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
+	void		**arr;
+	size_t		len;
+	size_t		capacity;
+	t_gc		*gc;
+	void		(*repr)(t_darray *self, void (*repr_item)(void *value));
+	void		**(*to_arr)(t_darray *self);
+	void		*(*peek_i)(t_darray *self, size_t i);
+	void		*(*peek)(t_darray *self);
+	void		(*insert)(t_darray *self, size_t i, void *item);
+	void		(*push)(t_darray *self, void *item);
+	void		*(*pop_i)(t_darray *self, size_t i);
+	void		*(*pop)(t_darray *self);
+	void		(*sort)(t_darray *self, bool (*f)(void *, void *));
+	void		(*set)(t_darray *self, size_t i, void *item);
+	bool		(*any)(t_darray * self, bool (*f)(void *, void *), void *target);
+	void		*(*find)(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
+	size_t		(*find_i)(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
+	void		*(*reduce)(t_darray *s,
+				void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
+	t_darray	*(*copy)(t_darray *self);
 };
 t_darray	*init_darray(t_gc *gc);
 t_darray	*init_from_arr(void **arr, t_gc *gc);

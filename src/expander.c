@@ -12,6 +12,7 @@
 
 #include <stddef.h>
 #include "datastructures.h"
+#include "libft.h"
 #include "minishell.h"
 
 void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc);
@@ -19,6 +20,7 @@ void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc);
 char	*expand_arg(char *arg, t_env *env)
 {
 	t_dfa_state	state;
+	t_dfa_state	previous;
 	t_darray	*fragments;
 	size_t		i;
 	size_t		start;
@@ -43,6 +45,13 @@ char	*expand_arg(char *arg, t_env *env)
 				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
 				start = i + 1;
 			}
+			else if (arg[i] == '$')
+			{
+				previous = state;
+				state = DOLLAR;
+				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
+				start = i + 1;
+			}
 		}
 		else if (state == SINGLE)
 		{
@@ -59,6 +68,28 @@ char	*expand_arg(char *arg, t_env *env)
 			{
 				state = TEXT;
 				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
+				start = i + 1;
+			}
+			else if (arg[i] == '$')
+			{
+				previous = state;
+				state = DOLLAR;
+				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
+				start = i + 1;
+			}
+		}
+		else if (state == DOLLAR)
+		{
+			if (arg[i] == '?')
+			{
+				fragments->push(fragments, gc_itoa(env->exit_code, env->gc));
+				state = previous;
+				start = i + 1;
+			}
+			else
+			{
+				fragments->push(fragments, "$");
+				state = previous;
 				start = i + 1;
 			}
 		}

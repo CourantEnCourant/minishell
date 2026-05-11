@@ -6,7 +6,7 @@
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:40:06 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/09 20:05:09 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/11 21:04:19 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
+void	echo(char **options, t_env *env);
 void	pwd(char **options, t_env *env);
 void	exit_minishell(char **options, t_env *env);
 void	unset(char **options, t_env *env);
@@ -44,6 +45,8 @@ void	exec_builtins(char *cmd, char **options, t_env *env)
 		print_env(options, env);
 	else if (ft_strcmp(cmd, "unset") == 0)
 		unset(options, env);
+	else if (ft_strcmp(cmd, "echo") == 0)
+		echo(options, env);
 }
 
 t_darray	*init_builtins(t_gc *gc)
@@ -55,6 +58,7 @@ t_darray	*init_builtins(t_gc *gc)
 	builtins->push(builtins, "exit");
 	builtins->push(builtins, "env");
 	builtins->push(builtins, "unset");
+	builtins->push(builtins, "echo");
 	return (builtins);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:40:06 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/13 15:30:53 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/11 21:04:19 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,18 @@ t_env	*init_env(t_gc *gc)
 {
 	t_env		*env;
 	extern char	**environ;
+	size_t		i;
 
 	env = gc_malloc(sizeof(t_env), gc);
 	env->exit_code = 0;
 	env->builtins = init_builtins(gc);
-	env->envp = init_from_arr((void **)environ, gc);
+	env->envp = init_darray(gc);
+	i = 0;
+	while (environ[i])
+	{
+		env->envp->push(env->envp, init_envar_from_str(environ[i], gc));
+		i++;
+	}
 	env->gc = gc;
 	return (env);
 }

@@ -29,6 +29,7 @@ SRC = ./src/checker.c \
 	  ./src/signals/signal_exit.c \
 	  ./src/builtins/echo.c \
 	  ./src/builtins/env.c \
+	  ./src/builtins/envar.c \
 	  ./src/builtins/exit.c \
 	  ./src/builtins/pwd.c \
 	  ./src/builtins/unset.c \

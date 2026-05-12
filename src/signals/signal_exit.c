@@ -6,14 +6,15 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 17:20:00 by fdong             #+#    #+#             */
-/*   Updated: 2026/05/12 17:42:50 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/12 17:48:32 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <sys/wait.h>
+#include <signal.h>
 
-void	update_eixt_code(int status, t_env *env)
+void	update_exit_code(int status, t_env *env)
 {
 	if (WIFEXITED(status))
 		env->exit_code = WEXITSTATUS(status);

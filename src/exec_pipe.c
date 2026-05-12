@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 20:07:52 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 17:35:56 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/12 17:47:50 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static void	wait_children(pid_t *pids, size_t len, t_env *env)
 			waitpid(pids[i], &status, 0);
 		i++;
 	}
-	update_eixt_code(status, env);
+	update_exit_code(status, env);
 }
 
 int	exec_pipe(t_btree *ast, t_env *env)

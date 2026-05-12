@@ -19,7 +19,7 @@ static void	push_redir(t_cmd *self, t_redir *redir)
 	self->redirs->push(self->redirs, redir);
 }
 
-static void	set_argv(t_cmd *self, char **argv)
+static void	set_argv(t_cmd *self, t_darray *argv)
 {
 	self->argv = argv;
 }

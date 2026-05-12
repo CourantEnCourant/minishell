@@ -3,9 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
+/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/14 21:07:26 by weizhang          #+#    #+#             */ /*   Updated: 2026/03/29 00:00:55 by weizhang         ###   ########.fr       */ /*                                                                            */
+/*   Created: 2026/05/11 00:19:44 by weizhang          #+#    #+#             */
+/*   Updated: 2026/05/11 00:19:46 by weizhang         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
@@ -15,12 +17,14 @@
 # include "gc_libft.h"
 # include "datastructures.h"
 
-typedef enum e_lexer_state
+typedef enum e_dfa_state
 {
 	TEXT,
 	SINGLE,
 	DOUBLE,
-}	t_lexer_state;
+	DOLLAR,
+	ALPHA,
+}	t_dfa_state;
 
 typedef enum e_redir_type
 {
@@ -29,21 +33,23 @@ typedef enum e_redir_type
 	FROM_FILE,
 }	t_redir_type;
 
-typedef struct s_redir
+typedef struct s_redir	t_redir;
+struct s_redir
 {
 	t_redir_type	redir_type;
 	char			*filename;
 	t_gc			*gc;
-}	t_redir;
+	void			(*set_filename)(t_redir *self, char *filename);
+};
 t_redir		*init_redir(t_redir_type type, char *filename, t_gc *gc);
 
 typedef struct s_cmd	t_cmd;
 struct s_cmd
 {
-	char		**argv;
+	t_darray	*argv;
 	t_darray	*redirs;
 	t_gc		*gc;
-	void		(*set_argv)(t_cmd *self, char **argv);
+	void		(*set_argv)(t_cmd *self, t_darray *argv);
 	void		(*push_redir)(t_cmd *self, t_redir *redir);
 };
 t_cmd		*init_cmd(t_gc *gc);
@@ -90,6 +96,7 @@ int			gc_execvp(const char *cmd, char *const argv[],
 char		*gc_readline(const char *prompt, t_gc *gc);
 char		*gc_getcwd(t_gc *gc);
 t_btree		*parse(char *input, t_env *env);
+void		expand_cmd(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
 void		setup_signals_interactive(void);
 void		setup_signals_execution(void);

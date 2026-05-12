@@ -16,7 +16,7 @@
 #include "datastructures.h"
 #include "minishell.h"
 
-t_lexer_state	update_state(char c, t_lexer_state current_state)
+t_dfa_state	update_state(char c, t_dfa_state current_state)
 {
 	if (current_state == TEXT)
 	{
@@ -81,8 +81,8 @@ static size_t	lookup(t_darray *tokens, char *cmd, size_t start, size_t i)
 
 t_darray	*tokenize(char *cmd, t_gc *gc)
 {
-	t_darray		*tokens;
-	t_lexer_state	state;
+	t_darray	*tokens;
+	t_dfa_state	state;
 	size_t			i;
 	size_t			start;
 

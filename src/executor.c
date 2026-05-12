@@ -26,13 +26,18 @@ bool		strs_eq(void *s1, void *s2);
 
 static void	exec_builtin_cmd(t_cmd *cmd, t_env *env)
 {
-	int	saved_stdin;
-	int	saved_stdout;
+	int		saved_stdin;
+	int		saved_stdout;
+	char	**argv;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (apply_redirs(cmd, env))
-		exec_builtins(cmd->argv[0], cmd->argv, env);
+	{
+		expand_cmd(cmd, env);
+		argv = (char **)cmd->argv->to_arr(cmd->argv);
+		exec_builtins(argv[0], argv, env);
+	}
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
@@ -41,11 +46,16 @@ static void	exec_builtin_cmd(t_cmd *cmd, t_env *env)
 
 static void	exec_fork_child(t_cmd *cmd, t_env *env)
 {
-	int	status;
+	int		status;
+	char	**argv;
 
-	if(apply_redirs(cmd, env))
-		status = gc_execvp(cmd->argv[0], cmd->argv,
+	if (apply_redirs(cmd, env))
+	{
+		expand_cmd(cmd, env);
+		argv = (char **)cmd->argv->to_arr(cmd->argv);
+		status = gc_execvp(argv[0], argv,
 				(char **)env->envp->to_arr(env->envp), env->gc);
+	}
 	else
 		status = env->exit_code;
 	env->gc->clean(env->gc);
@@ -57,7 +67,7 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 	pid_t	pid;
 	int		status;
 
-	if (env->builtins->any(env->builtins, strs_eq, cmd->argv[0]))
+	if (env->builtins->any(env->builtins, strs_eq, cmd->argv->peek_i(cmd->argv, 0)))
 	{
 		exec_builtin_cmd(cmd, env);
 		return ;

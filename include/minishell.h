@@ -98,5 +98,5 @@ char		*gc_getcwd(t_gc *gc);
 t_btree		*parse(char *input, t_env *env);
 void		expand_cmd(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
-
+void		setup_signals(void);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 13:37:33 by weizhang          #+#    #+#             */
-/*   Updated: 2026/03/11 13:38:19 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/12 12:02:17 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(void)
 
 	gc = init_gc();
 	env = init_env(gc);
+	setup_signals();
 	while (true)
 	{
 		input = gc_readline("minishell> ", gc);

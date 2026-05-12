@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 00:19:44 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/13 15:30:19 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/11 00:19:46 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,15 @@ struct s_token
 };
 t_token		*init_token(char *value, t_gc *gc);
 t_token		*init_cmd_token(t_cmd *cmd, t_gc *gc);
+
+typedef struct s_envar
+{
+	char	*key;
+	char	*value;
+	bool	exported;
+}	t_envar;
+t_envar	*init_envar(char *key, char *value, bool exported, t_gc *gc);
+t_envar	*init_envar_from_str(char *envar_str, t_gc *gc);
 
 typedef struct s_env
 {

@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:34:51 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 15:48:23 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/12 17:35:14 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 	if (pid == 0)
 		exec_fork_child(cmd, env);
 	waitpid(pid, &status, 0);
-	env->exit_code = status >> 8;
+	update_eixt_code(status, env);
 }
 
 void	exec_subshell(t_btree *ast, t_env *env)
@@ -107,7 +107,7 @@ void	exec_subshell(t_btree *ast, t_env *env)
 		exit(status);
 	}
 	waitpid(pid, &status, 0);
-	env->exit_code = status >> 8;
+	update_eixt_code(status, env);
 }
 
 void	execute(t_btree *ast, t_env *env)

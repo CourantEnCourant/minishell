@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 13:37:33 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 12:02:17 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/12 14:48:34 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int	main(void)
 
 	gc = init_gc();
 	env = init_env(gc);
-	setup_signals();
 	while (true)
 	{
+		setup_signals_interactive();
 		input = gc_readline("minishell> ", gc);
 		if (!input)
 			break ;
@@ -37,6 +37,7 @@ int	main(void)
 		ast = parse(input, env);
 		if (!ast)
 			continue ;
+		setup_signals_execution();
 		execute(ast, env);
 	}
 	printf("exit\n");

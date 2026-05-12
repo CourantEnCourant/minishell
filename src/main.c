@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 13:37:33 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 14:48:34 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/12 16:29:54 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,17 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	t_gc		*gc;
 	t_btree		*ast;
 	t_env		*env;
 
+	(void)argc;
+	(void)argv;
 	gc = init_gc();
-	env = init_env(gc);
+	env = init_env(gc, envp);
 	while (true)
 	{
 		setup_signals_interactive();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 21:39:10 by weizhang          #+#    #+#             */
-/*   Updated: 2026/04/16 21:41:49 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/12 15:48:21 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 	char	**argv;
 
 	manage_dup(in_fd, out_fd, env->gc);
+	setup_signals_fork();
 	token = node->value;
 	if (token->type == CMD)
 	{

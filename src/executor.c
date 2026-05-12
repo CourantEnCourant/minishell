@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:34:51 by weizhang          #+#    #+#             */
-/*   Updated: 2026/04/30 21:13:23 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/12 15:48:23 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static void	exec_fork_child(t_cmd *cmd, t_env *env)
 	int		status;
 	char	**argv;
 
+	setup_signals_fork();
 	if (apply_redirs(cmd, env))
 	{
 		expand_cmd(cmd, env);
@@ -99,6 +100,7 @@ void	exec_subshell(t_btree *ast, t_env *env)
 	}
 	if (pid == 0)
 	{
+		setup_signals_fork();
 		execute(ast->left, env);
 		status = env->exit_code;
 		ast->gc->clean(ast->gc);

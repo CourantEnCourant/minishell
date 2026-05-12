@@ -110,7 +110,7 @@ char	*expand_arg(char *arg, t_env *env)
 		}
 		else if (state == ALPHA)
 		{
-			if (!ft_isalnum(arg[i]))
+			if (!ft_isalnum(arg[i]) && arg[i] != '_')
 			{
 				fragments->push(fragments, find_var(gc_substr(arg, start, i - start, env->gc), env));
 				state = previous;

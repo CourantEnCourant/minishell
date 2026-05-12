@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 11:50:48 by fdong             #+#    #+#             */
-/*   Updated: 2026/05/12 12:19:05 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/12 12:34:10 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <unistd.h>
+#include <termios.h>
+
+void	hide_extra_chars(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return ;
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
 
 void	handle_sig_interrupt(int sig)
 {
@@ -29,6 +40,7 @@ void	setup_signals(void)
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
+	hide_extra_chars();
 	sa_int.sa_handler = handle_sig_interrupt;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;

@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 11:50:48 by fdong             #+#    #+#             */
-/*   Updated: 2026/05/12 14:42:49 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/12 16:44:42 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <readline/readline.h>
 #include <unistd.h>
 #include <termios.h>
+
+int	g_signal = 0;
 
 void	hide_extra_chars(void)
 {
@@ -28,7 +30,7 @@ void	hide_extra_chars(void)
 
 void	handle_sig_interrupt(int sig)
 {
-	(void)sig;
+	g_signal = sig;
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);

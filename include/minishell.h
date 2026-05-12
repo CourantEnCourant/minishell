@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 00:19:44 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 17:33:41 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/12 17:47:45 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,6 @@ void		execute(t_btree *ast, t_env *env);
 void		setup_signals_interactive(void);
 void		setup_signals_execution(void);
 void		setup_signals_fork(void);
-void		update_eixt_code(int code, t_env *env);
+void		update_exit_code(int code, t_env *env);
 
 #endif

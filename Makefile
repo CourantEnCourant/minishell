@@ -26,6 +26,7 @@ SRC = ./src/checker.c \
 	  ./src/redir.c \
 	  ./src/token.c \
 	  ./src/signals.c \
+	  ./src/builtins/echo.c \
 	  ./src/builtins/env.c \
 	  ./src/builtins/exit.c \
 	  ./src/builtins/pwd.c \

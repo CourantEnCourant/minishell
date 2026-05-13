@@ -55,7 +55,7 @@ static void	exec_fork_child(t_cmd *cmd, t_env *env)
 		expand_cmd(cmd, env);
 		argv = (char **)cmd->argv->to_arr(cmd->argv);
 		status = gc_execvp(argv[0], argv,
-				(char **)env->envp->to_arr(env->envp), env->gc);
+				(char **)env->export_envp(env), env->gc);
 	}
 	else
 		status = env->exit_code;

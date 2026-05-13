@@ -23,13 +23,16 @@ void	unset(char **options, t_env *env);
 
 void	print_env(char **options, t_env *env)
 {
+	t_envar	*envar;
 	size_t	i;
 
 	(void)options;
 	i = 0;
 	while (i < env->envp->len)
 	{
-		printf("%s\n", (char *)env->envp->peek_i(env->envp, i));
+		envar = env->envp->peek_i(env->envp, i);
+		if (envar->exported)
+			printf("%s=%s\n", envar->key, envar->value);
 		i++;
 	}
 	env->exit_code = 0;

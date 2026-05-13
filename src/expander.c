@@ -15,18 +15,17 @@
 #include "libft.h"
 #include "minishell.h"
 
+bool	key_match(void *envar, void *str);
 void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc);
-bool	startswith(void *s, void *ref);
 
-char	*find_var(char *var, t_env *env)
+char	*find_var(char *key, t_env *env)
 {
-	size_t	var_len;
+	t_envar	*envar;
 
-	var_len = ft_strlen(var);
-	var = env->envp->find(env->envp, startswith, gc_strjoin(var, "=", env->gc));
-	if (!var)
+	envar = env->envp->find(env->envp, key_match, key);
+	if (!envar)
 		return ("");
-	return (gc_strdup(&var[var_len + 1], env->gc));
+	return (envar->to_str(envar));
 }
 
 char	*expand_arg(char *arg, t_env *env)

@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 13:37:33 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 16:50:56 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/13 15:29:54 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,15 @@
 #include "minishell.h"
 #include <signal.h>
 
-int	main(int argc, char **argv, char **envp)
+int	main(void)
 {
 	char		*input;
 	t_gc		*gc;
 	t_btree		*ast;
 	t_env		*env;
 
-	(void)argc;
-	(void)argv;
 	gc = init_gc();
-	env = init_env(gc, envp);
+	env = init_env(gc);
 	while (true)
 	{
 		setup_signals_interactive();

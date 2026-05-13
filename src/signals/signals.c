@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 11:50:48 by fdong             #+#    #+#             */
-/*   Updated: 2026/05/12 16:44:42 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/13 15:50:23 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,6 @@
 
 int	g_signal = 0;
 
-void	hide_extra_chars(void)
-{
-	struct termios	term;
-
-	if (tcgetattr(STDIN_FILENO, &term) == -1)
-		return ;
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
 
 void	handle_sig_interrupt(int sig)
 {
@@ -42,7 +33,6 @@ void	setup_signals_interactive(void)
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
-	hide_extra_chars();
 	sa_int.sa_handler = handle_sig_interrupt;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;

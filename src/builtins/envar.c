@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "gc_libft.h"
 #include "minishell.h"
 
 static char	*extract_key(char *envar, t_gc *gc)
@@ -22,6 +23,14 @@ static char	*extract_value(char *envar, t_gc *gc)
 	return (gc_strdup(ft_strchr(envar, '=') + 1, gc));
 }
 
+static char	*to_str(t_envar *self)
+{
+	char	*str;
+
+	str = gc_strjoin(self->key, "=", self->gc);
+	return (gc_strjoin(str, self->value, self->gc));
+}
+
 t_envar	*init_envar(char *key, char *value, bool exported, t_gc *gc)
 {
 	t_envar	*envar;
@@ -30,6 +39,8 @@ t_envar	*init_envar(char *key, char *value, bool exported, t_gc *gc)
 	envar->key = key;
 	envar->value = value;
 	envar->exported = exported;
+	envar->gc = gc;
+	envar->to_str = to_str;
 	return (envar);
 }
 

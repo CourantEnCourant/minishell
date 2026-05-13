@@ -62,6 +62,29 @@ t_darray	*init_builtins(t_gc *gc)
 	return (builtins);
 }
 
+static char	**export_envp(t_env *self)
+{
+	char	**envp;
+	t_envar	*var;
+	size_t	i;
+	size_t	j;
+
+	envp = gc_calloc(self->envp->len, sizeof(char *), self->gc);
+	i = 0;
+	j = 0;
+	while (i < self->envp->len)
+	{
+		var = self->envp->peek_i(self->envp, i);
+		if (var->exported)
+		{
+			envp[j] = var->to_str(var);
+			j++;
+		}
+		i++;
+	}
+	return (envp);
+}
+
 t_env	*init_env(t_gc *gc)
 {
 	t_env		*env;
@@ -79,5 +102,6 @@ t_env	*init_env(t_gc *gc)
 		i++;
 	}
 	env->gc = gc;
+	env->export_envp = export_envp;
 	return (env);
 }

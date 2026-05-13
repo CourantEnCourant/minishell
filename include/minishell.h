@@ -82,22 +82,27 @@ struct s_token
 t_token		*init_token(char *value, t_gc *gc);
 t_token		*init_cmd_token(t_cmd *cmd, t_gc *gc);
 
-typedef struct s_envar
+typedef struct s_envar	t_envar;
+struct s_envar
 {
 	char	*key;
 	char	*value;
 	bool	exported;
-}	t_envar;
+	t_gc	*gc;
+	char	*(*to_str)(t_envar *self);
+};
 t_envar	*init_envar(char *key, char *value, bool exported, t_gc *gc);
 t_envar	*init_envar_from_str(char *envar_str, t_gc *gc);
 
-typedef struct s_env
+typedef struct s_env	t_env;
+struct s_env
 {
 	unsigned char	exit_code;
 	t_darray		*builtins;
 	t_darray		*envp;
 	t_gc			*gc;
-}	t_env;
+	char			**(*export_envp)(t_env *self);
+};
 
 extern int	g_signal;
 

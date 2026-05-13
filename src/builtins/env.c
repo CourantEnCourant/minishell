@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:40:06 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 16:28:56 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/13 15:30:53 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,10 @@ t_darray	*init_builtins(t_gc *gc)
 	return (builtins);
 }
 
-t_env	*init_env(t_gc *gc, char **environ)
+t_env	*init_env(t_gc *gc)
 {
 	t_env		*env;
+	extern char	**environ;
 
 	env = gc_malloc(sizeof(t_env), gc);
 	env->exit_code = 0;

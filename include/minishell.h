@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 00:19:44 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 17:47:45 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/13 15:30:19 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ typedef struct s_env
 
 extern int	g_signal;
 
-t_env		*init_env(t_gc *gc, char **environ);
+t_env		*init_env(t_gc *gc);
 
 int			gc_execvp(const char *cmd, char *const argv[],
 				char **envp, t_gc *gc);

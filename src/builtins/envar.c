@@ -12,6 +12,15 @@
 
 #include "gc_libft.h"
 #include "minishell.h"
+#include <stdbool.h>
+
+bool	key_match(void *envar, void *str)
+{
+	t_envar	*var;
+
+	var = (t_envar *)envar;
+	return (ft_strcmp(var->key, str) == 0);
+}
 
 static char	*extract_key(char *envar, t_gc *gc)
 {

@@ -25,7 +25,7 @@ char	*find_var(char *key, t_env *env)
 	envar = env->envp->find(env->envp, key_match, key);
 	if (!envar)
 		return ("");
-	return (envar->to_str(envar));
+	return (envar->value);
 }
 
 char	*expand_arg(char *arg, t_env *env)

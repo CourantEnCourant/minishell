@@ -72,7 +72,7 @@ static char	**export_envp(t_env *self)
 	size_t	i;
 	size_t	j;
 
-	envp = gc_calloc(self->envp->len, sizeof(char *), self->gc);
+	envp = gc_calloc(self->envp->len + 1, sizeof(char *), self->gc);
 	i = 0;
 	j = 0;
 	while (i < self->envp->len)

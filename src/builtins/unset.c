@@ -13,18 +13,17 @@
 #include <stddef.h>
 #include "minishell.h"
 
-bool	startswith(void *s, void *ref);
+bool	key_match(void *envar, void *str);
 
 void	unset(char **options, t_env *env)
 {
 	size_t	i;
 	size_t	elem_i;
 
-	i = 0;
+	i = 1;
 	while (options[i])
 	{
-		elem_i = env->envp->find_i(env->envp, startswith, 
-				gc_strjoin(options[i], "=", env->gc));
+		elem_i = env->envp->find_i(env->envp, key_match, options[i]);
 		if (elem_i != env->envp->len)
 			env->envp->pop_i(env->envp, elem_i);
 		i++;

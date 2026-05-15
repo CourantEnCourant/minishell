@@ -14,6 +14,16 @@
 #include "minishell.h"
 #include <stdbool.h>
 
+bool	envar_gt(void *e1, void *e2)
+{
+	t_envar	*envar1;
+	t_envar	*envar2;
+
+	envar1 = (t_envar *)e1;
+	envar2 = (t_envar *)e2;
+	return (ft_strcmp(envar1->key, envar2->key) > 0);
+}
+
 bool	key_match(void *envar, void *str)
 {
 	t_envar	*var;

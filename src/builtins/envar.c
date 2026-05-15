@@ -22,14 +22,19 @@ bool	key_match(void *envar, void *str)
 	return (ft_strcmp(var->key, str) == 0);
 }
 
-static char	*extract_key(char *envar, t_gc *gc)
+char	*extract_key(char *envar, t_gc *gc)
 {
 	return (gc_substr(envar, 0, ft_strcspn(envar, "="), gc));
 }
 
-static char	*extract_value(char *envar, t_gc *gc)
+char	*extract_value(char *envar, t_gc *gc)
 {
-	return (gc_strdup(ft_strchr(envar, '=') + 1, gc));
+	char	*eq_ptr;
+
+	eq_ptr = ft_strchr(envar, '=');
+	if (!eq_ptr)
+		return (NULL);
+	return (gc_strdup(eq_ptr + 1, gc));
 }
 
 static char	*to_str(t_envar *self)

@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:54:06 by fdong             #+#    #+#             */
-/*   Updated: 2026/05/16 17:56:58 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/16 18:01:05 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@
 
 void	repr_strs(char **strs);
 size_t	len(void **arr);
+bool	key_match(void *envar, void *str);
 void	set_env_var(char *key, char *value, t_env *env);
 
 void	cd(char **options, t_env *env)
 {
 	char	*oldpwd;
+	t_envar	*pwd_var;
 
 	if (len((void **)options) == 1)
 		return ;
@@ -30,7 +32,11 @@ void	cd(char **options, t_env *env)
 		env->exit_code = 1;
 		return ;
 	}
-	oldpwd = gc_getcwd(env->gc);
+	pwd_var = env->envp->find(env->envp, key_match, "PWD");
+	if (pwd_var && pwd_var->value)
+		oldpwd = gc_strdup(pwd_var->value, env->gc);
+	else
+		oldpwd = gc_strdup("", env->gc);
 	if (chdir(options[1]) == -1)
 	{
 		perror("cd");

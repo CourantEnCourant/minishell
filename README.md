@@ -22,4 +22,10 @@ make test   # Build and run tests
 ./minishell # Run minishell
 ```
 
+### Run with valgrind
+
+```bash
+valgrind --suppressions=readline.supp --show-leak-kinds=all --leak-check=full ./minishell
+```
+
 ## Resources

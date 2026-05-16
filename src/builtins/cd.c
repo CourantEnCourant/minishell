@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:54:06 by fdong             #+#    #+#             */
-/*   Updated: 2026/05/16 18:01:05 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/16 18:07:55 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	cd(char **options, t_env *env)
 		env->exit_code = 1;
 		return ;
 	}
-	set_env_var("OLDPWD", oldpwd, env);
-	set_env_var("PWD", gc_getcwd(env->gc), env);
+	set_env_var(gc_strdup("OLDPWD", env->gc), oldpwd, env);
+	set_env_var(gc_strdup("PWD", env->gc), gc_getcwd(env->gc), env);
 	env->exit_code = 0;
 }

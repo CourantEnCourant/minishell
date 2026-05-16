@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:40:06 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/11 22:01:31 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/16 15:11:30 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	pwd(char **options, t_env *env);
 void	exit_minishell(char **options, t_env *env);
 void	export(char **options, t_env *env);
 void	unset(char **options, t_env *env);
+void	cd(char **options, t_env *env);
+
 
 void	print_env(char **options, t_env *env)
 {
@@ -53,6 +55,8 @@ void	exec_builtins(char *cmd, char **options, t_env *env)
 		echo(options, env);
 	else if (ft_strcmp(cmd, "export") == 0)
 		export(options, env);
+	else if (ft_strcmp(cmd, "cd") == 0)
+		cd(options, env);
 }
 
 t_darray	*init_builtins(t_gc *gc)
@@ -66,6 +70,7 @@ t_darray	*init_builtins(t_gc *gc)
 	builtins->push(builtins, "env");
 	builtins->push(builtins, "unset");
 	builtins->push(builtins, "echo");
+	builtins->push(builtins, "cd");
 	return (builtins);
 }
 

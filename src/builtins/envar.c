@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envar.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 22:49:26 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 22:56:47 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/16 16:30:46 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,20 @@ t_envar	*init_envar_from_str(char *envar_str, t_gc *gc)
 	key = extract_key(envar_str, gc);
 	value = extract_value(envar_str, gc);
 	return (init_envar(key, value, true, gc));
+}
+
+void	set_env_var(char *key, char *value, t_env *env)
+{
+	size_t	target_i;
+	t_envar	*envar;
+
+	target_i = env->envp->find_i(env->envp, key_match, key);
+	if (target_i != env->envp->len)
+	{
+		envar = env->envp->peek_i(env->envp, target_i);
+		envar->exported = true;
+		envar->value = value;
+	}
+	else
+		env->envp->push(env->envp, init_envar(key, value, true, env->gc));
 }

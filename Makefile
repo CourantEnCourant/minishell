@@ -34,6 +34,7 @@ SRC = ./src/checker.c \
 	  ./src/builtins/export.c \
 	  ./src/builtins/pwd.c \
 	  ./src/builtins/unset.c \
+	  ./src/builtins/cd.c \
 	  ./src/utils/gc_execvp.c \
 	  ./src/utils/gc_getcwd.c \
 	  ./src/utils/gc_readline.c \

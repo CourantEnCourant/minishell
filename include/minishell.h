@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 00:19:44 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/11 00:19:46 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/16 15:20:25 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ char		*gc_getcwd(t_gc *gc);
 t_btree		*parse(char *input, t_env *env);
 void		expand_cmd(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
+void		cd(char **options, t_env *env);
+
 void		setup_signals_interactive(void);
 void		setup_signals_execution(void);
 void		setup_signals_fork(void);

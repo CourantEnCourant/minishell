@@ -1,0 +1,25 @@
+{
+   readline_leak
+   Memcheck:Leak
+   ...
+   obj:/libreadline.so
+}
+{
+   readline_leak_all
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:readline
+}
+{
+   add_history_leak
+   Memcheck:Leak
+   ...
+   fun:add_history
+}
+{
+   rl_initialize
+   Memcheck:Leak
+   ...
+   fun:rl_initialize
+}

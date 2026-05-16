@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_getcwd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 17:35:54 by anying            #+#    #+#             */
-/*   Updated: 2026/03/27 10:58:22 by anying           ###   ########.fr       */
+/*   Updated: 2026/05/16 17:42:48 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ char	*gc_getcwd(t_gc *gc)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-	{
-		gc->clean(gc);
-		exit(EXIT_FAILURE);
-	}
+		return (NULL);
 	gc->add(gc, cwd);
 	return (cwd);
 }

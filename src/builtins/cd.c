@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:54:06 by fdong             #+#    #+#             */
-/*   Updated: 2026/05/17 16:17:34 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/17 16:29:30 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,28 @@ static void	cd_dash(t_env *env)
 	}
 }
 
+static void	cd_home(t_env *env)
+{
+	t_envar	*home_var;
+
+	home_var = env->envp->find(env->envp, key_match, "HOME");
+	if (home_var && home_var->value)
+		cd_path(home_var->value, env);
+	else
+	{
+		ft_dprintf(STDERR_FILENO, "cd: HOME not set\n");
+		env->exit_code = 1;
+		return ;
+	}
+}
+
 void	cd(char **options, t_env *env)
 {
 	if (len((void **)options) == 1)
+	{
+		cd_home(env);
 		return ;
+	}
 	if (len((void **)options) > 2)
 	{
 		ft_dprintf(STDERR_FILENO, "cd: too many arguments\n");

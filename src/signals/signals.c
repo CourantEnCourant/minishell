@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 11:50:48 by fdong             #+#    #+#             */
-/*   Updated: 2026/05/13 15:50:23 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/17 16:32:54 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <termios.h>
 
 int	g_signal = 0;
-
 
 void	handle_sig_interrupt(int sig)
 {
@@ -37,7 +36,6 @@ void	setup_signals_interactive(void)
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;
 	sigaction(SIGINT, &sa_int, NULL);
-
 	sa_quit.sa_handler = SIG_IGN;
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = 0;

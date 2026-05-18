@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:40:06 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/16 15:11:30 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/18 15:16:25 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	exit_minishell(char **options, t_env *env);
 void	export(char **options, t_env *env);
 void	unset(char **options, t_env *env);
 void	cd(char **options, t_env *env);
-
 
 void	print_env(char **options, t_env *env)
 {

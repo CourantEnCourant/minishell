@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:54:06 by fdong             #+#    #+#             */
-/*   Updated: 2026/05/17 16:29:30 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/18 16:23:32 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ static char	*cd_path(char *path, t_env *env)
 		oldpwd = gc_strdup("", env->gc);
 	if (chdir(path) == -1)
 	{
-		perror("cd");
+		perror(gc_strjoin("minishell: cd: ", path, env->gc));
 		env->exit_code = 1;
 		return (NULL);
 	}
 	newpwd = gc_getcwd(env->gc);
 	if (!newpwd)
 	{
-		perror("cd");
+		perror("minishell: cd");
 		newpwd = gc_strdup("", env->gc);
 	}
 	set_env_var(gc_strdup("OLDPWD", env->gc), oldpwd, env);
@@ -62,7 +62,7 @@ static void	cd_dash(t_env *env)
 	}
 	else
 	{
-		ft_dprintf(STDERR_FILENO, "cd: OLDPWD not set\n");
+		ft_dprintf(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
 		env->exit_code = 1;
 		return ;
 	}
@@ -77,7 +77,7 @@ static void	cd_home(t_env *env)
 		cd_path(home_var->value, env);
 	else
 	{
-		ft_dprintf(STDERR_FILENO, "cd: HOME not set\n");
+		ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
 		env->exit_code = 1;
 		return ;
 	}
@@ -92,7 +92,7 @@ void	cd(char **options, t_env *env)
 	}
 	if (len((void **)options) > 2)
 	{
-		ft_dprintf(STDERR_FILENO, "cd: too many arguments\n");
+		ft_dprintf(STDERR_FILENO, "minishell: cd: too many arguments\n");
 		env->exit_code = 1;
 		return ;
 	}

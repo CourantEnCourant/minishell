@@ -20,10 +20,7 @@ char	*gc_getcwd(t_gc *gc)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-	{
-		gc->clean(gc);
-		exit(EXIT_FAILURE);
-	}
+		return (NULL);
 	gc->add(gc, cwd);
 	return (cwd);
 }

@@ -102,6 +102,7 @@ struct s_env
 	t_darray		*envp;
 	t_gc			*gc;
 	char			**(*export_envp)(t_env *self);
+	void			(*set_envar)(t_env *self, char *key, char *value);
 };
 
 extern int	g_signal;

@@ -27,6 +27,7 @@ SRC = ./src/checker.c \
 	  ./src/token.c \
 	  ./src/signals/signals.c \
 	  ./src/signals/signal_exit.c \
+	  ./src/builtins/cd.c \
 	  ./src/builtins/echo.c \
 	  ./src/builtins/env.c \
 	  ./src/builtins/envar.c \

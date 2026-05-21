@@ -16,10 +16,12 @@
 #include "gc_libft.h"
 #include "minishell.h"
 
+void	cd(char **options, t_env *env);
 void	echo(char **options, t_env *env);
-void	pwd(char **options, t_env *env);
 void	exit_minishell(char **options, t_env *env);
 void	export(char **options, t_env *env);
+bool	key_match(void *envar, void *str);
+void	pwd(char **options, t_env *env);
 void	unset(char **options, t_env *env);
 
 void	print_env(char **options, t_env *env)
@@ -53,6 +55,8 @@ void	exec_builtins(char *cmd, char **options, t_env *env)
 		echo(options, env);
 	else if (ft_strcmp(cmd, "export") == 0)
 		export(options, env);
+	else if (ft_strcmp(cmd, "cd") == 0)
+		cd(options, env);
 }
 
 t_darray	*init_builtins(t_gc *gc)
@@ -66,6 +70,7 @@ t_darray	*init_builtins(t_gc *gc)
 	builtins->push(builtins, "env");
 	builtins->push(builtins, "unset");
 	builtins->push(builtins, "echo");
+	builtins->push(builtins, "cd");
 	return (builtins);
 }
 
@@ -92,6 +97,17 @@ static char	**export_envp(t_env *self)
 	return (envp);
 }
 
+static void	set_envar(t_env *self, char *key, char *value)
+{
+	t_envar	*envar;
+
+	envar = self->envp->find(self->envp, key_match, key);
+	if (envar)
+		envar->value = value;
+	else
+		self->envp->push(self->envp, init_envar(key, value, true, self->gc));
+}
+
 t_env	*init_env(t_gc *gc)
 {
 	t_env		*env;
@@ -110,5 +126,6 @@ t_env	*init_env(t_gc *gc)
 	}
 	env->gc = gc;
 	env->export_envp = export_envp;
+	env->set_envar = set_envar;
 	return (env);
 }

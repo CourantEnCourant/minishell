@@ -43,15 +43,13 @@ static int	exec_with_path(const char *cmd, char *const argv[], char **envp)
 
 int	gc_execvp(const char *cmd, char *const argv[], char **envp, t_gc *gc)
 {
-	size_t		i;
-	char		*cmd_abs;
-	char		**paths;
+	size_t	i;
+	char	*cmd_abs;
+	char	**paths;
 
-	if (ft_strchr(cmd, '/'))
-		return (exec_with_path(cmd, argv, envp));
 	paths = get_paths(envp, gc);
-	if (!paths)
-		return (127);
+	if (ft_strchr(cmd, '/') || !paths)
+		return (exec_with_path(cmd, argv, envp));
 	i = -1;
 	while (paths[++i])
 	{

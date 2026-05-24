@@ -26,12 +26,10 @@ static char	**get_paths(char **envp, t_gc *gc)
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			break ;
+			return (gc_split(envp[i] + 5, ':', gc));
 		i++;
 	}
-	if (!envp[i])
-		return (NULL);
-	return (gc_split(envp[i] + 5, ':', gc));
+	return (NULL);
 }
 
 static int	exec_with_path(const char *cmd, char *const argv[], char **envp)

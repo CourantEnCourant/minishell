@@ -38,7 +38,7 @@ static int	exec_with_path(const char *cmd, char *const argv[], char **envp)
 {
 	execve(cmd, argv, envp);
 	perror(cmd);
-	if (errno == EACCES)
+	if (errno == EACCES || errno == ENOTDIR)
 		return (126);
 	return (127);
 }

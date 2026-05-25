@@ -56,6 +56,22 @@ size_t	find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
 	return (s->len);
 }
 
+t_darray	*filter(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
+{
+	t_darray	*filtered;
+	size_t		i;
+
+	filtered = init_darray(s->gc);
+	i = 0;
+	while (i < s->len)
+	{
+		if (f(s->peek_i(s, i), e2))
+			filtered->push(filtered, s->peek_i(s, i));
+		i++;
+	}
+	return (filtered);
+}
+
 void	*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc), void *a)
 {
 	size_t	i;

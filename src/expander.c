@@ -16,6 +16,7 @@
 #include "minishell.h"
 
 bool	key_match(void *envar, void *str);
+bool	strs_not_eq(void *s1, void *s2);
 void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc);
 
 static char	*find_var(char *key, t_env *env)
@@ -153,6 +154,7 @@ void	expand_cmd(t_cmd *cmd, t_env *env)
 			expand_arg(cmd->argv->peek_i(cmd->argv, i), env));
 		i++;
 	}
+	cmd->set_argv(cmd, cmd->argv->filter(cmd->argv, strs_not_eq, ""));
 	i = 0;
 	while (i < cmd->redirs->len)
 	{

@@ -10,9 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include "minishell.h"
 
 size_t	len(void **arr);
 bool	key_match(void *envar, void *str);
@@ -30,14 +32,14 @@ static char	*cd_path(char *path, t_env *env)
 		oldpwd = "";
 	if (chdir(path) == -1)
 	{
-		perror(gc_strjoin("minishell: cd: ", path, env->gc));
+		ft_dprintf(STDERR_FILENO, "cd: %s: %s\n", path, strerror(errno));
 		env->exit_code = 1;
 		return (NULL);
 	}
 	newpwd = gc_getcwd(env->gc);
 	if (!newpwd)
 	{
-		perror("minishell: cd");
+		perror("cd");
 		newpwd = "";
 	}
 	env->set_envar(env, "OLDPWD", oldpwd);
@@ -60,7 +62,7 @@ static void	cd_dash(t_env *env)
 	}
 	else
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
+		ft_dprintf(STDERR_FILENO, "cd: OLDPWD not set\n");
 		env->exit_code = 1;
 		return ;
 	}
@@ -75,7 +77,7 @@ static void	cd_home(t_env *env)
 		cd_path(home_var->value, env);
 	else
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
+		ft_dprintf(STDERR_FILENO, "cd: HOME not set\n");
 		env->exit_code = 1;
 		return ;
 	}
@@ -90,7 +92,7 @@ void	cd(char **options, t_env *env)
 	}
 	if (len((void **)options) > 2)
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: cd: too many arguments\n");
+		ft_dprintf(STDERR_FILENO, "cd: too many arguments\n");
 		env->exit_code = 1;
 		return ;
 	}

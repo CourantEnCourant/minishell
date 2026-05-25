@@ -80,28 +80,23 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 	manage_dup(in_fd, out_fd, env->gc);
 	setup_signals_fork();
 	token = node->value;
-	if (token->type == CMD)
+	if (token->type == SUBSHELL)
 	{
-		cmd = token->cmd;
-		if (apply_redirs(cmd, env))
-		{
-			expand_cmd(cmd, env);
-			argv = (char **)cmd->argv->to_arr(cmd->argv);
-			if (env->builtins->any(env->builtins, strs_eq, argv[0]))
-			{
-				exec_builtins(argv[0], argv, env);
-				exit_code = env->exit_code;
-			}
-			else
-				exit_code = gc_execvp(argv[0], argv,
-						(char **)env->export_envp(env), env->gc);
-		}
-		else
-			exit_code = env->exit_code;
+		exec_subshell(node, env);
+		exit_code = env->exit_code;
 		env->gc->clean(env->gc);
 		exit(exit_code);
 	}
-	exec_subshell(node, env);
+	cmd = token->cmd;
+	expand_cmd(cmd, env);
+	argv = (char **)cmd->argv->to_arr(cmd->argv);
+	if (!apply_redirs(cmd, env))
+		exit_code = env->exit_code;
+	else if (env->builtins->any(env->builtins, strs_eq, argv[0]))
+		exec_builtins(argv[0], argv, env);
+	else
+		env->exit_code = gc_execvp(argv[0], argv,
+				(char **)env->export_envp(env), env->gc);
 	exit_code = env->exit_code;
 	env->gc->clean(env->gc);
 	exit(exit_code);

@@ -18,7 +18,7 @@
 bool	key_match(void *envar, void *str);
 void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc);
 
-char	*find_var(char *key, t_env *env)
+static char	*find_var(char *key, t_env *env)
 {
 	t_envar	*envar;
 
@@ -28,7 +28,7 @@ char	*find_var(char *key, t_env *env)
 	return (envar->value);
 }
 
-char	*expand_arg(char *arg, t_env *env)
+static char	*expand_arg(char *arg, t_env *env)
 {
 	t_dfa_state	state;
 	t_dfa_state	previous;

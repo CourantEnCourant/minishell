@@ -26,5 +26,8 @@ void	update_exit_code(int status, t_env *env)
 			ft_dprintf(STDERR_FILENO, "\n");
 		else if (WTERMSIG(status) == SIGQUIT)
 			ft_dprintf(STDERR_FILENO, "Quit (core dumped)\n");
+		else if (WTERMSIG(status) == SIGSEGV)
+			ft_dprintf(STDERR_FILENO, "Segmentation fault: %d\n",
+				WTERMSIG(status));
 	}
 }

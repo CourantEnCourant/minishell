@@ -15,7 +15,16 @@
 
 void	pwd(char **options, t_env *env)
 {
-	(void)(options);
-	printf("%s\n", gc_getcwd(env->gc));
+	char	*cwd;
+
+	(void)options;
+	cwd = gc_getcwd(env->gc);
+	if (!cwd)
+	{
+		perror("pwd: error retrieving current directory: getcwd: cannot access parent directories");
+		env->exit_code = 1;
+		return ;
+	}
+	printf("%s\n", cwd);
 	env->exit_code = 0;
 }

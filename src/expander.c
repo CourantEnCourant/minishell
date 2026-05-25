@@ -28,6 +28,18 @@ static char	*find_var(char *key, t_env *env)
 	return (envar->value);
 }
 
+static char	*expand_tilde(char *arg, t_env *env)
+{
+	t_envar	*home;
+
+	if (arg[0] != '~' || (arg[1] != '/' && arg[1] != '\0'))
+		return (arg);
+	home = env->envp->find(env->envp, key_match, "HOME");
+	if (!home)
+		return (arg);
+	return (gc_strjoin(home->value, &arg[1], env->gc));
+}
+
 static char	*expand_arg(char *arg, t_env *env)
 {
 	t_dfa_state	state;
@@ -36,6 +48,7 @@ static char	*expand_arg(char *arg, t_env *env)
 	size_t		i;
 	size_t		start;
 
+	arg = expand_tilde(arg, env);
 	fragments = init_darray(env->gc);
 	state = TEXT;
 	i = 0;

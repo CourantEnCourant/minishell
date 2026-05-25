@@ -13,6 +13,16 @@
 #include <stdbool.h>
 #include "gc_libft.h"
 
+bool	strs_eq(void *s1, void *s2)
+{
+	return (ft_strcmp(s1, s2) == 0);
+}
+
+bool	strs_not_eq(void *s1, void *s2)
+{
+	return (!strs_eq(s1, s2));
+}
+
 void	*gc_strdup_wrap(void *ref, t_gc *gc)
 {
 	return (gc_strdup(ref, gc));

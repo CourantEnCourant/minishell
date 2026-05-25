@@ -14,34 +14,6 @@
 #include <stdbool.h>
 #include "datastructures.h"
 
-bool	any(t_darray *s, bool (*f)(void *elem, void *target), void *target)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < s->len)
-	{
-		if (f(s->peek_i(s, i), target))
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-void	*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < s->len)
-	{
-		if (f(s->peek_i(s, i), e2))
-			return (s->peek_i(s, i));
-		i++;
-	}
-	return (NULL);
-}
-
 size_t	find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
 {
 	size_t	i;
@@ -54,6 +26,21 @@ size_t	find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
 		i++;
 	}
 	return (s->len);
+}
+
+void	*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
+{
+	size_t	i;
+
+	i = find_i(s, f, e2);
+	if (i == s->len)
+		return (NULL);
+	return (s->peek_i(s, i));
+}
+
+bool	any(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
+{
+	return (find_i(s, f, e2) != s->len);
 }
 
 t_darray	*filter(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)

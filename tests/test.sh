@@ -7,3 +7,10 @@ chmod 000 no_permisson.tmp
 
 # Cleaning
 rm -f *.tmp
+
+# minishell_tester
+make all
+git clone https://github.com/LucasKuhn/minishell_tester.git
+cd minishell_tester
+./tester
+cd ..

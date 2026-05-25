@@ -63,11 +63,32 @@ static void	exec_fork_child(t_cmd *cmd, t_env *env)
 	exit(status);
 }
 
+static void	exec_empty_cmd(t_cmd *cmd, t_env *env)
+{
+	int		saved_stdin;
+	int		saved_stdout;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	expand_cmd(cmd, env);
+	if (apply_redirs(cmd, env))
+		env->exit_code = 0;
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+}
+
 static void	exec_cmd(t_cmd *cmd, t_env *env)
 {
 	pid_t	pid;
 	int		status;
 
+	if (cmd->argv->len == 0)
+	{
+		exec_empty_cmd(cmd, env);
+		return ;
+	}
 	if (env->builtins->any(env->builtins, strs_eq, cmd->argv->peek_i(cmd->argv, 0)))
 	{
 		exec_builtin_cmd(cmd, env);

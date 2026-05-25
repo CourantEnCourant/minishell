@@ -92,6 +92,8 @@ void	exec_child(t_btree *node, int in_fd, int out_fd, t_env *env)
 	argv = (char **)cmd->argv->to_arr(cmd->argv);
 	if (!apply_redirs(cmd, env))
 		exit_code = env->exit_code;
+	else if (cmd->argv->len == 0)
+		env->exit_code = 0;
 	else if (env->builtins->any(env->builtins, strs_eq, argv[0]))
 		exec_builtins(argv[0], argv, env);
 	else

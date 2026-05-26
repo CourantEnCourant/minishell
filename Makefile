@@ -72,9 +72,7 @@ fclean: clean
 	@$(RM) $(NAME) test
 	@echo "Removed $(NAME) and test"
 
-test: $(LIB_ARCHIVES) $(TEST_OBJ) $(NAME)
-	@$(CC) $(CFLAGS) $(LDFLAGS) -Wno-error=unused-function $(INCLUDE) $(TEST_OBJ) -x c tests/test.norminette -x none $(LIB_ARCHIVES) -lreadline -o test
-	@echo "Compiled ./test"
+test: $(NAME)
 	@bash tests/test.sh
 
 re: fclean all

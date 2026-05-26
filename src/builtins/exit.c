@@ -38,7 +38,7 @@ static bool	check_args(char **args, t_env *env)
 	if (len((void **)args) > 2)
 	{
 		ft_dprintf(STDERR_FILENO, "exit: too many arguments\n");
-		env->exit_code = 2;
+		env->exit_code = 1;
 		return (false);
 	}
 	env->exit_code = ft_atoi(args[1]);

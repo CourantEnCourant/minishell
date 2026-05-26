@@ -38,12 +38,12 @@ struct s_darray
 	void		*(*pop)(t_darray *self);
 	void		(*sort)(t_darray *self, bool (*f)(void *, void *));
 	void		(*set)(t_darray *self, size_t i, void *item);
-	bool		(*any)(t_darray * self, bool (*f)(void *, void *), void *target);
-	void		*(*find)(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
-	size_t		(*find_i)(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
-	t_darray	*(*filter)(t_darray *s, bool (*f)(void *e, void *e2), void *e2);
-	void		*(*reduce)(t_darray *s,
-				void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
+	bool		(*any)(t_darray *, bool (*f)(void *, void *), void *);
+	void		*(*find)(t_darray *, bool (*f)(void *, void *), void *);
+	size_t		(*find_i)(t_darray *, bool (*f)(void *, void *), void *);
+	t_darray	*(*filter)(t_darray *, bool (*f)(void *, void *), void *);
+	void		*(*reduce)(t_darray *,
+			void *(*f)(void *, void *, t_gc *), void *);
 	t_darray	*(*copy)(t_darray *self);
 };
 t_darray	*init_darray(t_gc *gc);

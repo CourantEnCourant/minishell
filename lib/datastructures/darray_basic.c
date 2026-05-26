@@ -27,9 +27,10 @@ bool		any(t_darray *s, bool (*f)(void *elem, void *target), void *target);
 void		*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 size_t		find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 t_darray	*filter(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
-void		*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
+void		*reduce(t_darray *s,
+				void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
 
-static t_darray *copy(t_darray *self)
+static t_darray	*copy(t_darray *self)
 {
 	t_darray	*new;
 	size_t		i;

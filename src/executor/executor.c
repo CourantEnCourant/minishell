@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:34:51 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/12 17:47:52 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/26 20:35:51 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ bool		apply_redirs(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
 void		exec_builtins(char *cmd, char **options, t_env *env);
 bool		strs_eq(void *s1, void *s2);
+void		exec_subshell(t_btree *ast, t_env *env);
 
 static void	exec_builtin_cmd(t_cmd *cmd, t_env *env)
 {
@@ -87,44 +88,15 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 		exec_empty_cmd(cmd, env);
 		return ;
 	}
-	if (env->builtins->any(env->builtins, strs_eq, cmd->argv->peek_i(cmd->argv, 0)))
+	if (env->builtins->any(env->builtins, strs_eq,
+			cmd->argv->peek_i(cmd->argv, 0)))
 	{
 		exec_builtin_cmd(cmd, env);
 		return ;
 	}
 	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		env->exit_code = 1;
-		return ;
-	}
 	if (pid == 0)
 		exec_fork_child(cmd, env);
-	waitpid(pid, &status, 0);
-	update_exit_code(status, env);
-}
-
-void	exec_subshell(t_btree *ast, t_env *env)
-{
-	pid_t	pid;
-	int		status;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		env->exit_code = 1;
-		return ;
-	}
-	if (pid == 0)
-	{
-		setup_signals_fork();
-		execute(ast->left, env);
-		status = env->exit_code;
-		ast->gc->clean(ast->gc);
-		exit(status);
-	}
 	waitpid(pid, &status, 0);
 	update_exit_code(status, env);
 }

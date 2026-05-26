@@ -17,6 +17,8 @@
 # include "gc_libft.h"
 # include "datastructures.h"
 
+extern int				g_signal;
+
 typedef enum e_dfa_state
 {
 	TEXT,
@@ -25,6 +27,15 @@ typedef enum e_dfa_state
 	DOLLAR,
 	ALPHA,
 }	t_dfa_state;
+
+typedef struct s_exp
+{
+	t_dfa_state	state;
+	t_dfa_state	previous;
+	t_darray	*fragments;
+	size_t		i;
+	size_t		start;
+}	t_exp;
 
 typedef enum e_redir_type
 {
@@ -91,8 +102,8 @@ struct s_envar
 	t_gc	*gc;
 	char	*(*to_str)(t_envar *self);
 };
-t_envar	*init_envar(char *key, char *value, bool exported, t_gc *gc);
-t_envar	*init_envar_from_str(char *envar_str, t_gc *gc);
+t_envar		*init_envar(char *key, char *value, bool exported, t_gc *gc);
+t_envar		*init_envar_from_str(char *envar_str, t_gc *gc);
 
 typedef struct s_env	t_env;
 struct s_env
@@ -104,9 +115,6 @@ struct s_env
 	char			**(*export_envp)(t_env *self);
 	void			(*set_envar)(t_env *self, char *key, char *value);
 };
-
-extern int	g_signal;
-
 t_env		*init_env(t_gc *gc);
 
 int			gc_execvp(const char *cmd, char *const argv[],

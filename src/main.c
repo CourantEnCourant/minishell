@@ -19,33 +19,40 @@
 #include "minishell.h"
 #include <signal.h>
 
-int	main(void)
+bool	loop(t_env *env)
 {
 	char		*input;
-	t_gc		*gc;
 	t_btree		*ast;
+
+	setup_signals_interactive();
+	input = gc_readline("minishell> ", env->gc);
+	if (g_signal == SIGINT)
+	{
+		env->exit_code = 130;
+		g_signal = 0;
+	}
+	if (!input)
+		return (false);
+	add_history(input);
+	ast = parse(input, env);
+	if (!ast)
+		return (true);
+	setup_signals_execution();
+	execute(ast, env);
+	return (true);
+}
+
+int	main(void)
+{
+	t_gc		*gc;
 	t_env		*env;
+	bool		flag;
 
 	gc = init_gc();
 	env = init_env(gc);
-	while (true)
-	{
-		setup_signals_interactive();
-		input = gc_readline("minishell> ", gc);
-		if (g_signal == SIGINT)
-		{
-			env->exit_code = 130;
-			g_signal = 0;
-		}
-		if (!input)
-			break ;
-		add_history(input);
-		ast = parse(input, env);
-		if (!ast)
-			continue ;
-		setup_signals_execution();
-		execute(ast, env);
-	}
+	flag = true;
+	while (flag)
+		flag = loop(env);
 	printf("exit\n");
 	rl_clear_history();
 	gc->clean(gc);

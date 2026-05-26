@@ -10,16 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-#include "datastructures.h"
-#include "libft.h"
 #include "minishell.h"
 
 bool	key_match(void *envar, void *str);
 bool	strs_not_eq(void *s1, void *s2);
 void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc);
+bool	dispatch(char *arg, t_exp *e, t_env *env);
 
-static char	*find_var(char *key, t_env *env)
+char	*find_var(char *key, t_env *env)
 {
 	t_envar	*envar;
 
@@ -43,103 +41,27 @@ static char	*expand_tilde(char *arg, t_env *env)
 
 static char	*expand_arg(char *arg, t_env *env)
 {
-	t_dfa_state	state;
-	t_dfa_state	previous;
-	t_darray	*fragments;
-	size_t		i;
-	size_t		start;
+	t_exp	e;
 
 	arg = expand_tilde(arg, env);
-	fragments = init_darray(env->gc);
-	state = TEXT;
-	i = 0;
-	start = 0;
-	while (arg[i])
+	e.fragments = init_darray(env->gc);
+	e.state = TEXT;
+	e.i = 0;
+	e.start = 0;
+	while (arg[e.i])
 	{
-		if (state == TEXT)
-		{
-			if (arg[i] == '\'')
-			{
-				state = SINGLE;
-				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
-				start = i + 1;
-			}
-			else if (arg[i] == '"')
-			{
-				state = DOUBLE;
-				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
-				start = i + 1;
-			}
-			else if (arg[i] == '$')
-			{
-				previous = state;
-				state = DOLLAR;
-				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
-				start = i + 1;
-			}
-		}
-		else if (state == SINGLE)
-		{
-			if (arg[i] == '\'')
-			{
-				state = TEXT;
-				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
-				start = i + 1;
-			}
-		}
-		else if (state == DOUBLE)
-		{
-			if (arg[i] == '"')
-			{
-				state = TEXT;
-				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
-				start = i + 1;
-			}
-			else if (arg[i] == '$')
-			{
-				previous = state;
-				state = DOLLAR;
-				fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
-				start = i + 1;
-			}
-		}
-		else if (state == DOLLAR)
-		{
-			if (arg[i] == '?')
-			{
-				fragments->push(fragments, gc_itoa(env->exit_code, env->gc));
-				state = previous;
-				start = i + 1;
-			}
-			else if (ft_isalpha(arg[i]) || arg[i] == '_')
-				state = ALPHA;
-			else
-			{
-				fragments->push(fragments, "$");
-				state = previous;
-				start = i;
-				continue ;
-			}
-		}
-		else if (state == ALPHA)
-		{
-			if (!ft_isalnum(arg[i]) && arg[i] != '_')
-			{
-				fragments->push(fragments, find_var(gc_substr(arg, start, i - start, env->gc), env));
-				state = previous;
-				start = i;
-				continue ;
-			}
-		}
-		i++;
+		if (!dispatch(arg, &e, env))
+			e.i++;
 	}
-	if (state == DOLLAR)
-		fragments->push(fragments, "$");
-	else if (state == ALPHA)
-		fragments->push(fragments, find_var(gc_substr(arg, start, i - start, env->gc), env));
+	if (e.state == DOLLAR)
+		e.fragments->push(e.fragments, "$");
+	else if (e.state == ALPHA)
+		e.fragments->push(e.fragments,
+			find_var(gc_substr(arg, e.start, e.i - e.start, env->gc), env));
 	else
-		fragments->push(fragments, gc_substr(arg, start, i - start, env->gc));
-	return (fragments->reduce(fragments, gc_strjoin_wrap, ""));
+		e.fragments->push(e.fragments,
+			gc_substr(arg, e.start, e.i - e.start, env->gc));
+	return (e.fragments->reduce(e.fragments, gc_strjoin_wrap, ""));
 }
 
 void	expand_cmd(t_cmd *cmd, t_env *env)

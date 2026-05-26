@@ -32,7 +32,7 @@ static char	*cd_path(char *path, t_env *env)
 		oldpwd = "";
 	if (chdir(path) == -1)
 	{
-		ft_dprintf(STDERR_FILENO, "cd: %s: %s\n", path, strerror(errno));
+		ft_dprintf(STDERR_FILENO, "cd: %s: No such file or directory\n", path);
 		env->exit_code = 1;
 		return (NULL);
 	}

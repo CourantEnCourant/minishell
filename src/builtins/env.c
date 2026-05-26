@@ -34,7 +34,7 @@ void	print_env(char **options, t_env *env)
 	while (i < env->envp->len)
 	{
 		envar = env->envp->peek_i(env->envp, i);
-		if (envar->exported)
+		if (envar->exported && envar->value)
 			printf("%s=%s\n", envar->key, envar->value);
 		i++;
 	}

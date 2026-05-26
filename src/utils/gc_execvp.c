@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stddef.h>
+#include <sys/stat.h>
 #include "libft.h"
 #include "gc_libft.h"
 #include "minishell.h"
@@ -34,6 +35,13 @@ static char	**get_paths(char **envp, t_gc *gc)
 
 static int	manual_exec(const char *cmd, char *const argv[], char **envp)
 {
+	struct stat	sb;
+
+	if (stat(cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
+	{
+		ft_dprintf(STDERR_FILENO, "%s: Is a directory\n", cmd);
+		return (126);
+	}
 	execve(cmd, argv, envp);
 	perror(cmd);
 	if (errno == EACCES || errno == ENOTDIR)

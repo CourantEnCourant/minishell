@@ -31,7 +31,7 @@ static bool	check_args(char **args, t_env *env)
 	if (!str_is_num(args[1]) || int64_overflow(args[1]))
 	{
 		ft_dprintf(STDERR_FILENO,
-				"exit: %s: numeric argument required\n", args[1]);
+			"exit: %s: numeric argument required\n", args[1]);
 		env->exit_code = 2;
 		return (false);
 	}

@@ -12,8 +12,8 @@
 
 #include <stdio.h>
 #include <stddef.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #include "minishell.h"
 #include "datastructures.h"
 

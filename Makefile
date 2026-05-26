@@ -12,29 +12,34 @@ AR = ar rcs
 RM = rm -rf
 
 INCLUDE = -I ./include
-SRC = ./src/checker.c \
-	  ./src/cmd.c \
+SRC = ./src/apply_redir.c \
+	  ./src/checker.c \
 	  ./src/error_msg.c \
-	  ./src/exec_pipe.c \
-	  ./src/exec_pipe_2.c \
-	  ./src/executor.c \
 	  ./src/expander.c \
+	  ./src/expander_2.c \
 	  ./src/lexer.c \
 	  ./src/lexer_postprocess.c \
 	  ./src/main.c \
 	  ./src/parser.c \
-	  ./src/redir.c \
-	  ./src/token.c \
-	  ./src/signals/signals.c \
-	  ./src/signals/signal_exit.c \
+	  ./src/builtins/builtins_utils.c \
 	  ./src/builtins/cd.c \
 	  ./src/builtins/echo.c \
 	  ./src/builtins/env.c \
-	  ./src/builtins/envar.c \
 	  ./src/builtins/exit.c \
 	  ./src/builtins/export.c \
 	  ./src/builtins/pwd.c \
 	  ./src/builtins/unset.c \
+	  ./src/executor/exec_pipe.c \
+	  ./src/executor/exec_pipe_2.c \
+	  ./src/executor/executor.c \
+	  ./src/executor/executor_2.c \
+	  ./src/signals/signals.c \
+	  ./src/signals/signal_exit.c \
+	  ./src/types/cmd.c \
+	  ./src/types/envar.c \
+	  ./src/types/redir.c \
+	  ./src/types/token.c \
+	  ./src/utils/envar_utils.c \
 	  ./src/utils/gc_execvp.c \
 	  ./src/utils/gc_getcwd.c \
 	  ./src/utils/gc_readline.c \

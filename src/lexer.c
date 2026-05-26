@@ -83,8 +83,8 @@ t_darray	*tokenize(char *cmd, t_gc *gc)
 {
 	t_darray	*tokens;
 	t_dfa_state	state;
-	size_t			i;
-	size_t			start;
+	size_t		i;
+	size_t		start;
 
 	tokens = init_darray(gc);
 	state = TEXT;

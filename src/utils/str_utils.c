@@ -24,7 +24,7 @@ bool	startswith(void *s, void *ref)
 bool	str_is_num(char *s)
 {
 	size_t	i;
-	
+
 	i = 0;
 	while (ft_isspace(s[i]))
 		i++;

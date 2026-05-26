@@ -32,7 +32,6 @@ static void	exec_builtin_cmd(t_cmd *cmd, t_env *env)
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	expand_cmd(cmd, env);
 	if (apply_redirs(cmd, env))
 	{
 		argv = (char **)cmd->argv->to_arr(cmd->argv);
@@ -50,7 +49,6 @@ static void	exec_fork_child(t_cmd *cmd, t_env *env)
 	char	**argv;
 
 	setup_signals_fork();
-	expand_cmd(cmd, env);
 	if (apply_redirs(cmd, env))
 	{
 		argv = (char **)cmd->argv->to_arr(cmd->argv);
@@ -70,7 +68,6 @@ static void	exec_empty_cmd(t_cmd *cmd, t_env *env)
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	expand_cmd(cmd, env);
 	if (apply_redirs(cmd, env))
 		env->exit_code = 0;
 	dup2(saved_stdin, STDIN_FILENO);
@@ -84,6 +81,7 @@ static void	exec_cmd(t_cmd *cmd, t_env *env)
 	pid_t	pid;
 	int		status;
 
+	expand_cmd(cmd, env);
 	if (cmd->argv->len == 0)
 	{
 		exec_empty_cmd(cmd, env);

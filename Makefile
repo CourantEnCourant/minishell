@@ -75,11 +75,15 @@ clean:
 	@echo "Removed *.o in $(NAME)"
 
 fclean: clean
-	@$(RM) $(NAME) test
+	@$(RM) $(NAME)
+	@$(RM) minishell_tester
 	@echo "Removed $(NAME) and test"
 
 test: $(NAME)
 	@bash tests/test.sh
+
+bonus: $(NAME)
+	@echo "Created $(NAME) with bonus"
 
 re: fclean all
 

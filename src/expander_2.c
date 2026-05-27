@@ -78,6 +78,11 @@ static bool	handle_dollar(char *arg, t_exp *e, t_env *env)
 		e->state = e->previous;
 		e->start = e->i + 1;
 	}
+	else if (ft_isdigit(arg[e->i]))
+	{
+		e->state = e->previous;
+		e->start = e->i + 1;
+	}
 	else if (ft_isalpha(arg[e->i]) || arg[e->i] == '_')
 		e->state = ALPHA;
 	else

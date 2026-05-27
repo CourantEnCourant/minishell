@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_postprocess.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 18:50:58 by weizhang          #+#    #+#             */
-/*   Updated: 2026/04/02 18:51:02 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/27 10:14:08 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ static size_t	add_to_cmd(t_cmd *cmd, t_darray *ops, size_t i, t_env *env)
 	else if (ft_strcmp(cur->value, "<") == 0)
 		cmd->push_redir(cmd,
 			init_redir(FROM_FILE, next->value, cmd->gc));
+	else if (ft_strcmp(cur->value, "<<") == 0)
+		cmd->push_redir(cmd,
+			init_redir(HERE_DOC, next->value, cmd->gc));
 	return (i + 2);
 }
 

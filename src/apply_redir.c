@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir_2.c                                          :+:      :+:    :+:   */
+/*   apply_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 20:42:24 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/26 20:43:35 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/27 20:01:55 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,25 @@ static bool	apply_to_file(t_redir *redir, t_env *env)
 	return (flag);
 }
 
+static bool	apply_heredoc(t_redir *redir, t_env *env)
+{
+	int		fd;
+
+	fd = open(redir->filename, O_RDONLY);
+	if (fd == -1)
+		return (perror("heredoc read open"), env->exit_code = 1, false);
+	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		perror("dup2");
+		env->exit_code = 1;
+		close(fd);
+		return (false);
+	}
+	close(fd);
+	unlink(redir->filename);
+	return (true);
+}
+
 bool	apply_redirs(t_cmd *cmd, t_env *env)
 {
 	t_redir	*redir;
@@ -102,6 +121,8 @@ bool	apply_redirs(t_cmd *cmd, t_env *env)
 			flag = apply_append_file(redir, env);
 		else if (redir->redir_type == FROM_FILE)
 			flag = apply_from_file(redir, env);
+		else if (redir->redir_type == HERE_DOC)
+			flag = apply_heredoc(redir, env);
 		if (!flag)
 			break ;
 		i++;

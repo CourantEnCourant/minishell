@@ -45,7 +45,8 @@ SRC = ./src/apply_redir.c \
 	  ./src/utils/gc_readline.c \
 	  ./src/utils/str_utils.c \
 	  ./src/utils/str_utils_2.c \
-	  ./src/utils/utils.c
+	  ./src/utils/utils.c \
+	  ./src/heredoc/heredoc.c
 
 OBJ = $(SRC:.c=.o)
 

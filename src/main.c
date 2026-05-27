@@ -6,7 +6,7 @@
 /*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 13:37:33 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/13 15:29:54 by fdong            ###   ########.fr       */
+/*   Updated: 2026/05/27 19:30:25 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ bool	loop(t_env *env)
 	ast = parse(input, env);
 	if (!ast)
 		return (true);
+	if (collect_heredocs(ast, env) == false)
+		return (clear_ast_heredocs(ast), true);
 	setup_signals_execution();
 	execute(ast, env);
 	return (true);

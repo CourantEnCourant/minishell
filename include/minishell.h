@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
+/*   By: fdong <fdong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 00:19:44 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/11 00:19:46 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/05/27 19:34:55 by fdong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef enum e_redir_type
 	TO_FILE,
 	APPEND_FILE,
 	FROM_FILE,
+	HERE_DOC
 }	t_redir_type;
 
 typedef struct s_redir	t_redir;
@@ -127,6 +128,9 @@ void		execute(t_btree *ast, t_env *env);
 void		setup_signals_interactive(void);
 void		setup_signals_execution(void);
 void		setup_signals_fork(void);
+void		clear_ast_heredocs(t_btree *ast);
 void		update_exit_code(int code, t_env *env);
-
+char		*get_hd_filename(t_env *env);
+bool		save_hd_input(char *delimiter, char *file, t_env *env);
+bool		collect_heredocs(t_btree *ast, t_env *env);
 #endif

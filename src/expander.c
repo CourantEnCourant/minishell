@@ -22,7 +22,7 @@ char	*find_var(char *key, t_env *env)
 	t_envar	*envar;
 
 	envar = env->envp->find(env->envp, key_match, key);
-	if (!envar)
+	if (!envar || !envar->value)
 		return ("");
 	return (envar->value);
 }

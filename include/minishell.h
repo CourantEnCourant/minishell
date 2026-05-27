@@ -133,6 +133,6 @@ void		setup_signals_fork(void);
 void		clear_ast_heredocs(t_btree *ast);
 void		update_exit_code(int code, t_env *env);
 char		*get_hd_filename(t_env *env);
-bool		save_hd_input(char *delimiter, char *file, t_env *env);
+bool		save_hd_input(char *delim, char *file, bool quoted, t_env *env);
 bool		collect_heredocs(t_btree *ast, t_env *env);
 #endif

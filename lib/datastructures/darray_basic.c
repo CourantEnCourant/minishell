@@ -26,6 +26,7 @@ void		set(t_darray *self, size_t i, void *item);
 bool		any(t_darray *s, bool (*f)(void *elem, void *target), void *target);
 void		*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 size_t		find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
+void		for_each(t_darray *self, void *(*f)(void *arg, t_gc *gc));
 t_darray	*filter(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 void		*reduce(t_darray *s,
 				void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
@@ -103,6 +104,7 @@ t_darray	*init_darray(t_gc *gc)
 	darray->any = any;
 	darray->find = find;
 	darray->find_i = find_i;
+	darray->for_each = for_each;
 	darray->filter = filter;
 	darray->reduce = reduce;
 	darray->copy = copy;

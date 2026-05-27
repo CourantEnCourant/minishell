@@ -41,6 +41,7 @@ struct s_darray
 	bool		(*any)(t_darray *, bool (*f)(void *, void *), void *);
 	void		*(*find)(t_darray *, bool (*f)(void *, void *), void *);
 	size_t		(*find_i)(t_darray *, bool (*f)(void *, void *), void *);
+	void		(*for_each)(t_darray *, void *(*f)(void *, t_gc *));
 	t_darray	*(*filter)(t_darray *, bool (*f)(void *, void *), void *);
 	void		*(*reduce)(t_darray *,
 			void *(*f)(void *, void *, t_gc *), void *);

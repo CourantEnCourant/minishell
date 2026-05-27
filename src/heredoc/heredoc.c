@@ -19,6 +19,9 @@
 #include <sys/wait.h>
 #include "minishell.h"
 
+char	*expand_arg(char *arg, t_env *env);
+void	*strip_sentinel(void *s, t_gc *gc);
+
 char	*get_hd_filename(t_env *env)
 {
 	static int		counter;
@@ -31,7 +34,7 @@ char	*get_hd_filename(t_env *env)
 	return (gc_strjoin("/tmp/.hd_", p_str, env->gc));
 }
 
-static void	hd_read_loop(char *delimiter, int fd, t_env *env)
+static void	hd_read_loop(char *delim, int fd, bool quoted, t_env *env)
 {
 	char	*line;
 
@@ -42,16 +45,18 @@ static void	hd_read_loop(char *delimiter, int fd, t_env *env)
 		{
 			ft_dprintf(STDERR_FILENO,
 				"here_document delimited by end-of-file (wanted '%s')\n",
-				delimiter);
+				delim);
 			break ;
 		}
-		if (ft_strcmp(line, delimiter) == 0)
+		if (ft_strcmp(line, delim) == 0)
 			break ;
+		if (!quoted)
+			line = strip_sentinel(expand_arg(line, env), env->gc);
 		ft_putendl_fd(line, fd);
 	}
 }
 
-static void	hd_child_process(char *delimiter, char *file, t_env *env)
+static void	hd_child_process(char *delim, char *file, bool q, t_env *env)
 {
 	int		fd;
 
@@ -64,14 +69,14 @@ static void	hd_child_process(char *delimiter, char *file, t_env *env)
 		env->gc->clean(env->gc);
 		exit(1);
 	}
-	hd_read_loop(delimiter, fd, env);
+	hd_read_loop(delim, fd, q, env);
 	close(fd);
 	rl_clear_history();
 	env->gc->clean(env->gc);
 	exit(0);
 }
 
-bool	save_hd_input(char *delimiter, char *file, t_env *env)
+bool	save_hd_input(char *delim, char *file, bool quoted, t_env *env)
 {
 	pid_t	pid;
 	int		status;
@@ -81,7 +86,7 @@ bool	save_hd_input(char *delimiter, char *file, t_env *env)
 	if (pid == -1)
 		return (perror("fork"), false);
 	if (pid == 0)
-		hd_child_process(delimiter, file, env);
+		hd_child_process(delim, file, quoted, env);
 	waitpid(pid, &status, 0);
 	setup_signals_interactive();
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)

@@ -40,7 +40,7 @@ static char	*expand_tilde(char *arg, t_env *env)
 	return (gc_strjoin(home->value, &arg[1], env->gc));
 }
 
-static char	*expand_arg(char *arg, t_env *env)
+char	*expand_arg(char *arg, t_env *env)
 {
 	t_exp	e;
 

@@ -16,6 +16,7 @@ bool	key_match(void *envar, void *str);
 bool	strs_not_eq(void *s1, void *s2);
 void	*gc_strjoin_wrap(void *s1, void *s2, t_gc *gc);
 bool	dispatch(char *arg, t_exp *e, t_env *env);
+void	*strip_sentinel(void *s, t_gc *gc);
 
 char	*find_var(char *key, t_env *env)
 {
@@ -77,11 +78,13 @@ void	expand_cmd(t_cmd *cmd, t_env *env)
 		i++;
 	}
 	cmd->set_argv(cmd, cmd->argv->filter(cmd->argv, strs_not_eq, ""));
+	cmd->argv->for_each(cmd->argv, strip_sentinel);
 	i = 0;
 	while (i < cmd->redirs->len)
 	{
 		redir = cmd->redirs->peek_i(cmd->redirs, i);
-		redir->set_filename(redir, expand_arg(redir->filename, env));
+		redir->set_filename(redir,
+			strip_sentinel(expand_arg(redir->filename, env), env->gc));
 		i++;
 	}
 }

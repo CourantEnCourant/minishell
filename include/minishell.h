@@ -12,6 +12,8 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# define SENTINEL '\x7f'
+# define SENTINEL_STR "\x7f"
 
 # include <stdbool.h>
 # include "gc_libft.h"

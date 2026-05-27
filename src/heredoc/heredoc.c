@@ -31,10 +31,29 @@ char	*get_hd_filename(t_env *env)
 	return (gc_strjoin("/tmp/.hd_", p_str, env->gc));
 }
 
+static void	hd_read_loop(char *delimiter, int fd, t_env *env)
+{
+	char	*line;
+
+	while (true)
+	{
+		line = gc_readline("> ", env->gc);
+		if (!line)
+		{
+			ft_dprintf(STDERR_FILENO,
+				"here_document delimited by end-of-file (wanted '%s')\n",
+				delimiter);
+			break ;
+		}
+		if (ft_strcmp(line, delimiter) == 0)
+			break ;
+		ft_putendl_fd(line, fd);
+	}
+}
+
 static void	hd_child_process(char *delimiter, char *file, t_env *env)
 {
 	int		fd;
-	char	*line;
 
 	setup_signals_fork();
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
@@ -45,19 +64,7 @@ static void	hd_child_process(char *delimiter, char *file, t_env *env)
 		env->gc->clean(env->gc);
 		exit(1);
 	}
-	while (true)
-	{
-		line = gc_readline("> ", env->gc);
-		if (!line)
-		{
-			ft_dprintf(STDERR_FILENO,
-				"here_document delimited by end-of-file (wanted '%s')\n", delimiter);
-			break ;
-		}
-		if (ft_strcmp(line, delimiter) == 0)
-			break ;
-		ft_putendl_fd(line, fd);
-	}
+	hd_read_loop(delimiter, fd, env);
 	close(fd);
 	rl_clear_history();
 	env->gc->clean(env->gc);
@@ -86,37 +93,6 @@ bool	save_hd_input(char *delimiter, char *file, t_env *env)
 	}
 	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 		env->exit_code = WEXITSTATUS(status);
-	return (true);
-}
-
-bool	collect_heredocs(t_btree *ast, t_env *env)
-{
-	t_token	*token;
-	t_redir	*redir;
-	size_t	i;
-	char	*tmp;
-
-	if (!ast)
-		return (true);
-	if (!collect_heredocs(ast->left, env) || !collect_heredocs(ast->right, env))
-		return (false);
-	token = ast->value;
-	if (token->type == CMD)
-	{
-		i = 0;
-		while (i < token->cmd->redirs->len)
-		{
-			redir = token->cmd->redirs->peek_i(token->cmd->redirs, i);
-			if (redir->redir_type == HERE_DOC)
-			{
-				tmp = get_hd_filename(env);
-				if (!save_hd_input(redir->filename, tmp, env))
-					return (false);
-				redir->filename = tmp;
-			}
-			i++;
-		}
-	}
 	return (true);
 }
 

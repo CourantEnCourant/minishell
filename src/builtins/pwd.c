@@ -21,7 +21,8 @@ void	pwd(char **options, t_env *env)
 	cwd = gc_getcwd(env->gc);
 	if (!cwd)
 	{
-		perror("pwd: error retrieving current directory: getcwd: cannot access parent directories");
+		perror("pwd: error retrieving current directory: \
+getcwd: cannot access parent directories");
 		env->exit_code = 1;
 		return ;
 	}

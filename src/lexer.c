@@ -38,7 +38,7 @@ static size_t	process(t_darray *tokens, char *cmd, int len, char *operator)
 	t_token	*token;
 
 	token_value = gc_substr(cmd, 0, len, tokens->gc);
-	token_value = gc_strtrim(token_value, " ", tokens->gc);
+	token_value = gc_strtrim(token_value, " \t\n\v\f\r", tokens->gc);
 	if (token_value[0])
 	{
 		token = init_token(token_value, tokens->gc);
@@ -56,7 +56,7 @@ static size_t	process(t_darray *tokens, char *cmd, int len, char *operator)
 
 static size_t	lookup(t_darray *tokens, char *cmd, size_t start, size_t i)
 {
-	if (cmd[i] == ' ')
+	if (ft_isspace(cmd[i]))
 		start += process(tokens, &cmd[start], i - start, NULL);
 	else if (ft_strncmp(&cmd[i], "&&", 2) == 0)
 		start += process(tokens, &cmd[start], i - start, "&&");

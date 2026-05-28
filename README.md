@@ -45,7 +45,13 @@ make test
 ### Valgrind
 
 ```bash
-valgrind --suppressions=readline.supp --show-leak-kinds=all --leak-check=full ./minishell
+valgrind \
+  --suppressions=readline.supp \
+  --show-leak-kinds=all \
+  --leak-check=full \
+  --track-fds=yes \
+  --trace-children=yes \
+  ./minishell
 ```
 
 ## Resources

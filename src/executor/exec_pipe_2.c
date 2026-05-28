@@ -18,7 +18,7 @@
 
 bool	apply_redirs(t_cmd *cmd, t_env *env);
 void	exec_subshell(t_btree *ast, t_env *env);
-void	exec_builtins(char *cmd, char **options, t_env *env);
+void	exec_builtins(char *cmd, char **options, int fds[2], t_env *env);
 bool	strs_eq(void *s1, void *s2);
 
 static void	flatten_recur(t_btree *ast, t_darray *nodes)
@@ -85,7 +85,7 @@ static void	exec_cmd_child(t_btree *node, t_env *env)
 	if (cmd->argv->len == 0)
 		env->exit_code = 0;
 	else if (env->builtins->any(env->builtins, strs_eq, argv[0]))
-		exec_builtins(argv[0], argv, env);
+		exec_builtins(argv[0], argv, NULL, env);
 	else
 		env->exit_code = gc_execvp(argv[0], argv,
 				(char **)env->export_envp(env), env->gc);

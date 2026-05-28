@@ -21,27 +21,26 @@
 int			exec_pipe(t_btree *ast, t_env *env);
 bool		apply_redirs(t_cmd *cmd, t_env *env);
 void		execute(t_btree *ast, t_env *env);
-void		exec_builtins(char *cmd, char **options, t_env *env);
+void		exec_builtins(char *cmd, char **options, int fds[2], t_env *env);
 bool		strs_eq(void *s1, void *s2);
 void		exec_subshell(t_btree *ast, t_env *env);
 
 static void	exec_builtin_cmd(t_cmd *cmd, t_env *env)
 {
-	int		saved_stdin;
-	int		saved_stdout;
+	int		fds[2];
 	char	**argv;
 
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
+	fds[0] = dup(STDIN_FILENO);
+	fds[1] = dup(STDOUT_FILENO);
 	if (apply_redirs(cmd, env))
 	{
 		argv = (char **)cmd->argv->to_arr(cmd->argv);
-		exec_builtins(argv[0], argv, env);
+		exec_builtins(argv[0], argv, fds, env);
 	}
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+	dup2(fds[0], STDIN_FILENO);
+	dup2(fds[1], STDOUT_FILENO);
+	close(fds[0]);
+	close(fds[1]);
 }
 
 static void	exec_fork_child(t_cmd *cmd, t_env *env)

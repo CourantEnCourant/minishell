@@ -45,7 +45,7 @@ static bool	check_args(char **args, t_env *env)
 	return (true);
 }
 
-void	exit_minishell(char **options, t_env *env)
+void	exit_minishell(char **options, int fds[2], t_env *env)
 {
 	int	exit_code;
 
@@ -53,6 +53,11 @@ void	exit_minishell(char **options, t_env *env)
 	if (!check_args(options, env))
 		return ;
 	exit_code = env->exit_code;
+	if (fds)
+	{
+		close(fds[0]);
+		close(fds[1]);
+	}
 	rl_clear_history();
 	env->gc->clean(env->gc);
 	exit(exit_code);

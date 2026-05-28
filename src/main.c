@@ -33,6 +33,8 @@ bool	loop(t_env *env)
 	}
 	if (!input)
 		return (false);
+	if (!input[0])
+		return (true);
 	add_history(input);
 	ast = parse(input, env);
 	if (!ast)

@@ -19,6 +19,8 @@ static char	*to_str(t_envar *self)
 {
 	char	*str;
 
+	if (!self->value)
+		return (self->key);
 	str = gc_strjoin(self->key, "=", self->gc);
 	return (gc_strjoin(str, self->value, self->gc));
 }

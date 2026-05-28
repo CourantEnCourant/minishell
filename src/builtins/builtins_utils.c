@@ -14,18 +14,18 @@
 
 void	cd(char **options, t_env *env);
 void	echo(char **options, t_env *env);
-void	exit_minishell(char **options, t_env *env);
+void	exit_minishell(char **options, int fds[2], t_env *env);
 void	export(char **options, t_env *env);
 void	pwd(char **options, t_env *env);
 void	unset(char **options, t_env *env);
 void	print_env(char **options, t_env *env);
 
-void	exec_builtins(char *cmd, char **options, t_env *env)
+void	exec_builtins(char *cmd, char **options, int fds[2], t_env *env)
 {
 	if (ft_strcmp(cmd, "pwd") == 0)
 		pwd(options, env);
 	else if (ft_strcmp(cmd, "exit") == 0)
-		exit_minishell(options, env);
+		exit_minishell(options, fds, env);
 	else if (ft_strcmp(cmd, "env") == 0)
 		print_env(options, env);
 	else if (ft_strcmp(cmd, "unset") == 0)
